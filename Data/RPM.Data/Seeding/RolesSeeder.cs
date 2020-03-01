@@ -4,11 +4,11 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using RPM.Common;
-    using RPM.Data.Models;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
+
+    using RPM.Common;
+    using RPM.Data.Models;
 
     internal class RolesSeeder : ISeeder
     {
@@ -17,6 +17,9 @@
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
             await SeedRoleAsync(roleManager, GlobalConstants.AdministratorRoleName);
+            await SeedRoleAsync(roleManager, GlobalConstants.OwnerRoleName);
+            await SeedRoleAsync(roleManager, GlobalConstants.ManagerRoleName);
+            await SeedRoleAsync(roleManager, GlobalConstants.TenantRoleName);
         }
 
         private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)
