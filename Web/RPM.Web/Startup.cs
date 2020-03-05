@@ -20,6 +20,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using CloudinaryDotNet;
 
     public class Startup
     {
@@ -47,9 +48,17 @@
                     });
 
             services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddSingleton(this.configuration);
+
+            Account account = new Account(
+                this.configuration["Cloudinary:CloudName"],
+                this.configuration["Cloudinary:ApiKey"],
+                this.configuration["Cloudinary:ApiSecret"]);
+
+            var cloudUtility = new Cloudinary(account);
+            services.AddSingleton(cloudUtility);
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -101,11 +110,17 @@
 
             app.UseEndpoints(
                 endpoints =>
-                    {
-                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                        endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                        endpoints.MapRazorPages();
-                    });
+                {
+                    endpoints.MapControllerRoute(
+                    "areaRoute",
+                    "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                    endpoints.MapControllerRoute(
+                        "default",
+                        "{controller=Home}/{action=Index}/{id?}");
+
+                    endpoints.MapRazorPages();
+                });
         }
     }
 }

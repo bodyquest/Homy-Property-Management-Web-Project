@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\RPM.Common\RPM.Common.csproj" />
     <ProjectReference Include="..\RPM.Data.Common\RPM.Data.Common.csproj" />
   </ItemGroup>
   

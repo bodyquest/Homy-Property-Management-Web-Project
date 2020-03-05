@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# SA1516: Elements should be separated by blank line
+dotnet_diagnostic.SA1516.severity = none

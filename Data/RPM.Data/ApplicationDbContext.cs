@@ -24,7 +24,14 @@
         {
         }
 
+        public DbSet<Home> Homes { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<Rental> Rentals { get; set; }
+        public DbSet<CloudImage> CloudImages { get; set; }
         public DbSet<Setting> Settings { get; set; }
+
 
         public override int SaveChanges() => this.SaveChanges(true);
 
