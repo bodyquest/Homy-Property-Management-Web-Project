@@ -21,6 +21,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using CloudinaryDotNet;
+    using Microsoft.AspNetCore.Identity;
 
     public class Startup
     {
@@ -51,6 +52,22 @@
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddSingleton(this.configuration);
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password = new PasswordOptions()
+                {
+                    RequiredLength = 6,
+                    RequireUppercase = false,
+                    RequireLowercase = false,
+                    RequireDigit = false,
+                    RequiredUniqueChars = 0,
+                    RequireNonAlphanumeric = false,
+                };
+
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+            });
 
             Account account = new Account(
                 this.configuration["Cloudinary:CloudName"],
