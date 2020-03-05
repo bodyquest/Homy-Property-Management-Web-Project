@@ -52,4 +52,8 @@
     <ProjectReference Include="..\RPM.Web.Infrastructure\RPM.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\RPM.Web.ViewModels\RPM.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\themes\admin\" />
+  </ItemGroup>
 </Project>
