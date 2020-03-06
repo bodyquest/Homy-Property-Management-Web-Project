@@ -54,6 +54,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\themes\admin\" />
+    <Folder Include="Areas\Administration\Models\Countries\" />
+    <Folder Include="Areas\Administration\Models\Cities\" />
+    <Folder Include="Areas\Administration\Views\Cities\" />
   </ItemGroup>
 </Project>

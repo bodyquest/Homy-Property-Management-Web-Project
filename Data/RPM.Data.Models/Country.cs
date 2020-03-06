@@ -7,6 +7,11 @@
 
     public class Country
     {
+        public Country()
+        {
+            this.Cities = new HashSet<City>();
+        }
+
         public int Id { get; set; }
 
         [Required]

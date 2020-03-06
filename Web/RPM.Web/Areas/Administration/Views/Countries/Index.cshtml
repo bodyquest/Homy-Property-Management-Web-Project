@@ -1,0 +1,107 @@
+﻿@model IEnumerable<AdminCountriesListingServiceModel>
+@{
+    ViewData["Title"] = "Country Administration";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<head>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/themes/admin/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/themes/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/themes/admin/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+</head>
+<body>
+    <div class="content-wrapper">
+        <h2 class="text-left pl-2 pt-2">@ViewData["Title"]</h2>
+        <section class="content">
+            <div class="row justify-content-center">
+                <div class="col-12 pt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3 class="card-title text-info">Countries List</h3>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <partial name="_ButtonCreatePartial" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            @if (Model.Count() > 0)
+                            {
+                                <table id="mytable" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>@Html.DisplayNameFor(c => c.Id)</th>
+                                            <th>@Html.DisplayNameFor(c => c.Name)</th>
+                                            <th>@Html.DisplayNameFor(c => c.Code)</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var country in Model)
+                                        {
+                                        <tr>
+                                            <td>@country.Id</td>
+                                            <td>@country.Name</td>
+                                            <td>@country.Code</td>
+                                            <td>
+                                                <partial name="_ButtonCRUDPartial" model="country.Id" />
+                                            </td>
+                                        </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            }
+                            else
+                            {
+                                <h2 class="text-danger">Oops, no entities in the database !</h2>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- jQuery -->
+    <script src="~/themes/admin/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/themes/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables -->
+    <script src="~/themes/admin/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/themes/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+</body>
+<!-- page script -->
+@section Scripts{
+    <script>
+    $(function () {
+                $('#mytable').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": false,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": true,
+                });
+    });
+    </script>
+    <script>
+        $(document).ready(function() {
+		       var table = $('#mytable').dataTable();
+		       table.fnPageChange( 'next' );
+		     } );
+    </script>
+}

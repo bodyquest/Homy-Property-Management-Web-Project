@@ -19,6 +19,10 @@
 
         <!-- Google Font: Source Sans Pro -->
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+        <!-- Bootstrap -->
+        <link href="~/themes/admin/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+
     </environment>
 
     <environment names="Staging,Production">
@@ -150,6 +154,11 @@
                         <i class="fas fa-th-large"></i>
                     </a>
                 </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <form class="form-inline bg-transparent" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
+                            <button type="submit" class="nav-link bg-transparent, border-transparent">Logout</button>
+                        </form>
+                    </li>
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -158,10 +167,10 @@
             <!-- Brand Logo -->
             <a href="~/themes/admin/index3.html" class="brand-link">
                 <img src="~/themes/admin/dist/img/AdminLTELogo.png"
-                     alt="AdminLTE Logo"
+                     alt="Homy Logo"
                      class="brand-image img-circle elevation-3"
                      style="opacity: .8">
-                <span class="brand-text font-weight-light">AdminLTE 3</span>
+                <span class="brand-text font-weight-light">Homy</span>
             </a>
 
             <!-- Sidebar -->
@@ -172,7 +181,7 @@
                         <img src="~/themes/admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Darin Rusev</a>
+                        <a href="#" class="d-block">@User.Identity.Name</a>
                     </div>
                 </div>
 
@@ -180,7 +189,75 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                     with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
+                        <!--********************************************************-->
+                        <!--MY ADMIN MENU-->
+                        @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        {
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-map-marker-alt"></i>
+                                    <p>
+                                        Locations
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a asp-area="Administration" asp-controller="Countries" asp-action="Index" class="nav-link">
+                                            <i class="fas fa-globe-europe nav-icon"></i>
+                                            <p>Countries</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-area="Administration" asp-controller="Cities" asp-action="Index" class="nav-link">
+                                            <i class="fas fa-city nav-icon"></i>
+                                            <p>Cities</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-users-cog"></i>
+                                    <p>
+                                        Users
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a asp-area="Administration" asp-controller="Users" asp-action="Index" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>All</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/themes/admin/index2.html" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>Owners</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/themes/admin/index2.html" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>Managers</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="~/themes/admin/pages/calendar.html" class="nav-link">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>
+                                        Listings
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -713,7 +790,13 @@
         </aside>
 
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+        <main role="main">
+            @if (TempData.ContainsKey(GlobalConstants.TempDataSuccessKey))
+	        {
+		        <div class="alert alert-success">
+                    @TempData[GlobalConstants.TempDataSuccessKey]
+                </div>  
+	        }
             @this.RenderBody()
         </main>
 

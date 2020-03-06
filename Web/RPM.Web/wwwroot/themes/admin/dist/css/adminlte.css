@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*!
  *   AdminLTE v3.0.2
  *   Author: Colorlib
@@ -30010,4 +30010,12 @@ a.text-muted:hover {
 [class*="accent-"] a.btn-dark {
   color: #ffffff;
 }
+
+/*Мy Custom CSS*/
+#logout {
+    color: lightcoral;
+    border-radius: 10px;
+}
+
+
 /*# sourceMappingURL=adminlte.css.map */

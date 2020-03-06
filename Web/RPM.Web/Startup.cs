@@ -22,6 +22,9 @@
     using Microsoft.Extensions.Hosting;
     using CloudinaryDotNet;
     using Microsoft.AspNetCore.Identity;
+    using RPM.Services.Admin;
+    using RPM.Services.Admin.Implementations;
+    using Microsoft.AspNetCore.Mvc;
 
     public class Startup
     {
@@ -85,6 +88,13 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IAdminUserService, AdminUserService>();
+            services.AddTransient<IAdminCountryService, AdminCountryService>();
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

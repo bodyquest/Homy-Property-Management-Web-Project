@@ -1,13 +1,13 @@
 ﻿namespace RPM.Web.Areas.Administration.Controllers
 {
-    using RPM.Common;
-    using RPM.Web.Controllers;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using RPM.Web.Controllers;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Administration")]
+    using static RPM.Common.GlobalConstants;
+
+    [Area(AdminArea)]
+    [Authorize(Roles = AdministratorRoleName)]
     public class AdministrationController : BaseController
     {
     }
