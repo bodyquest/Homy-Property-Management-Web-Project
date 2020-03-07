@@ -5,6 +5,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.Text;
 
+    using static RPM.Common.GlobalConstants;
+
     public class Country
     {
         public Country()
@@ -18,6 +20,7 @@
         public string Name { get; set; }
 
         [Required]
+        [StringLength(CountryCodeLength)]
         public string Code { get; set; }
 
         public ICollection<City> Cities { get; set; }

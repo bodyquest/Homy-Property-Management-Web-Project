@@ -9,7 +9,7 @@
     using RPM.Services.Mapping;
 
 
-    public class AdminUserListingServiceModel //: IMapFrom<User>, IHaveCustomMapping
+    public class AdminUserListingServiceModel : IMapFrom<User>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -19,9 +19,9 @@
 
         public List<string> UserRoles { get; set; }
 
-        //public void CreateMappings(IProfileExpression configuration)
-        //{
-        //    configuration.CreateMap<User, AdminUserListingServiceModel>();
-        //}
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<User, AdminUserListingServiceModel>();
+        }
     }
 }

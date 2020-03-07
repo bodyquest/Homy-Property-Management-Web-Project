@@ -11,27 +11,29 @@
     using Microsoft.EntityFrameworkCore;
     using RPM.Data.Models;
     using RPM.Services.Admin;
+    using RPM.Services.Admin.Models;
     using RPM.Web.Areas.Administration.Models.Users;
-    using Infrastructure.Extensions;
+    using RPM.Web.Infrastructure.Extensions;
 
     using static RPM.Common.GlobalConstants;
 
     public class UsersController : AdministrationController
     {
         private readonly IAdminUserService adminUserService;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly UserManager<User> userManager;
 
-        public UsersController(IAdminUserService adminUserService, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+        public UsersController(UserManager<User> userManager, RoleManager<ApplicationRole> roleManager, IAdminUserService adminUserService) 
         {
             this.adminUserService = adminUserService;
-            this.roleManager = roleManager;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var users = await this.adminUserService.AllAsync();
+            //var users = await this.adminUserService.AllAsync();
+            var users = this.adminUserService.GetAll<AdminUserListingServiceModel>();
             var roles = await this.roleManager
                 .Roles
                 .Select(x => new SelectListItem
@@ -41,18 +43,21 @@
                 })
                 .ToListAsync();
 
-            return this.View(new AdminUsersListingViewModel
+            var model = new AdminUsersListingViewModel
             {
                 Users = users,
                 Roles = roles,
-            });
+            };
+
+            return this.View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToRoleAsync(AddUserToRoleFormModel model)
         {
-            var roleExists = await this.roleManager.RoleExistsAsync(model.Role);
             var user = await this.userManager.FindByIdAsync(model.UserId);
+
+            var roleExists = await this.roleManager.RoleExistsAsync(model.Role);
             var userExists = user != null;
 
             if (!roleExists || !userExists)

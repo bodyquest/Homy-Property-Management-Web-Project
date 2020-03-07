@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using RPM.Services.Admin;
+    using RPM.Web.Areas.Administration.Models.Countries;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -29,18 +30,18 @@
             return this.View();
         }
 
-        //// POST - Create
-        //[HttpPost]
-        //public async Task<IActionResult> Create(AdminCategoryCreateViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        await this.adminCountryService.CreateAsync(model.Name);
+        // POST - Create
+        [HttpPost]
+        public async Task<IActionResult> Create(AdminCountryCreateInputViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.adminCountryService.CreateAsync(model.Name, model.Code);
 
-        //        return RedirectToAction(nameof(Index));
-        //    }
+                return this.RedirectToAction(nameof(this.Index));
+            }
 
-        //    return this.View(model);
-        //}
+            return this.View(model);
+        }
     }
 }

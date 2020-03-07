@@ -13,6 +13,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200304233544_AddInitialDatabase.cs" />
     <Compile Remove="Migrations\20200304233544_AddInitialDatabase.Designer.cs" />
+    <Compile Remove="Migrations\20200307115951_InitializeCollections.cs" />
+    <Compile Remove="Migrations\20200307115951_InitializeCollections.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -25,7 +25,7 @@
                 <div class="col-12 pt-4">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">DataTable with Users</h3>
+                            <h3 class="card-title text-info"><strong>Users List</strong></h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -65,7 +65,7 @@
                                                 }
                                             </td>
                                             <td>
-                                                @if (userRolesToAdd.Any())
+                                                @if (userRolesToRemoveFrom.Any())
                                                 {
                                                     <form asp-controller="Users" asp-action="RemoveFromRole" method="post">
                                                         <div class="col-md-8">

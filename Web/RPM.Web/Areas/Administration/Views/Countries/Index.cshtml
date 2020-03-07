@@ -20,15 +20,15 @@
 </head>
 <body>
     <div class="content-wrapper">
-        <h2 class="text-left pl-2 pt-2">@ViewData["Title"]</h2>
+        <h2 class="text-center pl-2 pt-2">@ViewData["Title"]</h2>
         <section class="content">
             <div class="row justify-content-center">
-                <div class="col-12 pt-4">
+                <div class="col-8 pt-4">
                     <div class="card">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-6">
-                                    <h3 class="card-title text-info">Countries List</h3>
+                                    <h2 class="card-title text-info"><strong>Countries List</strong></h2>
                                 </div>
                                 <div class="col-6 text-right">
                                     <partial name="_ButtonCreatePartial" />
@@ -44,22 +44,19 @@
                                         <tr>
                                             <th>@Html.DisplayNameFor(c => c.Id)</th>
                                             <th>@Html.DisplayNameFor(c => c.Name)</th>
-                                            <th>@Html.DisplayNameFor(c => c.Code)</th>
-                                            <th></th>
-                                            <th></th>
+                                            <th class="text-center">@Html.DisplayNameFor(c => c.Code)</th>
+                                            <th class="text-center">Manage</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var country in Model)
                                         {
-                                        <tr>
-                                            <td>@country.Id</td>
-                                            <td>@country.Name</td>
-                                            <td>@country.Code</td>
-                                            <td>
+                                            <tr>
+                                                <td class="col-md-1">@country.Id</td>
+                                                <td>@country.Name</td>
+                                                <td class="col-md-2 text-center">@country.Code</td>
                                                 <partial name="_ButtonCRUDPartial" model="country.Id" />
-                                            </td>
-                                        </tr>
+                                            </tr>
                                         }
                                     </tbody>
 
@@ -87,21 +84,21 @@
 <!-- page script -->
 @section Scripts{
     <script>
-    $(function () {
-                $('#mytable').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": true,
-                });
-    });
+        $(function () {
+            $('#mytable').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+            });
+        });
     </script>
     <script>
-        $(document).ready(function() {
-		       var table = $('#mytable').dataTable();
-		       table.fnPageChange( 'next' );
-		     } );
+        $(document).ready(function () {
+            var table = $('#mytable').dataTable();
+            table.fnPageChange('next');
+        });
     </script>
 }
