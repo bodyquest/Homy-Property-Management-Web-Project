@@ -4,6 +4,7 @@
     using RPM.Data;
     using RPM.Data.Models;
     using RPM.Services.Admin.Models;
+    using RPM.Web.Areas.Administration.Models.Countries;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -62,9 +63,43 @@
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteAsync(int? id)
+        public async Task<bool> DeleteAsync(int? id)
         {
-            throw new NotImplementedException();
+            var country = await this.context.Countries.FindAsync(id);
+
+            if (country == null)
+            {
+                return false;
+            }
+
+            this.context.Countries.Remove(country);
+            var result = await this.context.SaveChangesAsync();
+
+            if (result != 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<AdminCountryDeleteServiceModel> GetByIdAsync(int? id)
+        {
+            var country = await this.context.Countries.FindAsync(id);
+
+            if (country == null)
+            {
+                return null;
+            }
+
+            var model = new AdminCountryDeleteServiceModel
+            {
+                Id = country.Id,
+                Name = country.Name,
+                Code = country.Code,
+            };
+
+            return model;
         }
     }
 }

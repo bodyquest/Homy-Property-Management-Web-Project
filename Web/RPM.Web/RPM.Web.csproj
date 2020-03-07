@@ -45,6 +45,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\RPM.Data.Models\RPM.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\RPM.Data\RPM.Data.csproj" />
+    <ProjectReference Include="..\..\RPM.Common\RPM.Common.csproj" />
     <ProjectReference Include="..\..\Services\RPM.Services.Data\RPM.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\RPM.Services.Mapping\RPM.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\RPM.Services.Messaging\RPM.Services.Messaging.csproj" />

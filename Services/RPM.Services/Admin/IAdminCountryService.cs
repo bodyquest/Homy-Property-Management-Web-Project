@@ -7,6 +7,7 @@
 
     using RPM.Data.Models;
     using RPM.Services.Admin.Models;
+    using RPM.Web.Areas.Administration.Models.Countries;
 
     public interface IAdminCountryService
     {
@@ -17,5 +18,7 @@
         Task<bool> UpdateAsync(int? id, string name, string code);
 
         Task<bool> DeleteAsync(int? id);
+
+        Task<AdminCountryDeleteServiceModel> GetByIdAsync(int? id);
     }
 }

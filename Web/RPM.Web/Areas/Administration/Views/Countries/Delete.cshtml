@@ -1,0 +1,50 @@
+﻿@model AdminCountryDeleteServiceModel
+@{
+    ViewData["Title"] = "Country Administration";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body>
+    <div class="content-wrapper">
+        <h2 class="text-left pl-3 pt-2">@ViewData["Title"]</h2>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6">
+                        <div class="card card-primary">
+                            <div class="card-header" style="background-color: #17A2B8">
+                                <h3 class="card-title">Remove Country from List</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form role="form" method="post" asp-controller="Countries" asp-action="Delete">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label asp-for="Name">Country Name</label>
+                                        <input disabled asp-for="Name" class="form-control" placeholder="Country name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Code">Country Code</label>
+                                        <input disabled asp-for="Code" class="form-control col-3" placeholder="Country code">
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <partial name="_ButtonDeleteAndBackToListPartial" model="Model.Id" />
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!--/.col (left) -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+</body>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
