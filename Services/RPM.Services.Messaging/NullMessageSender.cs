@@ -5,13 +5,21 @@
 
     public class NullMessageSender : IEmailSender
     {
+        // Task IEmailSender.SendEmailAsync(
+        //    string email,
+        //    string subject,
+        //    string message)
+        //{
+        //    return Task.CompletedTask;
+        //}
+
         public Task SendEmailAsync(
-            string from,
-            string fromName,
-            string to,
-            string subject,
-            string htmlContent,
-            IEnumerable<EmailAttachment> attachments = null)
+           string from,
+           string fromName,
+           string to,
+           string subject,
+           string htmlContent,
+           IEnumerable<EmailAttachment> attachments = null)
         {
             return Task.CompletedTask;
         }

@@ -83,7 +83,7 @@
             return false;
         }
 
-        public async Task<AdminCountryDeleteServiceModel> GetByIdAsync(int? id)
+        public async Task<AdminCountryEditDeleteServiceModel> GetByIdAsync(int? id)
         {
             var country = await this.context.Countries.FindAsync(id);
 
@@ -92,7 +92,7 @@
                 return null;
             }
 
-            var model = new AdminCountryDeleteServiceModel
+            var model = new AdminCountryEditDeleteServiceModel
             {
                 Id = country.Id,
                 Name = country.Name,

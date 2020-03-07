@@ -19,6 +19,6 @@
 
         Task<bool> DeleteAsync(int? id);
 
-        Task<AdminCountryDeleteServiceModel> GetByIdAsync(int? id);
+        Task<AdminCountryEditDeleteServiceModel> GetByIdAsync(int? id);
     }
 }

@@ -68,9 +68,10 @@
                     RequireNonAlphanumeric = false,
                 };
 
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             });
+
 
             Account account = new Account(
                 this.configuration["Cloudinary:CloudName"],
@@ -86,7 +87,10 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender("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"));
+            //services.AddSingleton<IEmailSender, SendGridEmailSender>();
+            //services.Configure<EmailOptions>(this.configuration);
+
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IAdminUserService, AdminUserService>();
             services.AddTransient<IAdminCountryService, AdminCountryService>();

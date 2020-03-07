@@ -1,11 +1,11 @@
-﻿namespace RPM.Services.Admin.Models
+﻿namespace RPM.Web.Areas.Administration.Models.Countries
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class AdminCountryDeleteViewModel
+    public class AdminCountryEditDeleteServiceModel
     {
         public int Id { get; set; }
 

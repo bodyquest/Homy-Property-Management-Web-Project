@@ -4,12 +4,53 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.Extensions.Options;
     using SendGrid;
     using SendGrid.Helpers.Mail;
 
     public class SendGridEmailSender : IEmailSender
     {
+        #region
+        //public SendGridEmailSender(IOptions<EmailOptions> emailOptions)
+        //{
+        //    this.Options = emailOptions.Value;
+        //}
+
+        //public EmailOptions Options { get; set; }
+
+        //public async Task SendEmailAsync(string email, string subject, string message)
+        //{
+        //    await this.Execute(this.Options.SendGridKey, subject, message, email);
+        //}
+
+        //private async Task Execute(string sendGridKey, string subject, string message, string email)
+        //{
+        //    var client = new SendGridClient(sendGridKey);
+
+        //    var msg = new SendGridMessage()
+        //    {
+        //        From = new EmailAddress("admin@darko.com", "Homy Property Management"),
+        //        Subject = subject,
+        //        PlainTextContent = message,
+        //        HtmlContent = message,
+        //    };
+
+        //    msg.AddTo(new EmailAddress(email));
+
+        //    try
+        //    {
+        //        var response = await client.SendEmailAsync(msg);
+        //        Console.WriteLine(response.StatusCode);
+        //        Console.WriteLine(await response.Body.ReadAsStringAsync());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex);
+        //        throw;
+        //    }
+        //}
+        #endregion
+
         private readonly SendGridClient client;
 
         public SendGridEmailSender(string apiKey)
