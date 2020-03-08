@@ -3,17 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
+    using MimeKit;
     using RPM.Data.Models;
     using RPM.Services.Messaging;
 
@@ -26,17 +29,20 @@
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private IWebHostEnvironment _env;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _env = env;
         }
 
         [BindProperty]
@@ -91,12 +97,12 @@
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (this.ModelState.IsValid)
             {
-                var user = new User 
+                var user = new User
                 {
                     FirstName = this.Input.FirstName,
                     LastName = this.Input.LastName,
@@ -104,7 +110,7 @@
                     Email = this.Input.Email,
                     Birthdate = this.Input.Birthdate,
                 };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var result = await this._userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -118,27 +124,60 @@
                         values: new { area = "Identity", userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync("darko@test.com", "DotNetDari", Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    #region Use HTML Email Template
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    var webRoot = this._env.WebRootPath;
+
+                    // Get wwwroot Folder
+
+                    var pathToFile = _env.WebRootPath
+                            + Path.DirectorySeparatorChar.ToString()
+                            + "templates"
+                            + Path.DirectorySeparatorChar.ToString()
+                            + "registerConfirmation.html";
+
+                    var builder = new BodyBuilder();
+                    using (StreamReader sourceReader = System.IO.File.OpenText(pathToFile))
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
+                        builder.HtmlBody = sourceReader.ReadToEnd();
+                    }
+
+                    // {0} : callbackURL
+                    var body = builder.HtmlBody;
+                    string messageBody = string.Format(
+                        builder.HtmlBody,
+                        callbackUrl);
+
+                    #endregion
+
+                    await this._emailSender.SendEmailAsync(
+                        "darko@test.com",
+                        "DotNetDari",
+                        this.Input.Email,
+                        "Confirm your email, bah mu mamata",
+                        messageBody
+
+                        // $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
+                        );
+
+                    if (this._userManager.Options.SignIn.RequireConfirmedAccount)
+                    {
+                        return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email });
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        await this._signInManager.SignInAsync(user, isPersistent: false);
+                        return this.LocalRedirect(returnUrl);
                     }
                 }
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    this.ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return Page();
+            return this.Page();
         }
     }
 }
