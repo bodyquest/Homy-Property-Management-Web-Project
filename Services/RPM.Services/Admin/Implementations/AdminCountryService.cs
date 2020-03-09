@@ -1,15 +1,16 @@
 ﻿namespace RPM.Services.Admin.Implementations
 {
-    using Microsoft.EntityFrameworkCore;
-    using RPM.Data;
-    using RPM.Data.Models;
-    using RPM.Services.Admin.Models;
-    using RPM.Web.Areas.Administration.Models.Countries;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+    using RPM.Data;
+    using RPM.Data.Models;
+    using RPM.Services.Admin.Models;
+    using RPM.Web.Areas.Administration.Models.Countries;
 
     public class AdminCountryService : IAdminCountryService
     {
@@ -58,9 +59,27 @@
             return false;
         }
 
-        public Task<bool> UpdateAsync(int? id, string name, string code)
+        public async Task<bool> UpdateAsync(int? id, string name, string code)
         {
-            throw new NotImplementedException();
+            var country = await this.context.Countries.FindAsync(id);
+
+            if (id == null || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(code))
+            {
+                return false;
+            }
+
+            country.Name = name;
+            country.Code = code;
+
+            this.context.Countries.Update(country);
+            var result = await this.context.SaveChangesAsync();
+
+            if (result != 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> DeleteAsync(int? id)

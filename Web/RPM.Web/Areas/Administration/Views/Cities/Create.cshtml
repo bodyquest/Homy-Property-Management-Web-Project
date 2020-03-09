@@ -1,0 +1,107 @@
+﻿@using static RPM.Common.Extensions.EnumerableExtensionMethod
+
+@model AdminCityAndCountryInputModel
+@{
+    ViewData["Title"] = "City Administration";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body>
+    <div class="content-wrapper">
+        <h2 class="text-left pl-3 pt-2">@ViewData["Title"]</h2>
+        <br />
+        <br />
+        <partial name="_StatusMessagePartial" model="Model.StatusMessage" />
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6">
+                        <div class="card card-primary">
+                            <div class="card-header" style="background-color: #17A2B8">
+                                <h3 class="card-title">Add City to List</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form role="form" method="post" asp-controller="Cities" asp-action="Create">
+                                <div class="card-body">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label asp-for="City.Name">City Name</label>
+                                        <input asp-for="City.Name" class="form-control" placeholder="City name">
+                                        <span asp-validation-for="City.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="City.CountryId">Country</label>
+                                        <select id="ddlCountryList" asp-for="City.CountryId" asp-items="Model.CountryList.ToSelectListItem(Model.City.CountryId)" class="form-control col-6"></select>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <partial name="_ButtonCreateAndBackToListPartial" />
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!--/.col (left) -->
+                    <div class="col-md-3 offset-1">
+                        @if (Model.CityList.Count() > 0)
+                        {
+                            <div class="card card-primary">
+                                <div class="card-header" style="background-color: #17A2B8">
+                                    <h3 class="card-title">Existing Cities</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div id="CityList">
+                                    <ul class="list-group">
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <!-- /.card -->
+                        }
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+</body>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function updateCityList() {
+            var countrySelected = document.getElementById("ddlCountryList").value;
+
+            $list = $('#CityList');
+
+            $.ajax({
+                url: '/Administration/Cities/Create/' + countrySelected,
+                type: 'GET',
+                dataType: 'text',
+                success: function (data) {
+                    results = JSON.parse(data);
+                    $list.html('');
+                    $list.append(' <ul class="list-group"> ');
+                    for (i in results) {
+                        $list.append('<li class="list-group-item">' + results[i].text + '</li>');
+                    }
+                    $list.append('</ul>');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            updateCityList();
+        });
+
+        $("#ddlCountryList").on("change", function () {
+            updateCityList();
+        });
+
+    </script>
+}

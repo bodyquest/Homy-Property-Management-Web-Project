@@ -1,13 +1,31 @@
 ﻿@using RPM.Common
+@using RPM.Data.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Homy | Template</title>
 
     <environment names="Development">
-        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900&display=swap" rel="stylesheet">
+
+        <!-- Css Styles -->
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="~/css/flaticon.css" type="text/css">
+        <link rel="stylesheet" href="~/css/nice-select.css" type="text/css">
+        <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
+        <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css">
+        <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
+        <link rel="stylesheet" href="~/css/style.css" type="text/css">
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
@@ -15,61 +33,120 @@
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <nav class="sticky-top">
+        <header class="header-section">
+            <div class="container-fluid">
+                <div class="logo">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
                 </div>
-            </div>
-        </nav>
-    </header>
-    
-    <div class="container">
+                @if (this.SignInManager.IsSignedIn(this.User))
+                {
+                    if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Admin</a>
+                    }
+                    <div class="header-right">
+                        <div class="user-access">
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(this.User.Identity.Name)!</a>
+                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
+                                <button type="submit" class="nav-link btn btn-link">Logout</button>
+                            </form>
+                            <a href="#" class="primary-btn">Add Listing</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <nav class="main-menu mobile-menu">
+                        <ul>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a href="how-it-works.html">Explore</a></li>
+                            <li><a href="listings.html">More Cities</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                            <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                        </ul>
+                    </nav>
+                    <nav class="main-menu mobile-menu">
+                        <div class="header-right">
+                            <div class="user-access">
+                                <a asp-area="Identity" asp-page="/Account/Register">Register/</a>
+                                <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+                            </div>
+                            <a href="#" class="primary-btn">Add Listing</a>
+                        </div>
+                        </nav>
+                        }
+
+                        <div id="mobile-menu-wrap"></div>
+                </div>
+        </header>
+    </nav>
+    <!-- Header End -->
+
+
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+        <main role="main">
             @this.RenderBody()
         </main>
-    </div>
-    
-    <footer class="border-top footer text-muted">
+
+        <br />
+        <br />
+
+    <!-- Footer Section Begin -->
+    <footer class="footer-section spad">
         <div class="container">
-            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - 
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+            <div class="row footer-bottom">
+                <div class="col-lg-5 order-2 order-lg-1">
+                    <div class="copyright">
+                        <p class="text-white">
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
+    <!-- Footer Section End -->
 
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/jquery-3.3.1.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/jquery.magnific-popup.min.js"></script>
+        <script src="~/js/jquery.slicknav.js"></script>
+        <script src="~/js/owl.carousel.min.js"></script>
+        <script src="~/js/jquery.nice-select.min.js"></script>
+        <script src="~/js/mixitup.min.js"></script>
+        <script src="~/js/main.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+        <script src="~js/jquery.magnific-popup.min.js"></script>
+        <script src="~js/jquery.slicknav.js"></script>
+        <script src="~js/jquery.nice-select.min.js"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+        <script src="~js/owl.carousel.min.js"></script>
+        <script src="~js/mixitup.min.js"></script>
+        <script src="~js/main.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
     @this.RenderSection("Scripts", required: false)
 </body>
+
 </html>

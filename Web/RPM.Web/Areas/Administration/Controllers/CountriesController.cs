@@ -48,6 +48,41 @@
             return this.View(model);
         }
 
+        // GET - Edit
+        public async Task<IActionResult> EditAsync(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var model = await this.adminCountryService.GetByIdAsync(id);
+
+            return this.View(model);
+        }
+
+        // POST - Edit
+        [HttpPost]
+        [ActionName("Edit")]
+        public async Task<IActionResult> EditPostAsync(int? id, string name, string code)
+        {
+            if (this.ModelState.IsValid)
+            {
+                bool isEdited = await this.adminCountryService.UpdateAsync(id, name, code);
+
+                if (!isEdited)
+                {
+                    return this.RedirectToAction(nameof(this.Index))
+                        .WithWarning(string.Empty, CouldNotUpdateEntity);
+                }
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            return this.RedirectToAction(nameof(this.Index))
+                        .WithWarning(string.Empty, EntityIdIsInvalid);
+        }
+
         // GET - Delete
         public async Task<IActionResult> DeleteAsync(int? id)
         {

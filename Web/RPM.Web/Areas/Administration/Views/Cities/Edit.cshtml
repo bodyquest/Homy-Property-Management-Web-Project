@@ -1,0 +1,80 @@
+﻿@using static RPM.Common.Extensions.EnumerableExtensionMethod
+
+@model AdminCityEditDeleteServiceModel
+@{
+    ViewData["Title"] = "Country Administration";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body>
+    <div class="content-wrapper">
+        <h2 class="text-left pl-3 pt-2">@ViewData["Title"]</h2>
+        <br />
+        <br />
+        <partial name="_StatusMessagePartial" model="Model.StatusMessage" />
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6">
+                        <div class="card card-primary">
+                            <div class="card-header" style="background-color: #17A2B8">
+                                <h3 class="card-title">Edit City</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form role="form" method="post" asp-controller="Cities" asp-action="Create">
+                                <div class="card-body">
+                                    <input type="hidden" asp-for="City.CountryId" />
+                                    <input type="hidden" asp-for="City.Id" />
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label asp-for="City.Name">City Name</label>
+                                        <input asp-for="City.Name" class="form-control" placeholder="City name">
+                                        <span asp-validation-for="City.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="City.Country">Country</label>
+                                        <select disabled asp-for="City.Country" class="form-control col-6"></select>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <partial name="_ButtonEditAndBackToListPartial" model="Model.City.Id" />
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!--/.col (left) -->
+                    <div class="col-md-3 offset-1">
+                        @if (Model.CityList.Count() > 0)
+                        {
+                            <div class="card card-primary">
+                                <div class="card-header" style="background-color: #17A2B8">
+                                    <h3 class="card-title">Existing Cities</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div id="CityList">
+                                    <ul class="list-group">
+                                        @foreach (var city in Model.CityList)
+                                        {
+                                            <li class="list-group-item text-info">@city</li>
+                                        }
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <!-- /.card -->
+                        }
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+</body>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

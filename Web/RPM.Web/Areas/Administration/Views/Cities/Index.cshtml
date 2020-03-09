@@ -1,0 +1,92 @@
+﻿@using RPM.Services.Admin.Models
+@model IEnumerable<AdminCitiesListingServiceModel>
+@{
+    ViewData["Title"] = "Cities Administration";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<head>
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/themes/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <h2 class="text-center pl-2 pt-2">@ViewData["Title"]</h2>
+        <section class="content">
+            <div class="row justify-content-center">
+                <div class="col-8 pt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h2 class="card-title text-info"><strong>Cities List</strong></h2>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <partial name="_ButtonCreatePartial" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            @if (Model.Count() > 0)
+                            {
+                                <table id="mytable" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>@Html.DisplayNameFor(c => c.Id)</th>
+                                            <th>@Html.DisplayNameFor(c => c.Name)</th>
+                                            <th>@Html.DisplayNameFor(c => c.Country)</th>
+                                            <th class="text-center">Manage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var city in Model)
+                                        {
+                                            <tr>
+                                                <td class="col-md-1">@city.Id</td>
+                                                <td>@city.Name</td>
+                                                <td>@city.Country</td>
+                                                <partial name="_ButtonCRUDPartial" model="city.Id" />
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            }
+                            else
+                            {
+                                <h2 class="text-danger">Oops, no records in the database !</h2>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- DataTables -->
+    <script src="~/themes/admin/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/themes/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+</body>
+<!-- page script -->
+@section Scripts{
+    <script>
+        $(function () {
+            $('#mytable').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#mytable').dataTable();
+            table.fnPageChange('next');
+        });
+    </script>
+}

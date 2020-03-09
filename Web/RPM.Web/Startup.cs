@@ -94,6 +94,7 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IAdminUserService, AdminUserService>();
             services.AddTransient<IAdminCountryService, AdminCountryService>();
+            services.AddTransient<IAdminCityService, AdminCityService>();
 
             services.AddMvc(options =>
             {
