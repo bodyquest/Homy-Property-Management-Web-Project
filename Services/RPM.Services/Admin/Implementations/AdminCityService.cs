@@ -34,7 +34,6 @@
             return cities;
         }
 
-
         public async Task<AdminCityAndCountryInputModel> GetCreateAsync()
         {
             AdminCityAndCountryInputModel model = new AdminCityAndCountryInputModel
@@ -80,7 +79,6 @@
             }
         }
 
-
         public async Task<AdminCityEditDeleteServiceModel> GetUpdateAsync(int? id)
         {
             var city = await this.context.Cities
@@ -97,7 +95,7 @@
             {
                 Country = country.Name,
 
-                City = new City(),
+                City = city,
 
                 CityList = await this.context.Cities
                     .Where(x => x.CountryId == city.CountryId)
@@ -108,12 +106,23 @@
             };
 
             return model;
-
         }
 
-        public async Task<bool> UpdateAsync(int? id, string name, string countryName)
+        public async Task<bool> UpdateAsync(int? id, string name)
         {
-            throw new NotImplementedException();
+            var city = await this.context.Cities
+                .FindAsync(id);
+
+            if (city == null || string.IsNullOrWhiteSpace(name))
+            {
+                return false;
+            }
+
+            city.Name = name;
+
+            await this.context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> DeleteAsync(int? id)

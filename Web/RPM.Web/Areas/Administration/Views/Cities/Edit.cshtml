@@ -23,19 +23,18 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form role="form" method="post" asp-controller="Cities" asp-action="Create">
+                            <form role="form" method="post" asp-controller="Cities" asp-action="Edit">
                                 <div class="card-body">
-                                    <input type="hidden" asp-for="City.CountryId" />
                                     <input type="hidden" asp-for="City.Id" />
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
                                         <label asp-for="City.Name">City Name</label>
-                                        <input asp-for="City.Name" class="form-control" placeholder="City name">
+                                        <input asp-for="City.Name" class="form-control">
                                         <span asp-validation-for="City.Name" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label asp-for="City.Country">Country</label>
-                                        <select disabled asp-for="City.Country" class="form-control col-6"></select>
+                                        <label asp-for="Country">Country</label>
+                                        <input type="text" asp-for="Country" class="form-control col-6" disabled>
                                     </div>
                                 </div>
                                 <!-- /.card-body -->

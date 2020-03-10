@@ -20,7 +20,7 @@
 
         Task<AdminCityEditDeleteServiceModel> GetUpdateAsync(int? id);
 
-        Task<bool> UpdateAsync(int? id, string name, string countryName);
+        Task<bool> UpdateAsync(int? id, string name);
 
 
         Task<bool> DeleteAsync(int? id);

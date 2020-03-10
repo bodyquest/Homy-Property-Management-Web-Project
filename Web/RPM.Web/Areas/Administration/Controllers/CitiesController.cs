@@ -52,7 +52,7 @@
 
                 if (cityExists == null)
                 {
-                    this.StatusMessage = EntityAlreadyExists;
+                    this.StatusMessage = RecordAlreadyExists;
 
                     modelVM.City = model.City;
                     modelVM.StatusMessage = this.StatusMessage;
@@ -60,7 +60,8 @@
                     return this.View(modelVM);
                 }
 
-                return this.RedirectToAction(nameof(this.Index));
+                return this.RedirectToAction(nameof(this.Index))
+                    .WithSuccess(string.Empty, RecordCreatedSuccessfully);
             }
 
             return this.View(modelVM);
@@ -92,24 +93,46 @@
 
         // POST: Cities/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [ActionName("Edit")]
+        public async Task<IActionResult> EditPostAsync(int? id, AdminCityEditDeleteServiceModel model)
         {
-            try
+            if (this.ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                bool isEdited = await this.adminCityService.UpdateAsync(id, model.City.Name);
 
-                return RedirectToAction(nameof(Index));
+                if (!isEdited)
+                {
+                    this.StatusMessage = CouldNotUpdateRecord;
+                    var modelVM = await this.adminCityService.GetUpdateAsync(id);
+                    modelVM.StatusMessage = this.StatusMessage;
+
+                    return this.View(modelVM);
+                }
+
+                return this.RedirectToAction(nameof(this.Index))
+                    .WithSuccess(string.Empty, RecordUpdatedSuccessfully);
             }
-            catch
-            {
-                return View();
-            }
+
+            return this.RedirectToAction(nameof(this.Index))
+                        .WithWarning(string.Empty, RecordIdIsInvalid);
         }
 
         // GET: Cities/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var model = await this.adminCityService.GetUpdateAsync(id);
+
+            if (model == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View();
         }
 
         // POST: Cities/Delete/5

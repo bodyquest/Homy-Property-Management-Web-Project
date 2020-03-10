@@ -73,14 +73,14 @@
                 if (!isEdited)
                 {
                     return this.RedirectToAction(nameof(this.Index))
-                        .WithWarning(string.Empty, CouldNotUpdateEntity);
+                        .WithWarning(string.Empty, CouldNotUpdateRecord);
                 }
 
                 return this.RedirectToAction(nameof(this.Index));
             }
 
             return this.RedirectToAction(nameof(this.Index))
-                        .WithWarning(string.Empty, EntityIdIsInvalid);
+                        .WithWarning(string.Empty, RecordIdIsInvalid);
         }
 
         // GET - Delete
@@ -108,14 +108,15 @@
                 if (!isDeleted)
                 {
                     return this.RedirectToAction(nameof(this.Index))
-                        .WithWarning(string.Empty, CouldNotDeleteEntity);
+                        .WithWarning(string.Empty, CouldNotDeleteRecord);
                 }
 
-                return this.RedirectToAction(nameof(this.Index));
+                return this.RedirectToAction(nameof(this.Index))
+                    .WithSuccess(string.Empty, RecordDeletedSuccessfully);
             }
 
             return this.RedirectToAction(nameof(this.Index))
-                        .WithWarning(string.Empty, EntityIdIsInvalid);
+                        .WithWarning(string.Empty, RecordIdIsInvalid);
         }
     }
 }
