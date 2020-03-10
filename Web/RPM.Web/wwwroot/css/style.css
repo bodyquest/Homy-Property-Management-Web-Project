@@ -403,7 +403,7 @@ ol {
 
 .hero-section {
 	height: 938px;
-	padding-top: 253px;
+	padding-top: 170px;
 }
 
 .hero-text h1 {
@@ -741,7 +741,7 @@ ol {
 	padding: 30px 15px 29px 48px;
 	display: inline-block;
 	position: relative;
-	background: #000;
+	background: #00000087;
 	z-index: 999;
 }
 
@@ -2114,7 +2114,7 @@ ol {
 
 @media only screen and (min-width: 1350px) and (max-width: 1920px) {
 	.header-section .logo {
-		margin-right: 180px;
+		margin-right: 120px;
 	}
 }
 
