@@ -38,10 +38,7 @@
         [DataType(DataType.Date)]
         public DateTime Birthdate { get; set; }
 
-        [ForeignKey(nameof(ProfilePic))]
-        public int? ProfilePicId { get; set; }
-
-        public virtual CloudImage ProfilePic { get; set; }
+        public CloudImage ProfilePic { get; set; }
 
         public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
 

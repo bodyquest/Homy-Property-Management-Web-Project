@@ -49,5 +49,7 @@
         [ForeignKey(nameof(Country))]
         public int CountryId { get; set; }
         public Country Country { get; set; }
+
+        public ICollection<CloudImage> Images { get; set; }
     }
 }
