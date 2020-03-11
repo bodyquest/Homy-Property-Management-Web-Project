@@ -19,6 +19,5 @@
         public Country Country { get; set; }
 
         public ICollection<Home> Homes { get; set; }
-
     }
 }

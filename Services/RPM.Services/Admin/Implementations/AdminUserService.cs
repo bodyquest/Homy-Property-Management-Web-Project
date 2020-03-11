@@ -49,5 +49,17 @@
 
             return query.To<T>().ToList();
         }
+
+        public async Task<User> GetUserByUsername(string username)
+        {
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user;
+        }
     }
 }

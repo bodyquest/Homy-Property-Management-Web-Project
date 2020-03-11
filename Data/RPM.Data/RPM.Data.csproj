@@ -15,6 +15,8 @@
     <Compile Remove="Migrations\20200304233544_AddInitialDatabase.Designer.cs" />
     <Compile Remove="Migrations\20200307115951_InitializeCollections.cs" />
     <Compile Remove="Migrations\20200307115951_InitializeCollections.Designer.cs" />
+    <Compile Remove="Migrations\20200311124118_ChangeHomeEntityAddressConstraints.cs" />
+    <Compile Remove="Migrations\20200311124118_ChangeHomeEntityAddressConstraints.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

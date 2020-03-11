@@ -1,23 +1,19 @@
-﻿namespace RPM.Data.Models
+﻿namespace RPM.Web.Areas.Administration.Models.Listings
 {
+    using AutoMapper;
+    using Microsoft.AspNetCore.Http;
+    using RPM.Data.Models.Enums;
+    using RPM.Web.Areas.Administration.Models.Countries;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Text;
-
-    using RPM.Data.Models.Enums;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     using static RPM.Common.GlobalConstants;
 
-    public class Home
+    public class AdminListingCreateInputModel
     {
-        public Home()
-        {
-            this.Id = Guid.NewGuid().ToString();
-            this.Images = new HashSet<CloudImage>();
-        }
-
         public string Id { get; set; }
 
         [Required]
@@ -46,14 +42,21 @@
         public HomeCategory Category { get; set; }
 
         [Required]
-        [ForeignKey(nameof(User))]
-        public string OwnerId { get; set; }
-        public User Owner { get; set; }
+        public string Owner { get; set; }
 
-        [ForeignKey(nameof(City))]
-        public int CityId { get; set; }
-        public City City { get; set; }
+        [Required]
+        public string Country { get; set; }
 
-        public ICollection<CloudImage> Images { get; set; }
+        [Required]
+        public string City { get; set; }
+
+        [Required]
+        public IFormFile Image { get; set; }
+
+        public IEnumerable<CityViewModel> Cities { get; set; }
+
+        public IEnumerable<CountryViewModel> Countries { get; set; }
+
+        public IEnumerable<IFormFile> Images { get; set; }
     }
 }
