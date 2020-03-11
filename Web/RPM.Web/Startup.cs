@@ -25,6 +25,8 @@
     using RPM.Services.Admin;
     using RPM.Services.Admin.Implementations;
     using Microsoft.AspNetCore.Mvc;
+    using RPM.Services.Common;
+    using RPM.Services.Common.Implementations;
 
     public class Startup
     {
@@ -68,6 +70,8 @@
                     RequireNonAlphanumeric = false,
                 };
 
+                options.User.RequireUniqueEmail = true;
+
                 options.SignIn.RequireConfirmedEmail = true;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             });
@@ -95,6 +99,10 @@
             services.AddTransient<IAdminUserService, AdminUserService>();
             services.AddTransient<IAdminCountryService, AdminCountryService>();
             services.AddTransient<IAdminCityService, AdminCityService>();
+            services.AddTransient<IAdminListingService, AdminListingService>();
+            services.AddTransient<ICloudImageService, CloudImageService>();
+            services.AddTransient<IImageDbService, ImageDbService>();
+            services.AddTransient<ICloudImageService, CloudImageService>();
 
             services.AddMvc(options =>
             {
@@ -105,7 +113,9 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(ErrorViewModel).GetTypeInfo().Assembly
+                );
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())

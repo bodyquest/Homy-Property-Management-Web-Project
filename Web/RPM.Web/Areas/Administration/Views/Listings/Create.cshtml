@@ -1,0 +1,140 @@
+﻿@using RPM.Data.Models.Enums
+
+@model RPM.Web.Areas.Administration.Models.Listings.AdminListingCreateInputModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "List Property";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body>
+    <div class="content-wrapper">
+        <h2 class="text-left pl-3 pt-2">@ViewData["Title"]</h2>
+        <br />
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header bg-info">
+                                <h3 class="card-title">Add a Property</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form method="post" role="form" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly"></div>
+
+                                <div class="card-body">
+
+                                    <div class="form-group">
+
+                                        <label asp-for="Name" class="col-form-label">Title</label>
+                                        <input asp-for="Name" class="form-control" placeholder="Title...">
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Description" class="col-form-label">Description</label>
+                                        <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter description..."></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Address">Address</label>
+                                        <input asp-for="Address" class="form-control" placeholder="Address...">
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="City">City</label>
+                                        <input asp-for="City" class="form-control" placeholder="City...">
+                                        <span asp-validation-for="City" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Price">Price</label>
+                                        <input type="number"
+                                               step="0.01"
+                                               class="form-control"
+                                               id="price"
+                                               placeholder="Price..."
+                                               asp-for="Price">
+                                        <span asp-validation-for="Price" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Owner">Owner's Username</label>
+                                        <input asp-for="Owner" class="form-control" placeholder="Owner Username...">
+                                        <span asp-validation-for="Owner" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Status">Status</label>
+                                        <select asp-for="Status"
+                                                asp-items="Html.GetEnumSelectList<HomeStatus>().OrderBy(x => x.Value)"
+                                                class="form-control"
+                                                placeholder="Status..."></select>
+                                        <span asp-validation-for="Status" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Category">Category</label>
+                                        <select asp-for="Category"
+                                                asp-items="Html.GetEnumSelectList<HomeCategory>().OrderBy(x => x.Value)"
+                                                class="form-control"
+                                                placeholder="Category..."></select>
+                                        <span asp-validation-for="Category" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="pb-2 text-bold">Image</div>
+                                    <div class="custom-file">
+                                        <label asp-for="Image" class="custom-file-label">Upload Image...</label>
+                                        <div class="input-group">
+                                            <input type="file"
+                                                   asp-for="Image"
+                                                   class="form-control custom-file-input"
+                                                   id="image"
+                                                   placeholder="Image...">
+                                            <span asp-validation-for="Image" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-info">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--/.col (left) -->
+                    <!-- right column -->
+                    <div class="col-md-5 offset-1">
+                        <!-- general form elements disabled -->
+                        <div class="card card-warning">
+                            <div class="card-header">
+                                <h3 class="card-title text-info">Images</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!--/.col (right) -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+</body>
+
+<!-- /.row -->
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
