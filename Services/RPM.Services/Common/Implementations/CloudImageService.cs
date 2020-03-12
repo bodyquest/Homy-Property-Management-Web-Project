@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
     using CloudinaryDotNet;
@@ -35,6 +36,8 @@
             }
 
             var fileName = imageFile.FileName;
+            //int index = fileName.LastIndexOf('.');
+            //var trueFileName = index == -1 ? fileName : fileName.Substring(0, index);
 
             using (var ms = new MemoryStream(destinationData))
             {
@@ -42,7 +45,7 @@
                 {
                     Folder = CloudFolder,
                     File = new FileDescription(fileName, ms),
-                    PublicId = fileName,
+                    PublicId = $"{PubPrefix}_{Guid.NewGuid().ToString().Substring(0, 5)}",
                     Transformation = new Transformation().Crop(Limit).Width(ImgWidth).Height(ImgHeight),
                 };
 

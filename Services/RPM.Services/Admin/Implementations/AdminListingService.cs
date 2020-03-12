@@ -53,12 +53,12 @@
             };
 
             home.Images.Add(model.Image);
-            
 
             this.context.Homes.Add(home);
             var result = await this.context.SaveChangesAsync();
 
             city.Homes.Add(home);
+            await this.context.SaveChangesAsync();
 
             return result > 0;
         }

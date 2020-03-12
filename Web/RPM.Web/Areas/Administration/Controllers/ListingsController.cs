@@ -98,8 +98,12 @@
 
             var owner = await this.adminUserService.GetUserByUsername(model.Owner);
 
-            await this.userManager.AddToRoleAsync(owner, OwnerRoleName);
-            await this.imageDbService.WriteToDatabasebAsync(imgUrl, imgPubId);
+            if (!await this.userManager.IsInRoleAsync(owner, OwnerRoleName))
+            {
+                await this.userManager.AddToRoleAsync(owner, OwnerRoleName);
+            }
+
+            //await this.imageDbService.WriteToDatabasebAsync(imgUrl, imgPubId);
 
             return this.RedirectToAction("Index", "Dashboard", new { area = AdminArea })
                 .WithSuccess(string.Empty, RecordCreatedSuccessfully);
