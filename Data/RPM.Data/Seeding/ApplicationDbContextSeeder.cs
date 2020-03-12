@@ -33,6 +33,7 @@
                               new SettingsSeeder(),
                               new CountriesSeeder(),
                               new CitiesSeeder(),
+                              new UsersSeeder(),
                           };
 
             foreach (var seeder in seeders)
