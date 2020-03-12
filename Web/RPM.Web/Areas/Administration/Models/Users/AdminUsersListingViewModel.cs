@@ -1,11 +1,12 @@
 ﻿namespace RPM.Web.Areas.Administration.Models.Users
 {
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using RPM.Services.Admin.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using RPM.Services.Admin.Models;
 
     public class AdminUsersListingViewModel
     {

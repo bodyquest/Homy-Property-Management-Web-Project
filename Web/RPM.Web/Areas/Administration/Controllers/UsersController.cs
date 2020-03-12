@@ -32,8 +32,7 @@
 
         public async Task<IActionResult> Index()
         {
-            //var users = await this.adminUserService.AllAsync();
-            var users = this.adminUserService.GetAll<AdminUserListingServiceModel>();
+            var users = await this.adminUserService.AllAsync();
             var roles = await this.roleManager
                 .Roles
                 .Select(x => new SelectListItem
@@ -41,6 +40,7 @@
                     Text = x.Name,
                     Value = x.Name,
                 })
+                .OrderByDescending(x => x.Value)
                 .ToListAsync();
 
             var model = new AdminUsersListingViewModel

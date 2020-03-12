@@ -5,7 +5,6 @@
 }
 
 <head>
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/themes/admin/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
@@ -19,74 +18,82 @@
 </head>
 <body>
     <div class="content-wrapper">
-        <h2 class="text-left pl-2 pt-2">@ViewData["Title"]</h2>
+        <h2 class="text-left pl-3 pt-2">@ViewData["Title"]</h2>
         <section class="content">
             <div class="row justify-content-center">
                 <div class="col-12 pt-4">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title text-info"><strong>Users List</strong></h3>
+                            <h3 class="card-title text-info pl-1"><strong>Users List</strong></h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="mytable" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="text-center text-info"><strong>Username</strong></th>
-                                        <th class="text-center text-info"><strong>Email</strong></th>
-                                        <th class="text-center text-info"><strong>Add Role</strong></th>
-                                        <th class="text-center text-info"><strong>Remove Role</strong></th>
+                                        <th class="col-2 text-info"><strong>Username</strong></th>
+                                        <th class="col-4 text-info"><strong>Email</strong></th>
+                                        <th class="col-2 text-center text-info"><strong>Add Role</strong></th>
+                                        <th class="col-2 text-center text-info"><strong>Remove Role</strong></th>
+                                        <th class="col-1 text-center text-info"><strong>Profile</strong></th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var user in Model.Users)
                                     {
-                                        var userRolesToAdd = Model.Roles.Where(r => !user.UserRoles.Contains(r.Text));
-                                        var userRolesToRemoveFrom = Model.Roles.Where(r => user.UserRoles.Contains(r.Text));
-                                        <tr>
-                                            <td>@user.Username</td>
-                                            <td>@user.Email</td>
-                                            <td>
-                                                @if (userRolesToAdd.Any())
-                                                {
-                                                <form asp-controller="Users" asp-action="AddToRole" method="post">
-                                                    <div class="form-inline text-center">
-                                                            <input type="hidden" name="UserId" value="@user.Id" />
-                                                            <select 
-                                                                    name="Role" 
-                                                                    asp-items="userRolesToAdd" 
-                                                                    class="form-control">
-                                                            </select>
-                                                        <button class="btn btn-sm btn-primary" type="submit" value="Add">
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (userRolesToRemoveFrom.Any())
-                                                {
-                                                    <form asp-controller="Users" asp-action="RemoveFromRole" method="post">
-                                                        <div class="col-md-8">
-                                                            <input type="hidden" name="UserId" value="@user.Id" />
-                                                            <select name="Role"
-                                                                    asp-items="userRolesToRemoveFrom"
-                                                                    class="form-control">
-                                                            </select>
-                                                           
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button class="btn btn-sm btn-danger" type="submit" value="Remove">
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                }
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>@user.Username</td>
+                                        <td>@user.Email</td>
+                                        <td>
+                                            <form asp-controller="Users"
+                                                  asp-action="AddToRole" method="post">
+                                                <div class="d-flex justify-content-end">
+                                                    <input type="hidden"
+                                                           name="UserId"
+                                                           value="@user.Id" />
+                                                    <select name="Role"
+                                                            asp-items="Model.Roles"
+                                                            class="form-control col-9">
+                                                    </select>
+                                                    &nbsp;
+                                                    <button class=" col-2 btn btn-sm btn-primary"
+                                                            type="submit"
+                                                            value="Add">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form asp-controller="Users"
+                                                  asp-action="RemoveFromRole" method="post">
+                                                <div class="d-flex justify-content-end">
+                                                    <input type="hidden" name="UserId" value="@user.Id" />
+                                                    <select name="Role"
+                                                            asp-items="Model.Roles"
+                                                            class="form-control col-9">
+                                                    </select>
+                                                    &nbsp;
+                                                    <button class="col-2 btn btn-sm btn-danger"
+                                                            type="submit"
+                                                            value="Remove">
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </button>
+                                            </form>
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-dark"
+                                                    type="submit"
+                                                    value="Remove">
+                                                <i class="far fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
                                     }
                                 </tbody>
-
+                                
                             </table>
                         </div>
                     </div>
