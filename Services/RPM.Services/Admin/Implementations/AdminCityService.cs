@@ -130,9 +130,26 @@
             throw new NotImplementedException();
         }
 
-        public async Task<AdminCityEditDeleteServiceModel> GetByIdAsync(int? id)
+        public async Task<AdminCityDetailsServiceModel> GetByIdAsync(int? id)
         {
-            throw new NotImplementedException();
+            var city = await this.context.Cities
+                .FindAsync(id);
+
+            if (city == null)
+            {
+                return null;
+            }
+
+            var country = await this.context.Countries.FindAsync(city.CountryId);
+
+            var model = new AdminCityDetailsServiceModel
+            {
+                Id = city.Id,
+                Name = city.Name,
+                Country = country.Name,
+            };
+
+            return model;
         }
     }
 }

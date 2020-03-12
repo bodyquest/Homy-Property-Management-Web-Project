@@ -25,6 +25,6 @@
 
         Task<bool> DeleteAsync(int? id);
 
-        Task<AdminCityEditDeleteServiceModel> GetByIdAsync(int? id);
+        Task<AdminCityDetailsServiceModel> GetByIdAsync(int? id);
     }
 }

@@ -55,7 +55,10 @@
                                 <!-- /.card-header -->
                                 <div id="CityList">
                                     <ul class="list-group">
-
+                                        @foreach (var city in Model.CityList)
+                                        {
+                                            <li class="list-group-item text-info">@city</li>
+                                        }
                                     </ul>
                                 </div>
 

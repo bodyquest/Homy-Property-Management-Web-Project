@@ -117,7 +117,7 @@
                         .WithWarning(string.Empty, RecordIdIsInvalid);
         }
 
-        // GET: Cities/Delete/5
+        // GET - Delete
         public async Task<IActionResult> DeleteAsync(int? id)
         {
             if (id == null)
@@ -125,30 +125,35 @@
                 return this.NotFound();
             }
 
-            var model = await this.adminCityService.GetUpdateAsync(id);
+            var model = await this.adminCityService.GetByIdAsync(id);
 
-            if (model == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View();
+            return this.View(model);
         }
 
-        // POST: Cities/Delete/5
+        // POST - Delete
         [HttpPost]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeletePostAsync(int? id)
         {
-            try
+            if (this.ModelState.IsValid)
             {
-                // TODO: Add delete logic here
+                bool isDeleted = await this.adminCityService.DeleteAsync(id);
 
-                return RedirectToAction(nameof(Index));
+                if (!isDeleted)
+                {
+                    this.StatusMessage = CouldNotUpdateRecord;
+                    var modelVM = await this.adminCityService.GetByIdAsync(id);
+                    modelVM.StatusMessage = this.StatusMessage;
+
+                    return this.View(modelVM);
+                }
+
+                return this.RedirectToAction(nameof(this.Index))
+                    .WithSuccess(string.Empty, RecordDeletedSuccessfully);
             }
-            catch
-            {
-                return View();
-            }
+
+            return this.RedirectToAction(nameof(this.Index))
+                        .WithWarning(string.Empty, RecordIdIsInvalid);
         }
     }
 }
