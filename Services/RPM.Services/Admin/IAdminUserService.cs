@@ -10,7 +10,9 @@
 
     public interface IAdminUserService
     {
-        Task<IEnumerable<AdminUserListingServiceModel>> AllAsync();
+        Task<IEnumerable<AdminUserListingServiceModel>> AllAsync(int page = 1);
+
+        int Total();
 
         IEnumerable<T> GetAll<T>(int? count = null);
 

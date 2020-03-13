@@ -16,6 +16,8 @@
 
         public string Email { get; set; }
 
+        public DateTime RegisteredOn { get; set; }
+
         public List<string> UserRoles { get; set; }
     }
 }

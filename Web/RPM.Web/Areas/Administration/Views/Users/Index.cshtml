@@ -1,4 +1,4 @@
-﻿@model AdminUsersListingViewModel
+﻿@model AllUsersViewModel
 @{
     ViewData["Title"] = "User Administration";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -25,6 +25,50 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title text-info pl-1"><strong>Users List</strong></h3>
+                            <div class="row d-flex justify-content-end">
+                                @if (Model.PreviousDisabled)
+                                {
+                                    <div class="col-1 d-flex align-items-center text-left">
+                                        <h6>@Model.CurrentPage-@Model.PageSize/@Model.Total</h6>
+                                    </div>
+
+                                    <a href="/Administration/Users?page=@Model.PreviousPage"
+                                       class="btn btn-default text-center mb-1
+                                    @(Model.PreviousDisabled? "disabled" : string.Empty)">Prev</a>
+                                }
+                                else if (Model.NextDisabled)
+                                {
+                                    <div class="col-1 d-flex align-items-center text-left">
+                                        <h6 class="align-center">@(Model.CurrentPage * Model.PageSize)-@Model.Total/@Model.Total</h6>
+                                    </div>
+                                    <a href="/Administration/Users?page=@Model.PreviousPage"
+                                       class="btn btn-info text-center mb-1
+                                    @(Model.PreviousDisabled? "disabled" : string.Empty)">Prev</a>
+                                }
+                                else
+                                {
+                                    <div class="col-1 d-flex align-items-center text-left">
+                                        <h6 class="align-center">@(Model.CurrentPage * Model.PageSize)-@((Model.CurrentPage * Model.PageSize) + Model.PageSize)/@Model.Total</h6>
+                                    </div>
+                                    <a href="/Administration/Users?page=@Model.PreviousPage"
+                                       class="btn btn-info text-center mb-1
+                                    @(Model.PreviousDisabled? "disabled" : string.Empty)">Prev</a>
+                                }
+
+                                @if (Model.NextDisabled)
+                                {
+                                    <a href="/Administration/Users?page=@Model.NextPage"
+                                       class="btn btn-default ml-1 pr-3 mr-1 text-center mb-1
+                               @(Model.NextDisabled? "disabled" : string.Empty)">Next</a>
+                                }
+                                else
+                                {
+                                    <a href="/Administration/Users?page=@Model.NextPage"
+                                       class="btn btn-info ml-1 pr-3 mr-1 text-center mb-1
+                               @(Model.NextDisabled? "disabled" : string.Empty)">Next</a>
+                                }
+                            </div>
+
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -36,64 +80,63 @@
                                         <th class="col-2 text-center text-info"><strong>Add Role</strong></th>
                                         <th class="col-2 text-center text-info"><strong>Remove Role</strong></th>
                                         <th class="col-1 text-center text-info"><strong>Profile</strong></th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var user in Model.Users)
                                     {
-                                    <tr>
-                                        <td>@user.Username</td>
-                                        <td>@user.Email</td>
-                                        <td>
-                                            <form asp-controller="Users"
-                                                  asp-action="AddToRole" method="post">
-                                                <div class="d-flex justify-content-end">
-                                                    <input type="hidden"
-                                                           name="UserId"
-                                                           value="@user.Id" />
-                                                    <select name="Role"
-                                                            asp-items="Model.Roles"
-                                                            class="form-control col-9">
-                                                    </select>
-                                                    &nbsp;
-                                                    <button class=" col-2 btn btn-sm btn-primary"
-                                                            type="submit"
-                                                            value="Add">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                </div>
+                                        <tr>
+                                            <td>@user.Username</td>
+                                            <td>@user.Email</td>
+                                            <td>
+                                                <form asp-controller="Users"
+                                                      asp-action="AddToRole" method="post">
+                                                    <div class="d-flex justify-content-end">
+                                                        <input type="hidden"
+                                                               name="UserId"
+                                                               value="@user.Id" />
+                                                        <select name="Role"
+                                                                asp-items="Model.Roles"
+                                                                class="form-control col-9">
+                                                        </select>
+                                                        &nbsp;
+                                                        <button class=" col-3 btn btn-sm btn-info"
+                                                                type="submit"
+                                                                value="Add">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
 
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <form asp-controller="Users"
-                                                  asp-action="RemoveFromRole" method="post">
-                                                <div class="d-flex justify-content-end">
-                                                    <input type="hidden" name="UserId" value="@user.Id" />
-                                                    <select name="Role"
-                                                            asp-items="Model.Roles"
-                                                            class="form-control col-9">
-                                                    </select>
-                                                    &nbsp;
-                                                    <button class="col-2 btn btn-sm btn-danger"
-                                                            type="submit"
-                                                            value="Remove">
-                                                        <i class="far fa-trash-alt"></i>
-                                                    </button>
-                                            </form>
-                                        </td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-dark"
-                                                    type="submit"
-                                                    value="Remove">
-                                                <i class="far fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <form asp-controller="Users"
+                                                      asp-action="RemoveFromRole" method="post">
+                                                    <div class="d-flex justify-content-end">
+                                                        <input type="hidden" name="UserId" value="@user.Id" />
+                                                        <select name="Role"
+                                                                asp-items="Model.Roles"
+                                                                class="form-control col-9">
+                                                        </select>
+                                                        &nbsp;
+                                                        <button class="col-3 btn btn-sm btn-danger"
+                                                                type="submit"
+                                                                value="Remove">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                </form>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class=" col-7 btn btn-dark"
+                                                        type="submit"
+                                                        value="Remove">
+                                                    <i class="far fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     }
                                 </tbody>
-                                
+
                             </table>
                         </div>
                     </div>

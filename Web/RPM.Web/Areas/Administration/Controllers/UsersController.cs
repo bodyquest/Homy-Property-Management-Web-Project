@@ -30,9 +30,9 @@
             this.roleManager = roleManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var users = await this.adminUserService.AllAsync();
+            var users = await this.adminUserService.AllAsync(page);
             var roles = await this.roleManager
                 .Roles
                 .Select(x => new SelectListItem
@@ -43,10 +43,15 @@
                 .OrderByDescending(x => x.Value)
                 .ToListAsync();
 
-            var model = new AdminUsersListingViewModel
+            var totalUsers = this.adminUserService.Total();
+
+            var model = new AllUsersViewModel
             {
                 Users = users,
                 Roles = roles,
+                Total = totalUsers,
+                CurrentPage = page,
+                PageSize = PageSize,
             };
 
             return this.View(model);

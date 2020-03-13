@@ -15,6 +15,8 @@
     using RPM.Services.Admin.Models;
     using RPM.Services.Mapping;
 
+    using static RPM.Common.GlobalConstants;
+
     public class AdminUserService : IAdminUserService
     {
         private readonly ApplicationDbContext context;
@@ -26,17 +28,22 @@
             this.usersRepository = usersRepository;
         }
 
-        public async Task<IEnumerable<AdminUserListingServiceModel>> AllAsync()
+        public async Task<IEnumerable<AdminUserListingServiceModel>> AllAsync(int page = 1)
         {
             return await this.context.Users
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize)
                 .Select(x => new AdminUserListingServiceModel
                 {
                     Username = x.UserName,
                     Email = x.Email,
+                    RegisteredOn = x.CreatedOn,
 
                 })
                 .ToListAsync();
         }
+
+        public int Total() => this.context.Users.Count();
 
         public IEnumerable<T> GetAll<T>(int? count = null)
         {
