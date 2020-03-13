@@ -21,6 +21,7 @@
         <h2 class="text-left pl-3 pt-2">@ViewData["Title"]</h2>
         <section class="content">
             <div class="row justify-content-center">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="col-12 pt-4">
                     <div class="card">
                         <div class="card-header">
@@ -33,7 +34,7 @@
                                     </div>
 
                                     <a href="/Administration/Users?page=@Model.PreviousPage"
-                                       class="btn btn-default text-center mb-1
+                                       class="btn btn-default text-center
                                     @(Model.PreviousDisabled? "disabled" : string.Empty)">Prev</a>
                                 }
                                 else if (Model.NextDisabled)
@@ -42,7 +43,7 @@
                                         <h6 class="align-center">@(Model.CurrentPage * Model.PageSize)-@Model.Total/@Model.Total</h6>
                                     </div>
                                     <a href="/Administration/Users?page=@Model.PreviousPage"
-                                       class="btn btn-info text-center mb-1
+                                       class="btn btn-info text-center
                                     @(Model.PreviousDisabled? "disabled" : string.Empty)">Prev</a>
                                 }
                                 else
@@ -51,20 +52,20 @@
                                         <h6 class="align-center">@(Model.CurrentPage * Model.PageSize)-@((Model.CurrentPage * Model.PageSize) + Model.PageSize)/@Model.Total</h6>
                                     </div>
                                     <a href="/Administration/Users?page=@Model.PreviousPage"
-                                       class="btn btn-info text-center mb-1
+                                       class="btn btn-info text-center
                                     @(Model.PreviousDisabled? "disabled" : string.Empty)">Prev</a>
                                 }
 
                                 @if (Model.NextDisabled)
                                 {
                                     <a href="/Administration/Users?page=@Model.NextPage"
-                                       class="btn btn-default ml-1 pr-3 mr-1 text-center mb-1
+                                       class="btn btn-default ml-1 pr-3 mr-1 text-center
                                @(Model.NextDisabled? "disabled" : string.Empty)">Next</a>
                                 }
                                 else
                                 {
                                     <a href="/Administration/Users?page=@Model.NextPage"
-                                       class="btn btn-info ml-1 pr-3 mr-1 text-center mb-1
+                                       class="btn btn-info ml-1 pr-3 mr-1 text-center
                                @(Model.NextDisabled? "disabled" : string.Empty)">Next</a>
                                 }
                             </div>
@@ -86,7 +87,19 @@
                                     @foreach (var user in Model.Users)
                                     {
                                         <tr>
-                                            <td>@user.Username</td>
+                                            <td class="pl-0 align-center">
+                                                <ul class="d-flex flex-row pl-0 m-0" style="list-style-type:none;">
+                                                    <li class="col-9 my-auto">
+                                                        @user.Username
+                                                    </li>
+                                                    <li class="col-3 my-auto">
+                                                        @foreach (var role in user.UserRoles)
+                                                        {
+                                                            <span class="row right badge badge-danger">@role</span>
+                                                        }
+                                                    </li>
+                                                </ul>
+                                            </td>
                                             <td>@user.Email</td>
                                             <td>
                                                 <form asp-controller="Users"
@@ -106,7 +119,6 @@
                                                             <i class="fas fa-plus"></i>
                                                         </button>
                                                     </div>
-
                                                 </form>
                                             </td>
                                             <td>
@@ -124,6 +136,7 @@
                                                                 value="Remove">
                                                             <i class="far fa-trash-alt"></i>
                                                         </button>
+                                                    </div>
                                                 </form>
                                             </td>
                                             <td class="text-center">

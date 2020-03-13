@@ -1,4 +1,4 @@
-﻿@model AdminCountryEditDeleteServiceModel
+﻿@model AdminCityDetailsServiceModel
 @{
     ViewData["Title"] = "Country Administration";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -7,6 +7,8 @@
 <body>
     <div class="content-wrapper">
         <h2 class="text-left pl-3 pt-2">@ViewData["Title"]</h2>
+        <br />
+        <br />
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -14,19 +16,20 @@
                     <div class="col-md-6">
                         <div class="card card-primary">
                             <div class="card-header" style="background-color: #17A2B8">
-                                <h3 class="card-title">Remove Country from List</h3>
+                                <h3 class="card-title">Remove City from List</h3>
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form role="form" method="post" asp-controller="Countries" asp-action="Delete">
+                            <form role="form" method="post" asp-controller="Cities" asp-action="Delete">
                                 <div class="card-body">
+                                    <input type="hidden" asp-for="Id" />
                                     <div class="form-group">
-                                        <label asp-for="Name">Country Name</label>
-                                        <input disabled asp-for="Name" class="form-control" placeholder="Country name">
+                                        <label asp-for="Name">City Name</label>
+                                        <input disabled asp-for="Name" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label asp-for="Code">Country Code</label>
-                                        <input disabled asp-for="Code" class="form-control col-3" placeholder="Country code">
+                                        <label asp-for="Country">Country</label>
+                                        <input disabled type="text" asp-for="Country" class="form-control col-6">
                                     </div>
                                 </div>
                                 <!-- /.card-body -->

@@ -18,10 +18,10 @@
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
-            //if (context.Users.Any(u => u.UserName == "radito" && u.UserName == "bodyquest"))
-            //{
-            //    return;
-            //}
+            if (context.Users.Any())
+            {
+                return;
+            }
 
             var users = new List<(
                 string FirstName,

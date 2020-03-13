@@ -8,7 +8,10 @@
 
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    //using Data.Common.Repositories;
     using RPM.Data;
     using RPM.Data.Common.Repositories;
     using RPM.Data.Models;
@@ -21,26 +24,41 @@
     {
         private readonly ApplicationDbContext context;
         private readonly IDeletableEntityRepository<User> usersRepository;
+        private readonly RoleManager<ApplicationRole> roleManager;
+        private readonly UserManager<User> userManager;
 
-        public AdminUserService(ApplicationDbContext context, Data.Common.Repositories.IDeletableEntityRepository<User> usersRepository)
+        public AdminUserService(
+           ApplicationDbContext context,
+           IDeletableEntityRepository<User> usersRepository,
+           RoleManager<ApplicationRole> roleManager,
+           UserManager<User> userManager)
         {
             this.context = context;
             this.usersRepository = usersRepository;
+            this.roleManager = roleManager;
+            this.userManager = userManager;
         }
 
         public async Task<IEnumerable<AdminUserListingServiceModel>> AllAsync(int page = 1)
         {
-            return await this.context.Users
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize)
-                .Select(x => new AdminUserListingServiceModel
-                {
-                    Username = x.UserName,
-                    Email = x.Email,
-                    RegisteredOn = x.CreatedOn,
 
-                })
-                .ToListAsync();
+            var userList = await this.context.Users
+                                  .Skip((page - 1) * PageSize)
+                                  .Take(PageSize)
+                                  .Select(x => new AdminUserListingServiceModel
+                                  {
+                                      Id = x.Id,
+                                      Username = x.UserName,
+                                      Email = x.Email,
+                                      RegisteredOn = x.CreatedOn,
+                                      UserRoles = (from userRole in x.Roles //[AspNetUserRoles]
+                                                   join role in this.context.Roles //[AspNetRoles]//
+                                                   on userRole.RoleId
+                                                   equals role.Id
+                                                   select role.Name).ToList(),
+                                  })
+                                  .ToListAsync();
+            return userList;
         }
 
         public int Total() => this.context.Users.Count();
