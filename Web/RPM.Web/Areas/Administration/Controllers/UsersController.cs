@@ -32,8 +32,6 @@
 
         public async Task<IActionResult> Index(int page = 1)
         {
-
-
             var users = await this.adminUserService.AllAsync(page);
             var roles = await this.roleManager
                 .Roles
@@ -81,7 +79,31 @@
 
             var result = await this.userManager.AddToRoleAsync(user, model.Role);
 
-            this.TempData.AddSuccessMessage(string.Format(UserAddedToRole, user.UserName, model.Role));
+            return this.RedirectToAction(nameof(this.Index))
+                .WithSuccess(string.Empty, RecordUpdatedSuccessfully);
+        }
+
+        [HttpPost]
+        [ActionName(RemoveRole)]
+        public async Task<IActionResult> RemoveFromRole(AddUserToRoleFormModel model)
+        {
+            var user = await this.userManager.FindByIdAsync(model.UserId);
+
+            var roleExists = await this.roleManager.RoleExistsAsync(model.Role);
+            var userExists = user != null;
+
+            if (!roleExists || !userExists)
+            {
+                this.ModelState.AddModelError(string.Empty, InvalidIdentityError);
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(this.Index))
+                    .WithWarning(string.Empty, CouldNotUpdateRecord);
+            }
+
+            var result = await this.userManager.RemoveFromRoleAsync(user, model.Role);
 
             return this.RedirectToAction(nameof(this.Index))
                 .WithSuccess(string.Empty, RecordUpdatedSuccessfully);
