@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RPM.Data;
 
 namespace RPM.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200313222317_ChangeHomeDescriptionConstraint")]
+    partial class ChangeHomeDescriptionConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -291,6 +293,9 @@ namespace RPM.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("RentalId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -299,6 +304,8 @@ namespace RPM.Data.Migrations
                     b.HasIndex("CityId");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("RentalId");
 
                     b.ToTable("Homes");
                 });
@@ -555,6 +562,12 @@ namespace RPM.Data.Migrations
                     b.HasOne("RPM.Data.Models.User", "Owner")
                         .WithMany("Homes")
                         .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RPM.Data.Models.Rental", "Rental")
+                        .WithMany()
+                        .HasForeignKey("RentalId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

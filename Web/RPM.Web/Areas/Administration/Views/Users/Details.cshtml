@@ -1,0 +1,199 @@
+﻿
+@model UserProfileViewModel
+@{
+    ViewData["Title"] = "User Administration";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row pt-2">
+
+                        <div class="col-md-4">
+
+                            <!-- Profile Image -->
+                            <div class="card card-primary card-outline">
+                                <div class="card-body box-profile">
+                                    <div class="text-center">
+                                        @if (Model.ProfilePic == null)
+                                        {
+                                            <img class="img-fluid img-circle"
+                                                 src="~/img/circle-user-icon.png"
+                                                 alt="User profile picture">
+                                        }
+                                        else
+                                        {
+                                            <img class="img-fluid img-circle"
+                                                 src="../../dist/img/user4-128x128.jpg"
+                                                 alt="User profile picture">
+                                        }
+                                    </div>
+
+                                    <h3 class="profile-username text-center">@Model.FirstName @Model.LastName</h3>
+                                    @foreach (var role in Model.Roles)
+                                    {
+                                        <p class="text-muted text-center mb-1">@role</p>
+                                    }
+
+                                    <ul class="list-group list-group-unbordered mb-2">
+
+                                        @if (Model.Roles.Contains("Owner"))
+                                        {
+                                            <li class="list-group-item">
+                                                <b>Properties</b> <a class="float-right">@Model.Homes.Count()</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Rentals</b> <a class="float-right">@Model.Rentals.Count()</a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="list-group-item">
+                                                <b>Managed Properties</b> <a class="float-right">@Model.Homes.Count()</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Rented Properties</b> <a class="float-right">@Model.Rented.Count()</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                            <!-- About Box -->
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">About</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <strong><i class="far fa-calendar-alt mr-1"></i> Birth Date</strong>
+
+                                    <p class="text-muted">@Model.Birthdate.ToShortDateString()</p>
+
+                                    <hr>
+
+                                    <strong><i class="far fa-file-alt mr-1"></i> Profile Info</strong>
+
+                                    <p class="text-muted">@Model.About</p>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+                        </div>
+
+                        <!-- /.col -->
+                        @foreach (var home in Model.Homes)
+                        {
+                            <div class="col-md-8">
+                                <!-- Box -->
+                                <div class="card card-widget">
+                                    <div class="card-header">
+                                        <div class="user-block">
+                                            <img class="img-circle" src="../dist/img/user1-128x128.jpg" alt="User Image">
+                                            <span class="username"><a href="#">@home.Name</a></span>
+                                            <span class="description">@home.City.Name  - @home.City.Country.Name</span>
+                                        </div>
+                                        <!-- /.user-block -->
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-toggle="tooltip" title="Mark as read">
+                                                <i class="far fa-circle"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <!-- /.card-tools -->
+                                    </div>
+                                    <!-- /.card-header -->
+                                    @{ 
+                                        var url = @home.Images.Select(x => x.PictureUrl).FirstOrDefault();
+                                    }
+                                <div class="card-body">
+                                    <img class="img-fluid pad" src="@url" alt="Photo">
+
+                                    <h4 class="pt-2 pl-4"><strong>$@home.Price</strong></h4>
+                                </div>
+                                    <!-- /.card-body -->
+                                    <div class="card-footer card-comments">
+
+                                        <div class="card-comment">
+                                            <div class="comment-text">
+                                                <span class="username">
+                                                    Address:
+                                                </span><!-- /.entry -->
+                                                @home.Address
+                                            </div>
+                                            <!-- /.comment-text -->
+                                        </div>
+                                        <!-- /.card-comment -->
+
+                                        <div class="card-comment">
+                                            <div class="comment-text">
+                                                <span class="username">
+                                                    Location:
+                                                </span><!-- /.entry -->
+                                                @home.City.Name, @home.City.Country.Name
+                                            </div>
+                                            <!-- /.comment-text -->
+                                        </div>
+                                        <!-- /.card-comment -->
+
+                                        <div class="card-comment">
+                                            <div class="comment-text">
+                                                <span class="username">
+                                                    Status:
+                                                </span><!-- /.entry -->
+                                                @home.Status.ToString()
+                                            </div>
+                                            <!-- /.comment-text -->
+                                        </div>
+                                        <!-- /.card-comment -->
+
+                                        <div class="card-comment">
+                                            <div class="comment-text">
+                                                <span class="username">
+                                                    Category:
+                                                </span><!-- /.entry -->
+                                                @home.Category.ToString()
+                                            </div>
+                                            <!-- /.comment-text -->
+                                        </div>
+                                        <!-- /.card-comment -->
+
+                                    </div>
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                        }
+                        <!-- /.col -->
+
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+
+
+        </div>
+        <!-- /.content-wrapper -->
+    </div>
+    <!-- ./wrapper -->
+
+</body>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

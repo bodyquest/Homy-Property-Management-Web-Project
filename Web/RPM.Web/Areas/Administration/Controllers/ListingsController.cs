@@ -103,7 +103,7 @@
                 await this.userManager.AddToRoleAsync(owner, OwnerRoleName);
             }
 
-            //await this.imageDbService.WriteToDatabasebAsync(imgUrl, imgPubId);
+            await this.imageDbService.WriteToDatabasebAsync(imgUrl, imgPubId);
 
             return this.RedirectToAction("Index", "Dashboard", new { area = AdminArea })
                 .WithSuccess(string.Empty, RecordCreatedSuccessfully);

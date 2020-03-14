@@ -12,6 +12,8 @@
 
         string GetThumbnailUrl(string imagePublicId);
 
+        string GetTinyThumbnailUrl(string imagePublicId);
+
         string GetProfilePic(string imagePublicId);
 
         Task DeleteImages(params string[] publicIds);

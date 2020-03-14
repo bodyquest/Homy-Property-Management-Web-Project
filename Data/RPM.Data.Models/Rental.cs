@@ -10,6 +10,7 @@
 
         public DateTime RentDate { get; set; }
 
+        [ForeignKey(nameof(Home))]
         public string HomeId { get; set; }
         public Home Home { get; set; }
 

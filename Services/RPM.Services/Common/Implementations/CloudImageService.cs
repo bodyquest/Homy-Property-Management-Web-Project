@@ -36,8 +36,8 @@
             }
 
             var fileName = imageFile.FileName;
-            //int index = fileName.LastIndexOf('.');
-            //var trueFileName = index == -1 ? fileName : fileName.Substring(0, index);
+            // int index = fileName.LastIndexOf('.');
+            // var trueFileName = index == -1 ? fileName : fileName.Substring(0, index);
 
             using (var ms = new MemoryStream(destinationData))
             {
@@ -45,9 +45,10 @@
                 {
                     Folder = CloudFolder,
                     File = new FileDescription(fileName, ms),
-                    PublicId = $"{PubPrefix}_{Guid.NewGuid().ToString().Substring(0, 5)}",
                     Transformation = new Transformation().Crop(Limit).Width(ImgWidth).Height(ImgHeight),
                 };
+
+                // $"{PubPrefix}_{Guid.NewGuid().ToString().Substring(0, 5)}"
 
                 var uploadResult = await this.cloudUtility.UploadAsync(uploadParams);
 
@@ -73,6 +74,20 @@
                                  .Transform(new Transformation()
                                      .Height(200)
                                      .Width(200)
+                                     .Crop(Thumb))
+                                 .BuildUrl(string.Format(GetImageUrlFormat, imagePublicId));
+
+            return imageUrl;
+        }
+
+        public string GetTinyThumbnailUrl(string imagePublicId)
+        {
+            var imageUrl = this.cloudUtility
+                                 .Api
+                                 .UrlImgUp
+                                 .Transform(new Transformation()
+                                     .Height(40)
+                                     .Width(60)
                                      .Crop(Thumb))
                                  .BuildUrl(string.Format(GetImageUrlFormat, imagePublicId));
 

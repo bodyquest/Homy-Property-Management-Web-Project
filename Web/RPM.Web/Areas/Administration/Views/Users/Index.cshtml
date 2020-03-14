@@ -140,11 +140,18 @@
                                                 </form>
                                             </td>
                                             <td class="text-center">
-                                                <button class=" col-7 btn btn-dark"
-                                                        type="submit"
-                                                        value="Remove">
-                                                    <i class="far fa-eye"></i>
-                                                </button>
+                                                <form>
+                                                    <input type="hidden"
+                                                           name="UserId"
+                                                           value="@user.Id" />
+                                                    <button class=" col-7 btn btn-dark"
+                                                            asp-action="Details"
+                                                            asp-route-Id="@user.Id"
+                                                            type="submit"
+                                                            value="Details">
+                                                        <i class="far fa-eye"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     }

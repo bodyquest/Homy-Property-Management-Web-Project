@@ -7,10 +7,13 @@
 
     using RPM.Data.Models;
     using RPM.Services.Admin.Models;
+    using RPM.Services.Common.Models.User;
 
     public interface IAdminUserService
     {
         Task<IEnumerable<AdminUserListingServiceModel>> AllAsync(int page = 1);
+
+        Task<UserProfileServiceModel> GetUserDetailsAsync(string id);
 
         int Total();
 

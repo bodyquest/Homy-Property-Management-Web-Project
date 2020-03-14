@@ -31,6 +31,6 @@
 
         public CloudImage Image { get; set; }
 
-        public ICollection<string> Images { get; set; }
+        public ICollection<CloudImage> Images { get; set; }
     }
 }

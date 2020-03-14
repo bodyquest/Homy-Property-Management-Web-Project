@@ -14,7 +14,7 @@
     using RPM.Services.Admin.Models;
     using RPM.Web.Areas.Administration.Models.Users;
     using RPM.Web.Infrastructure.Extensions;
-
+    using RPM.Web.Models.Users;
     using static RPM.Common.GlobalConstants;
 
     public class UsersController : AdministrationController
@@ -109,5 +109,30 @@
                 .WithSuccess(string.Empty, RecordUpdatedSuccessfully);
         }
 
+        public async Task<IActionResult> DetailsAsync(string id)
+        {
+            var model = await this.adminUserService.GetUserDetailsAsync(id);
+
+            var viewModel = new UserProfileViewModel
+            {
+                Id = model.Id,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Username = model.Username,
+                Email = model.Email,
+                Birthdate = model.Birthdate,
+                About = model.About,
+                ProfilePic = model.ProfilePic,
+                RegisteredAt = model.RegisteredAt,
+
+                Rentals = model.Rentals,
+
+                Roles = model.Roles,
+
+                Homes = model.Homes,
+            };
+
+            return this.View(viewModel);
+        }
     }
 }
