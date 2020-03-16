@@ -1,6 +1,5 @@
 ﻿@model HomeIndexViewModel
 
-<!--<link rel="stylesheet" href="~/css/site.scss">-->
 <link rel="stylesheet" href="~/css/sitecustom.css">
 
 @using RPM.Common
@@ -46,38 +45,7 @@
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-md-4">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Houses</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Appartments</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Rooms</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
+            @await Html.PartialAsync("_PropertyListByCategoryPartial", Model.PropertiesByCategory)
 
         </div>
     </div>
@@ -92,58 +60,18 @@
     </div>
 </div>
 
-<h2 class="text-center" style="color:#FF5581"><strong>Latest Listings To Rent</strong></h2>
+<a asp-controller="Listings" asp-action="AllToRent">
+    <h2 class="text-center" style="color:#FF5581">
+        <strong>Latest Listings To Rent</strong>
+    </h2>
+</a>
 <br />
 <section class="categories-section spad pb-0">
     <div class="container-fluid">
         <div class="row">
 
-            @foreach (var home in Model.Properties.Take(4))
-            {
-                <div class="col-md-3">
-                    <div class="pb-0 mb-0 categories-item set-bg" data-setbg="@home.Image">
-                        <a href="@home.Image" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                        <div class="categories-text">
-                            <h4>@(home.Name.Length <= 30 ? home.Name : home.Name.Substring(0, 30) + "...")</h4>
-                            <p>@home.City, @home.Country</p>
-                            <a href="#">View Details</a>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <div class="col-md-3">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Appartments</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Rooms</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Rooms</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
+            @await Html.PartialAsync("_PropertyListByStatusPartial",
+                Model.PropertiesToRent.Take(4))
 
         </div>
     </div>
@@ -158,55 +86,17 @@
     </div>
 </div>
 
-<h2 class="text-center" style="color:#FF5581"><strong>Latest Listings To Manage</strong></h2>
+<a asp-controller="Listings" asp-action="AllToManage">
+    <h2 class="text-center" style="color:#FF5581">
+        <strong>Latest Listings To Manage</strong>
+    </h2>
+</a>
 <br />
 <section class="categories-section spad pb-0">
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-md-3">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Houses</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Appartments</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Rooms</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Rooms</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
-                    </div>
-                </div>
-            </div>
+            @await Html.PartialAsync("_PropertyListByStatusPartial", Model.PropertiesToManage.Take(4))
 
         </div>
     </div>
@@ -220,7 +110,6 @@
         </div>
     </div>
 </div>
-
 
 
 

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<PropertyListServiceModel>
+
+@foreach (var home in Model)
+{
+    <div class="col-md-3">
+        <div class="pb-0 mb-0 categories-item set-bg" data-setbg="@home.Image">
+            <a href="@home.Image" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
+            <div class="categories-text">
+                <h4>@(home.Name.Length <= 30 ? home.Name : home.Name.Substring(0, 30) + "...")</h4>
+                <p>@home.City, @home.Country</p>
+                <a asp-controller="Listings" asp-action="Details" asp-route-id="@home.Id">View Details</a>
+            </div>
+        </div>
+    </div>
+}

@@ -31,11 +31,51 @@
                 return this.RedirectToAction("Index", "Dashboard", new { area = AdminArea });
             }
 
+            var housesCountModel = await this.listingService.GetPropertyCountByCategoryAsync(House);
+            var apartmentsCountModel = await this.listingService.GetPropertyCountByCategoryAsync(Apartment);
+            var roomsCountModel = await this.listingService.GetPropertyCountByCategoryAsync(Room);
+
+            if (housesCountModel == null)
+            {
+                housesCountModel = new PropertyCountServiceModel
+                {
+                    CategoryName = "No Houses",
+                    Count = 0,
+                    ExampleImage = DefaultPropertyImage,
+                };
+            }
+
+            if (apartmentsCountModel == null)
+            {
+                apartmentsCountModel = new PropertyCountServiceModel
+                {
+                    CategoryName = "No Apartments",
+                    Count = 0,
+                    ExampleImage = DefaultPropertyImage,
+                };
+            }
+
+            if (roomsCountModel == null)
+            {
+                roomsCountModel = new PropertyCountServiceModel
+                {
+                    CategoryName = "No Rooms",
+                    Count = 0,
+                    ExampleImage = DefaultPropertyImage,
+                };
+            }
+
             var model = new HomeIndexViewModel
             {
-                Properties = await this.listingService.GetPropertiesAsync(),
+                PropertiesToRent = await this.listingService.GetAllByStatusAsync(ToRent),
+                PropertiesToManage = await this.listingService.GetAllByStatusAsync(ToManage),
             };
 
+            model.PropertiesByCategory.Add(housesCountModel);
+            model.PropertiesByCategory.Add(apartmentsCountModel);
+            model.PropertiesByCategory.Add(roomsCountModel);
+
+            // Redundant Check ???
             if (model == null)
             {
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty }).WithWarning(string.Empty, CouldNotFind);

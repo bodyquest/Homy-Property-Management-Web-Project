@@ -1,12 +1,12 @@
 ﻿@model SearchViewModel
 
+<link rel="stylesheet" href="~/css/sitecustom.css">
 
 @{
     ViewData["Title"] = $"Search Results for {Model.SearchText} :";
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 
 <h2 class="text-left home-search-results pl-lg-5"
     style="color:#FF5581">
@@ -31,6 +31,8 @@
 }
 else
 {
-    <h3>No listings found.</h3>
+    <h2 class="text-left home-search-results pl-lg-5"
+        style="color:#FF5581">
+        <strong>No listings found.</strong>
+    </h2>
 }
-

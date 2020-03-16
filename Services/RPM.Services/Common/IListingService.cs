@@ -10,6 +10,10 @@
     {
         Task<IEnumerable<PropertyListServiceModel>> GetPropertiesAsync();
 
+        Task<IEnumerable<PropertyListServiceModel>> GetAllByStatusAsync(string status);
+
+        Task<PropertyCountServiceModel> GetPropertyCountByCategoryAsync(string category);
+
         Task<IEnumerable<PropertyListServiceModel>> FindAsync(string searchText);
     }
 }

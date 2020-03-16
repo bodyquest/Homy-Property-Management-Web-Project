@@ -36,6 +36,7 @@
             }
 
             var fileName = imageFile.FileName;
+
             // int index = fileName.LastIndexOf('.');
             // var trueFileName = index == -1 ? fileName : fileName.Substring(0, index);
 
@@ -61,6 +62,7 @@
             string imageUrl = this.cloudUtility
                                       .Api
                                       .UrlImgUp
+                                      .Transform( new Transformation().Quality("auto"))
                                       .BuildUrl(string.Format(GetImageUrlFormat, imagePublicId));
 
             return imageUrl;

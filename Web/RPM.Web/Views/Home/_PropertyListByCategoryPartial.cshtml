@@ -1,0 +1,15 @@
+﻿@model ICollection<PropertyCountServiceModel>
+
+@foreach (var category in Model)
+{
+    <div class="col-md-4">
+        <div class="pb-0 mb-0 categories-item set-bg" data-setbg="@category.ExampleImage">
+            <a href="@category.ExampleImage" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
+            <div class="categories-text">
+                <h4>@category.CategoryName</h4>
+                <p>@category.Count Listings</p>
+                <a asp-controller="Listings" asp-action="All@(category.CategoryName)">View All</a>
+            </div>
+        </div>
+    </div>
+}

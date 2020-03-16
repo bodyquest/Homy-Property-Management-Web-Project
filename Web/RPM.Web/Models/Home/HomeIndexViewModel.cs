@@ -9,7 +9,15 @@
 
     public class HomeIndexViewModel : SearchFormModel
     {
+        public HomeIndexViewModel()
+        {
+            this.PropertiesByCategory = new HashSet<PropertyCountServiceModel>();
+        }
 
-        public IEnumerable<PropertyListServiceModel> Properties { get; set; }
+        public IEnumerable<PropertyListServiceModel> PropertiesToRent { get; set; }
+
+        public IEnumerable<PropertyListServiceModel> PropertiesToManage { get; set; }
+
+        public ICollection<PropertyCountServiceModel> PropertiesByCategory { get; set; }
     }
 }
