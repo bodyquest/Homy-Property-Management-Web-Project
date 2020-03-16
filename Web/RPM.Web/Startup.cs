@@ -103,6 +103,7 @@
             services.AddTransient<ICloudImageService, CloudImageService>();
             services.AddTransient<IImageDbService, ImageDbService>();
             services.AddTransient<ICloudImageService, CloudImageService>();
+            services.AddTransient<IListingService, ListingService>();
 
             services.AddMvc(options =>
             {

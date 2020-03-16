@@ -1,4 +1,10 @@
-﻿@using RPM.Common
+﻿@model HomeIndexViewModel
+
+<!--<link rel="stylesheet" href="~/css/site.scss">-->
+<link rel="stylesheet" href="~/css/sitecustom.css">
+
+@using RPM.Common
+@using System.Text
 @{
     this.ViewData["Title"] = "Home Page";
 }
@@ -10,32 +16,30 @@
                 <div class="hero-text">
                     <img src="/img/placeholder.png" alt="">
                     <h1>Rent or Manage a Home</h1>
-                    <form action="#" class="filter-search">
-                        <div class="category-search">
-                            <h5>Search By City</h5>
-                            <select class="ca-search">
-                                <option>Restaurants</option>
-                                <option>Hotels</option>
-                                <option>Food & Drinks</option>
-                                <option>Home Delievery</option>
-                                <option>Commercial Shops</option>
-                            </select>
-                        </div>
-                        <div class="location-search">
-                            <h5>Your Location</h5>
-                            <select class="lo-search">
-                                <option>New York</option>
-                            </select>
-                        </div>
-                        <button type="submit">Search Now</button>
-                    </form>
                 </div>
+            </div>
+        </div>
+        <div class="row pt-5">
+            <div class="col-lg-12">
+                <form asp-action="Search" class="row d-flex justify-content-center">
+                    <div class="col-6 pr-0">
+                        <input asp-for="SearchText"
+                               class="form-control form-control-lg"
+                               id="inputlg"
+                               placeholder="Search by city..." />
+                    </div>
+                    <div class="col-2">
+                        <input type="submit"
+                           value="Search"
+                           class="btn btn-lg text-white"
+                           style="background-color:#FF5581">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </section>
 <!-- Hero Section End -->
-<br>
 <br>
 <!-- Categories Section Begin -->
 <section class="categories-section spad pb-0">
@@ -94,16 +98,19 @@
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-md-3">
-                <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">
-                    <a href="/img/categories/cat-4.jpg" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
-                    <div class="categories-text">
-                        <h4>Houses</h4>
-                        <p>2373 Listings</p>
-                        <a href="#">View All</a>
+            @foreach (var home in Model.Properties.Take(4))
+            {
+                <div class="col-md-3">
+                    <div class="pb-0 mb-0 categories-item set-bg" data-setbg="@home.Image">
+                        <a href="@home.Image" class="img-hover pop-up"><img src="/img/zoom.png" alt=""></a>
+                        <div class="categories-text">
+                            <h4>@(home.Name.Length <= 30 ? home.Name : home.Name.Substring(0, 30) + "...")</h4>
+                            <p>@home.City, @home.Country</p>
+                            <a href="#">View Details</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
 
             <div class="col-md-3">
                 <div class="pb-0 mb-0 categories-item set-bg" data-setbg="/img/categories/cat-4.jpg">

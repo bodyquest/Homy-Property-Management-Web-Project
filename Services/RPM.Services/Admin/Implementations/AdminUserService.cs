@@ -73,6 +73,7 @@
                 .Where(h => h.OwnerId == id).ToListAsync();
 
             var firstImagePubIdForTinyThumb = new List<string>();
+
             foreach (var home in homes)
             {
                 foreach (var image in home.Images)
@@ -86,7 +87,6 @@
             var rentals = await this.context.Rentals
                 .Where(r => r.Home.OwnerId == id)
                 .ToListAsync();
-
 
             var rented = this.context.Rentals.Where(r => r.TenantId == id).ToList();
 

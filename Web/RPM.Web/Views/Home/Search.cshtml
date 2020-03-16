@@ -1,0 +1,36 @@
+﻿@model SearchViewModel
+
+
+@{
+    ViewData["Title"] = $"Search Results for {Model.SearchText} :";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2 class="text-left home-search-results pl-lg-5"
+    style="color:#FF5581">
+    <strong>@ViewData["Title"]</strong>
+</h2>
+
+<div class="row px-lg-5 pb-4">
+    <div class="col-12">
+        <hr class="hr-2" />
+    </div>
+</div>
+
+@if (Model.Properties.Any())
+{
+    <section class="categories-section spad pb-0">
+        <div class="container-fluid">
+            <div class="row">
+                @await Html.PartialAsync("_PropertyListPartial", Model.Properties)
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <h3>No listings found.</h3>
+}
+
