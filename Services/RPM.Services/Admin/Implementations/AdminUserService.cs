@@ -142,11 +142,6 @@
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.UserName == username);
 
-            if (user == null)
-            {
-                return null;
-            }
-
             return user;
         }
     }

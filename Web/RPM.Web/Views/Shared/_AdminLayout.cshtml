@@ -266,6 +266,41 @@
                                     </p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a asp-area="Administration" asp-controller="Rentals" asp-action="Create" class="nav-link">
+                                    <i class="fas fa-angle-left right"></i>
+                                    <p>
+                                        Rentals CREATE
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        else if(User.IsInRole(GlobalConstants.OwnerRoleName))
+                        {
+                            <li class="nav-item">
+                                <a asp-area="Management" asp-controller="Rentals" asp-action="Index" class="nav-link">
+                                    <i class="fas fa-angle-left right"></i>
+                                    <p>
+                                        Rentals
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="Management" asp-controller="Requests" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>
+                                        Requests
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="Management" asp-controller="Messages" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon far fa-envelope"></i>
+                                    <p>
+                                        Messages
+                                    </p>
+                                </a>
+                            </li>
                         }
 
 
@@ -810,7 +845,6 @@
 
         <main role="main">
             <partial name="_AlertMessages" />
-
             @this.RenderBody()
         </main>
 
