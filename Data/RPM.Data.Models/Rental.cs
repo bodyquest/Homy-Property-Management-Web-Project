@@ -13,7 +13,7 @@
         [ForeignKey(nameof(Home))]
         public string HomeId { get; set; }
         public Home Home { get; set; }
-          
+
         [ForeignKey(nameof(User))]
         public string TenantId { get; set; }
         public User Tenant { get; set; }

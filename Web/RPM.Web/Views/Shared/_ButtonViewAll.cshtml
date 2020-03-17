@@ -1,0 +1,10 @@
+﻿<p class="text-right p-0 m-0">
+    @if (this.User.IsInRole(OwnerRoleName))
+    {
+        <a asp-controller="Listings" asp-action="Index" class="btn btn-secondary"><i class="fas fa-eye"></i> &nbsp; View All</a>
+    }
+    else
+    {
+        <a asp-action="Create" class="btn btn-secondary"><i class="fas fa-eye"></i> &nbsp; View All</a>
+    }
+</p>

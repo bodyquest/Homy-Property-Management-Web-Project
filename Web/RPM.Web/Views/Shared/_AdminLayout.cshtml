@@ -36,6 +36,7 @@
 
     <!-- BODY WRAPPER -->
     <div class="wrapper">
+
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
@@ -164,6 +165,7 @@
             </ul>
         </nav>
         <!-- /.navbar -->
+
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -183,7 +185,7 @@
                         <img src="~/themes/admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">@User.Identity.</a>
+                        <a href="#" class="d-block text-bold">@User.Identity.Name</a>
                     </div>
                 </div>
 
@@ -275,11 +277,19 @@
                                 </a>
                             </li>
                         }
-                        else if(User.IsInRole(GlobalConstants.OwnerRoleName))
+                        else if (User.IsInRole(GlobalConstants.OwnerRoleName))
                         {
                             <li class="nav-item">
+                                <a asp-area="Management" asp-controller="Listings" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>
+                                        Properties
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a asp-area="Management" asp-controller="Rentals" asp-action="Index" class="nav-link">
-                                    <i class="fas fa-angle-left right"></i>
+                                    <i class="nav-icon fas fa-edit"></i>
                                     <p>
                                         Rentals
                                     </p>
@@ -287,7 +297,7 @@
                             </li>
                             <li class="nav-item">
                                 <a asp-area="Management" asp-controller="Requests" asp-action="Index" class="nav-link">
-                                    <i class="nav-icon fas fa-home"></i>
+                                    <i class="nav-icon fas fa-question"></i>
                                     <p>
                                         Requests
                                     </p>
@@ -879,6 +889,8 @@
 
         <!-- AdminLTE for demo purposes -->
         <script src="~/themes/admin/dist/js/demo.js"></script>
+
+        <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
     </environment>
 
     <environment names="Staging,Production">
