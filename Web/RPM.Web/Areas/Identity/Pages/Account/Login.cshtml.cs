@@ -18,17 +18,18 @@ namespace RPM.Web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+        private readonly ILogger<LoginModel> logger;
 
-        public LoginModel(SignInManager<User> signInManager, 
+        public LoginModel(
+            SignInManager<User> signInManager,
             ILogger<LoginModel> logger,
             UserManager<User> userManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.logger = logger;
         }
 
         [BindProperty]
@@ -41,6 +42,75 @@ namespace RPM.Web.Areas.Identity.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
+        public async Task OnGetAsync(string returnUrl = null)
+        {
+            if (!string.IsNullOrEmpty(this.ErrorMessage))
+            {
+                this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
+            }
+
+            returnUrl = returnUrl ?? this.Url.Content("~/");
+
+            // Clear the existing external cookie to ensure a clean login process
+            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            this.ReturnUrl = returnUrl;
+        }
+
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        {
+            returnUrl = returnUrl ?? this.Url.Content("~/");
+
+            if (this.ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await this.signInManager.PasswordSignInAsync(this.Input.Username, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    var user = this.userManager.FindByNameAsync(this.Input.Username).GetAwaiter().GetResult();
+                    var roles = this.userManager.GetRolesAsync(user).GetAwaiter().GetResult();
+
+                    if (roles.Contains("Admin"))
+                    {
+                        this.logger.LogInformation("Admin logged in.");
+                        return this.LocalRedirect("~/Administration/Dashboard/Index");
+                    }
+                    else if (roles.Contains("Owner"))
+                    {
+                        this.logger.LogInformation("Owner logged in.");
+                        return this.LocalRedirect("~/Management/Dashboard/Index");
+                    }
+                    else
+                    {
+                        this.logger.LogInformation("User logged in.");
+                        return this.LocalRedirect(returnUrl);
+                    }
+                }
+
+                if (result.RequiresTwoFactor)
+                {
+                    return this.RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = this.Input.RememberMe });
+                }
+
+                if (result.IsLockedOut)
+                {
+                    this.logger.LogWarning("User account locked out.");
+                    return this.RedirectToPage("./Lockout");
+                }
+                else
+                {
+                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return this.Page();
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return this.Page();
+        }
+
         public class InputModel
         {
             [Required]
@@ -52,68 +122,6 @@ namespace RPM.Web.Areas.Identity.Pages.Account
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
-        }
-
-        public async Task OnGetAsync(string returnUrl = null)
-        {
-            if (!string.IsNullOrEmpty(ErrorMessage))
-            {
-                ModelState.AddModelError(string.Empty, ErrorMessage);
-            }
-
-            returnUrl = returnUrl ?? Url.Content("~/");
-
-            // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            ReturnUrl = returnUrl;
-        }
-
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        {
-            returnUrl = returnUrl ?? Url.Content("~/");
-
-            if (ModelState.IsValid)
-            {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    var user = _userManager.FindByNameAsync(Input.Username).GetAwaiter().GetResult();
-                    var roles = _userManager.GetRolesAsync(user).GetAwaiter().GetResult();
-
-                    if (roles.Contains("Admin"))
-                    {
-                        _logger.LogInformation("Admin logged in.");
-                        return LocalRedirect("~/Administration/Dashboard/Index");
-                    }
-                    else
-                    {
-                        _logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
-                    }
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return Page();
         }
     }
 }
