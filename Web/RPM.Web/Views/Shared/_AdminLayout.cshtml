@@ -158,14 +158,13 @@
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <form class="form-inline bg-transparent" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
-                        <button type="submit" class="btn btn-danger", border-transparent">Logout</button>
+                        <button type="submit" class="btn btn-danger" , border-transparent">Logout</button>
                     </form>
-                    
+
                 </li>
             </ul>
         </nav>
         <!-- /.navbar -->
-
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -193,7 +192,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
+                    with font-awesome or any other icon font library -->
                         <!--********************************************************-->
                         <!--MY ADMIN MENU-->
                         @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
@@ -852,13 +851,12 @@
             <!-- /.sidebar -->
         </aside>
 
-        <partial name="_CookieConsentPartial" />
-
         <main role="main">
             <partial name="_AlertMessages" />
             @this.RenderBody()
         </main>
 
+        <partial name="_CookieConsentPartial" />
         <!-- FOOTER -->
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">

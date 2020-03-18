@@ -27,6 +27,7 @@
         <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
         <link rel="stylesheet" href="~/css/style.css" type="text/css">
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+
     </environment>
     <environment names="Staging,Production">
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
@@ -45,12 +46,12 @@
         <header class="header-section">
             <div class="container-fluid">
                 <div class="logo pl-5">
-                    <a class="navbar-brand" 
+                    <a class="navbar-brand"
                        asp-area=""
-                       asp-controller="Home" 
+                       asp-controller="Home"
                        asp-action="Index"
                        style="margin-top: -18px;">
-                         <img src="~/img/Homy_Graphic Logo_4.png" class="image-fluid">
+                        <img src="~/img/Homy_Graphic Logo_4.png" class="image-fluid">
                     </a>
                 </div>
                 @if (this.SignInManager.IsSignedIn(this.User))
@@ -59,15 +60,23 @@
                     {
                         <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Admin</a>
                     }
+                    <nav class="main-menu mobile-menu">
+                        <ul>
+                            <li class="active"><a href="index.html">Home</a></li>
+                            <li><a href="how-it-works.html">Explore</a></li>
+                            <li><a href="listings.html">Cities</a></li>
+                            <li><a href="contact.html">Help</a></li>
+                        </ul>
+                    </nav>
                     <div class="header-right">
                         <div class="user-access">
-                            <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(this.User.Identity.Name)!</a>
-                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
-                                <button type="submit" class="nav-link btn btn-link">Logout</button>
-                            </form>
-                            <a href="#" class="primary-btn">Add Listing</a>
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index"
+                               title="Manage" style="color:#FF5581" class="pr-2">Hello @(this.User.Identity.Name)!</a>
+                            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">Logout</a>
                         </div>
+                        <a href="#" class="primary-btn">Add Listing</a>
                     </div>
+                    <div id="mobile-menu-wrap"></div>
                 }
                 else
                 {
@@ -84,32 +93,29 @@
 
                         </ul>
                     </nav>
-                    
-                    <nav class="main-menu mobile-menu">
-                        <div class="header-right">
-                            <div class="user-access">
-                                <a asp-area="Identity" asp-page="/Account/Register">Register/</a>
-                                <a asp-area="Identity" asp-page="/Account/Login">Login</a>
-                            </div>
-                            <a href="#" class="primary-btn">Add Listing</a>
-                        </div>
-                    </nav>
-                }
 
-                <div id="mobile-menu-wrap"></div>
+                    <div class="header-right">
+                        <div class="user-access">
+                            <a asp-area="Identity" asp-page="/Account/Register">Register/</a>
+                            <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+                        </div>
+                        <a href="#" class="primary-btn">Add Listing</a>
+                    </div>
+                    <div id="mobile-menu-wrap"></div>
+                }
             </div>
         </header>
     </nav>
     <!-- Header End -->
 
 
-        <partial name="_CookieConsentPartial" />
-        <main role="main">
-            @this.RenderBody()
-        </main>
+    <partial name="_CookieConsentPartial" />
+    <main role="main">
+        @this.RenderBody()
+    </main>
 
-        <br />
-        <br />
+    <br />
+    <br />
 
     <!-- Footer Section Begin -->
     <footer class="footer-section spad">
@@ -141,7 +147,9 @@
         <script src="~/js/jquery.nice-select.min.js"></script>
         <script src="~/js/mixitup.min.js"></script>
         <script src="~/js/main.js"></script>
+
     </environment>
+
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
         <script src="~js/jquery.magnific-popup.min.js"></script>

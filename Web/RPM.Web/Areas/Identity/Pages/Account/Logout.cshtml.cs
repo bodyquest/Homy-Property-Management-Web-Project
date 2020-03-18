@@ -14,30 +14,36 @@ namespace RPM.Web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<LogoutModel> _logger;
+        private readonly SignInManager<User> signInManager;
+        private readonly ILogger<LogoutModel> logger;
 
         public LogoutModel(SignInManager<User> signInManager, ILogger<LogoutModel> logger)
         {
-            _signInManager = signInManager;
-            _logger = logger;
+            this.signInManager = signInManager;
+            this.logger = logger;
         }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            await this.signInManager.SignOutAsync();
+
+            return this.Redirect("~/");
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+            returnUrl = returnUrl ?? this.Url.Content("~/");
+
+            await this.signInManager.SignOutAsync();
+            this.logger.LogInformation("User logged out.");
+
             if (returnUrl != null)
             {
-                return LocalRedirect(returnUrl);
+                return this.LocalRedirect(returnUrl);
             }
             else
             {
-                return RedirectToPage();
+                return this.RedirectToPage();
             }
         }
     }

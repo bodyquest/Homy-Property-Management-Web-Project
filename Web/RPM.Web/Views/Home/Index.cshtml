@@ -1,43 +1,76 @@
-﻿@model HomeIndexViewModel
+﻿@using RPM.Common
+@using System.Text
+
+
+@model HomeIndexViewModel
 
 <link rel="stylesheet" href="~/css/sitecustom.css">
 
-@using RPM.Common
-@using System.Text
 @{
     this.ViewData["Title"] = "Home Page";
 }
 <!-- Hero Section Begin -->
-<section class="hero-section set-bg" data-setbg="/img/hero-bg.jpg">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="hero-text">
-                    <img src="/img/placeholder.png" alt="">
-                    <h1>Rent or Manage a Home</h1>
+@if (this.User.Identity.IsAuthenticated &&
+ (this.User.IsInRole(GlobalConstants.ViewerRoleName)
+ || this.User.IsInRole(GlobalConstants.ManagerRoleName)))
+{
+    <section class="jumbotron jumbotron-fluid jumboHeroImage">
+        <div class="container">
+            <div class="row pt-5">
+                <div class="col-lg-12 pt-5">
+                    <form asp-action="Search" class="row d-flex justify-content-center">
+                        <div class="col-6 pr-0">
+                            <input asp-for="SearchText"
+                                   class="form-control form-control-lg"
+                                   id="inputlg"
+                                   placeholder="Search by city..." />
+                        </div>
+                        <div class="col-2">
+                            <input type="submit"
+                                   value="Search"
+                                   class="btn btn-lg text-white"
+                                   style="background-color:#FF5581">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="row pt-5">
-            <div class="col-lg-12">
-                <form asp-action="Search" class="row d-flex justify-content-center">
-                    <div class="col-6 pr-0">
-                        <input asp-for="SearchText"
-                               class="form-control form-control-lg"
-                               id="inputlg"
-                               placeholder="Search by city..." />
+    </section>
+    <!-- Hero Section End -->
+}
+else
+{
+    <section class="hero-section set-bg" data-setbg="/img/hero-bg.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hero-text">
+                        <img src="/img/placeholder.png" alt="">
+                        <h1>Rent or Manage a Home</h1>
                     </div>
-                    <div class="col-2">
-                        <input type="submit"
-                           value="Search"
-                           class="btn btn-lg text-white"
-                           style="background-color:#FF5581">
-                    </div>
-                </form>
+                </div>
+            </div>
+            <div class="row pt-5">
+                <div class="col-lg-12">
+                    <form asp-action="Search" class="row d-flex justify-content-center">
+                        <div class="col-6 pr-0">
+                            <input asp-for="SearchText"
+                                   class="form-control form-control-lg"
+                                   id="inputlg"
+                                   placeholder="Search by city..." />
+                        </div>
+                        <div class="col-2">
+                            <input type="submit"
+                                   value="Search"
+                                   class="btn btn-lg text-white"
+                                   style="background-color:#FF5581">
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+}
 <!-- Hero Section End -->
 <br>
 <!-- Categories Section Begin -->

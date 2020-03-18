@@ -60,5 +60,15 @@ body {
 }
 
 .search-background {
-    background: url('~/img/search-background.jpg');
+    background-image: url('../img/search-background.jpg');
 }
+
+.jumboHeroImage {
+    background-image: url("../img/city-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 40vh;
+}
+
+

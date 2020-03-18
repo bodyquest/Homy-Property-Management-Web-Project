@@ -29,16 +29,16 @@
         [HttpGet("/Management/Dashboard/Index")]
         public async Task<IActionResult> Index()
         {
-            var properties = await this.listingService.GetMyPropertiesAsync();
-            var requests = await this.requestService.GetRequestsAsync();
-            var rentals = await this.rentalService.GetRentalsAsync();
+            //var properties = await this.listingService.GetMyPropertiesAsync();
+            //var requests = await this.requestService.GetRequestsAsync();
+            //var rentals = await this.rentalService.GetRentalsAsync();
 
-            var viewModel = new OwnerDashboardViewModel
-            {
-                Properties = properties,
-                Requests = requests,
-                Rentals = rentals,
-            };
+            //var viewModel = new OwnerDashboardViewModel
+            //{
+            //    Properties = properties,
+            //    Requests = requests,
+            //    Rentals = rentals,
+            //};
 
             return this.View();
         }
