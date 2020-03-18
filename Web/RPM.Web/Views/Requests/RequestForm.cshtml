@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewData["Title"] = "RequestForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="jumbotron jumbotron-fluid jumboHeroImage">
+</section>
+<!-- Hero Section End -->
+
+<section>
+    <div class="container-fluid">
+        <div class="row pl-lg-5">
+            <div class="col-5">
+                <form asp-action="SubmitForm" asp-route-id="" enctype="multipart/form-data" method="post">
+                    <div class="formBox">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h2>Request for Rental</h2>
+                                @if (string.IsNullOrEmpty("some field is empty"))
+                                {
+                                    <h4 class="pt-2">Please fill the empty fields</h4>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="inputField">
+                                    <div class="inputText">First Name</div>
+                                    <input disabled type="text" name="" class="input">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="inputField">
+                                    <div class="inputText">Last Name</div>
+                                    <input disabled type="text" name="" class="input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="inputField">
+                                    <div class="inputText">Email</div>
+                                    <input disabled type="text" name="" class="input">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="inputField">
+                                    <div class="inputText">Mobile</div>
+                                    <input disabled type="text" name="" class="input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="inputField">
+                                    <div class="inputText">About</div>
+                                    <textarea class="input" rows="7"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="inputField">
+                                    <div class="inputText">Your Message</div>
+                                    <textarea class="input" rows="7"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>
+                            <a method="post" asp-controller="Requests" asp-action="RequestFrom" class="btn btn-success">Request To Rent</a>
+                        </p>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-7">
+                <div class="row">
+                    <img src="~/img/wp2406709.jpg" class="img-fluid" alt="Responsive image">
+                </div>
+                <div class="row">
+                    <h2 class="text-left">
+                        <strong>Great Apartment in Berlin Pankow</strong>
+                    </h2>
+                    <div class="text-left">
+                        <p class="text-muted pt-2">17, Damerowstrasse, 13187</p>
+                        <hr />
+                        <strong><i class="far fa-file-alt mr-1"></i> Details</strong>
+
+                        <p class="text-muted">
+                            In fact, a similar anger exists within segments of the white community. I have unequivocally prohibited the use of torture by the United States, and I have ordered the prison at Guantanamo Bay closed by early next year.
+
+                            If there's a senior citizen somewhere who can't pay for their prescription drugs, and has to choose between medicine and the rent, that makes my life poorer, even if it's not my grandparent. The hope of a young naval lieutenant bravely patrolling the Mekong Delta. But what I will not do is suggest that the Senator takes his positions for political purposes. The victims were innocent men, women and children from America and many other nations who had done nothing to harm anybody. Since the Islamic Revolution, Iran has played a role in acts of hostage-taking and violence against U.S.
+                        </p>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+
+

@@ -2,33 +2,35 @@
 {
     using System.Reflection;
 
+    using CloudinaryDotNet;
+
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+
     using RPM.Data;
     using RPM.Data.Common;
     using RPM.Data.Common.Repositories;
     using RPM.Data.Models;
     using RPM.Data.Repositories;
     using RPM.Data.Seeding;
-    using RPM.Services.Data;
-    using RPM.Services.Mapping;
-    using RPM.Services.Messaging;
-    using RPM.Web.ViewModels;
-
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using CloudinaryDotNet;
-    using Microsoft.AspNetCore.Identity;
     using RPM.Services.Admin;
     using RPM.Services.Admin.Implementations;
-    using Microsoft.AspNetCore.Mvc;
     using RPM.Services.Common;
     using RPM.Services.Common.Implementations;
+    using RPM.Services.Data;
     using RPM.Services.Management;
     using RPM.Services.Management.Implementations;
+    using RPM.Services.Mapping;
+    using RPM.Services.Messaging;
+
+    using RPM.Web.ViewModels;
 
     public class Startup
     {
@@ -116,6 +118,12 @@
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
+
+            services.AddRouting(option =>
+            {
+                option.ConstraintMap["slugify"] = typeof(SlugifyParameterTransformer);
+                option.LowercaseUrls = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -166,8 +174,9 @@
                     "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                     endpoints.MapControllerRoute(
-                        "default",
-                        "{controller=Home}/{action=Index}/{id?}");
+                    name: "default",
+                    pattern: "{controller:slugify}/{action:slugify}/{id:slugify?}",
+                    defaults: new { controller = "Home", action = "Index" });
 
                     endpoints.MapRazorPages();
                 });

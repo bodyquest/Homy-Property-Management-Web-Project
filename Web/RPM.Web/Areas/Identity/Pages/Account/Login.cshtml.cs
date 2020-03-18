@@ -59,15 +59,21 @@ namespace RPM.Web.Areas.Identity.Pages.Account
             this.ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            // var url = Request.HttpContext.Request.Query["ReturnUrl"];
+            // var uri = String.Format("http://example.com?page={0}", url);
+            // Response.Redirect(uri);
+
+            // returnUrl = returnUrl ?? this.Url.Content("~/");
 
             if (this.ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await this.signInManager.PasswordSignInAsync(this.Input.Username, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: false);
+                var result = await this.signInManager
+                    .PasswordSignInAsync(this.Input.Username, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
                     var user = this.userManager.FindByNameAsync(this.Input.Username).GetAwaiter().GetResult();

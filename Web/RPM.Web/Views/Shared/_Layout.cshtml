@@ -62,7 +62,7 @@
                     }
                     <nav class="main-menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="index.html">Home</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                             <li><a href="how-it-works.html">Explore</a></li>
                             <li><a href="listings.html">Cities</a></li>
                             <li><a href="contact.html">Help</a></li>
@@ -84,7 +84,7 @@
                         <ul mr-auto>
                             <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                             <li><a href="how-it-works.html">Explore</a></li>
-                            <li><a href="listings.html">More Cities</a></li>
+                            <li><a href="listings.html">Cities</a></li>
                             <li><a href="contact.html">Contact</a></li>
                             <li></li>
                             <li></li>
@@ -109,9 +109,10 @@
     <!-- Header End -->
 
 
-    <partial name="_CookieConsentPartial" />
     <main role="main">
         @this.RenderBody()
+        <partial name="_AlertMessages" />
+        <partial name="_CookieConsentPartial" />
     </main>
 
     <br />

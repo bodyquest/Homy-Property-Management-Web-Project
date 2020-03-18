@@ -71,4 +71,56 @@ body {
     height: 40vh;
 }
 
+/***************************************************************/
+
+.formBox {
+    margin-top: 90px;
+    padding: 50px;
+}
+
+.formBox h1 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    font-size: 48px;
+}
+
+.inputField {
+    position: relative;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+    .inputField .inputText {
+        position: absolute;
+        font-size: 16px;
+        line-height: 20px;
+        transition: .5s;
+        opacity: .5;
+    }
+
+    .inputField .input {
+        position: relative;
+        width: 100%;
+        height: 20px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        border-bottom: 1px solid rgba(0,0,0,.5);
+    }
+
+.focus .inputText {
+    transform: translateY(-30px);
+    font-size: 18px;
+    opacity: 1;
+    color: #00bcd4;
+}
+
+textarea {
+    height: 100px !important;
+}
+
 

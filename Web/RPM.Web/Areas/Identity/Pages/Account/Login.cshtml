@@ -18,7 +18,11 @@
     <div class="row justify-content-around">
         <div class="col-md-4 pl-lg-5">
             <section>
-                <form id="account" method="post">
+                @{
+                    string referer = this.HttpContext.Request.Headers["Referer"].ToString();
+                    Uri baseUri = new Uri(referer);
+                 }
+                <form id="account" asp-route-returnUrl="@baseUri.AbsolutePath" method="post">
                     <h4>Use a local account to log in.</h4>
                     <hr />
                     <div asp-validation-summary="All" class="text-danger"></div>
