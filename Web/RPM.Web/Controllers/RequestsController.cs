@@ -10,12 +10,13 @@
 
     using static RPM.Common.GlobalConstants;
 
-    public class RequestController : BaseController
+    public class RequestsController : BaseController
     {
-        public RequestController()
+        public RequestsController()
         {
         }
 
+        [ActionName("RequestForm")]
         public async Task<IActionResult> RequestFormAsync()
         {
             if (!this.User.Identity.IsAuthenticated)
