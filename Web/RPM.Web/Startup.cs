@@ -27,6 +27,8 @@
     using Microsoft.AspNetCore.Mvc;
     using RPM.Services.Common;
     using RPM.Services.Common.Implementations;
+    using RPM.Services.Management;
+    using RPM.Services.Management.Implementations;
 
     public class Startup
     {
@@ -100,10 +102,15 @@
             services.AddTransient<IAdminCountryService, AdminCountryService>();
             services.AddTransient<IAdminCityService, AdminCityService>();
             services.AddTransient<IAdminListingService, AdminListingService>();
+
             services.AddTransient<ICloudImageService, CloudImageService>();
             services.AddTransient<IImageDbService, ImageDbService>();
-            services.AddTransient<ICloudImageService, CloudImageService>();
+            //services.AddTransient<ICloudImageService, CloudImageService>();
             services.AddTransient<IListingService, ListingService>();
+
+            services.AddTransient<IOwnerListingService, OwnerListingService>();
+            services.AddTransient<IOwnerRequestService, OwnerRequestService>();
+            services.AddTransient<IOwnerRentalService, OwnerRentalService>();
 
             services.AddMvc(options =>
             {

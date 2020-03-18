@@ -1,17 +1,14 @@
 ﻿namespace RPM.Web.Areas.Management.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using RPM.Web.Controllers;
+
     using static RPM.Common.GlobalConstants;
 
     [Area(ManagementArea)]
+    [Authorize(Roles = OwnerRoleName)]
     public class ManagementController : BaseController
     {
-
     }
 }
