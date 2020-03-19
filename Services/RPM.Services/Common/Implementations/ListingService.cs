@@ -47,6 +47,24 @@
             return model;
         }
 
+        public async Task<IEnumerable<PropertyListServiceModel>> GetAllByCategoryAsync(HomeCategory category)
+        {
+            var managedStatus = HomeStatus.Managed;
+
+            if (category == HomeCategory.House)
+            {
+                return await this.GetAllByCategoryAsync(category, managedStatus);
+            }
+            else if (category == HomeCategory.Apartment)
+            {
+                return await this.GetAllByCategoryAsync(category, managedStatus);
+            }
+            else
+            {
+                return await this.GetAllByCategoryAsync(category, managedStatus);
+            }
+        }
+
         public async Task<PropertyDetailsServiceModel> GetDetailsAsync(string id)
         {
             var model = await this.context.Homes
@@ -130,6 +148,29 @@
                     Image = x.Images.Select(i => i.PictureUrl).FirstOrDefault(),
                 })
                 .ToListAsync();
+
+            return model;
+        }
+
+        private async Task<IEnumerable<PropertyListServiceModel>> GetAllByCategoryAsync(HomeCategory category, HomeStatus managedStatus)
+        {
+            var model = await this.context.Homes
+                            .Include(x => x.City)
+                            .Include(x => x.City.Country)
+                            .Include(h => h.Images)
+                            .Where(h => h.Category == category && h.Status != managedStatus)
+                            .Select(x => new PropertyListServiceModel
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                City = x.City.Name,
+                                Country = x.City.Country.Name,
+                                Price = x.Price,
+                                Status = x.Status,
+                                Category = x.Category,
+                                Image = x.Images.Select(i => i.PictureUrl).FirstOrDefault(),
+                            })
+                            .ToListAsync();
 
             return model;
         }

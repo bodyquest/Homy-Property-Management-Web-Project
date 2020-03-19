@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
+    using RPM.Data.Models.Enums;
     using RPM.Services.Common;
     using RPM.Web.Models.Listings;
 
@@ -45,6 +46,45 @@
             return this.View(viewModel);
         }
 
+        [ActionName("AllHouses")]
+        public async Task<IActionResult> AllHousesAsync()
+        {
+            var category = HomeCategory.House;
+            var viewModel = new PropertyListByCategoryViewModel
+            {
+                Properties = await this.listingService.GetAllByCategoryAsync(category),
+                Category = category.ToString(),
+            };
 
+            return this.View(viewModel);
+        }
+
+        [ActionName("AllApartments")]
+        public async Task<IActionResult> AllApartmentsAsync()
+        {
+            var category = HomeCategory.Apartment;
+
+            var viewModel = new PropertyListByCategoryViewModel
+            {
+                Properties = await this.listingService.GetAllByCategoryAsync(category),
+                Category = category.ToString(),
+            };
+
+            return this.View(viewModel);
+        }
+
+        [ActionName("AllRooms")]
+        public async Task<IActionResult> AllRoomsAsync()
+        {
+            var category = HomeCategory.Room;
+
+            var viewModel = new PropertyListByCategoryViewModel
+            {
+                Properties = await this.listingService.GetAllByCategoryAsync(category),
+                Category = category.ToString(),
+            };
+
+            return this.View(viewModel);
+        }
     }
 }
