@@ -13,14 +13,5 @@
     public class RequestFormServiceModel
     {
         public PropertyDetailsServiceModel PropertyDetails { get; set; }
-
-        public UserDetailsInputModel UserDetails { get; set; }
-
-        [Required]
-        [MinLength(MessageMinLength)]
-        [MaxLength(MessageMaxLength)]
-        public string Message { get; set; }
-
-        public IFormFile Document { get; set; }
     }
 }

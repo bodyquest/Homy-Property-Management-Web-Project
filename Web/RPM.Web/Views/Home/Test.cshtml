@@ -1,0 +1,182 @@
+﻿@using RPM.Common
+@using System.Text
+
+
+@model HomeIndexViewModel
+
+<link rel="stylesheet" href="~/css/sitecustom.css">
+
+@{
+    this.ViewData["Title"] = "Home Page";
+}
+<!-- Hero Section Begin -->
+@if (this.User.Identity.IsAuthenticated &&
+(this.User.IsInRole(GlobalConstants.ViewerRoleName)
+|| this.User.IsInRole(GlobalConstants.ManagerRoleName)))
+{
+    <section class="jumbotron jumbotron-fluid jumboHeroImage">
+        <div class="container">
+            <div class="row pt-5">
+                <div class="col-lg-12 pt-5">
+                    <form asp-action="Search" class="row d-flex justify-content-center">
+                        <div class="col-6 pr-0">
+                            <input asp-for="SearchText"
+                                   class="form-control form-control-lg"
+                                   id="inputlg"
+                                   placeholder="Search by city..." />
+                        </div>
+                        <div class="col-2">
+                            <input type="submit"
+                                   value="Search"
+                                   class="btn btn-lg text-white"
+                                   style="background-color:#FF5581">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+}
+else
+{
+    <section class="hero-section set-bg" data-setbg="/img/hero-bg.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hero-text">
+                        <img src="/img/placeholder.png" alt="">
+                        <h1>Rent or Manage a Home</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-5">
+                <div class="col-lg-12">
+                    <form asp-action="Search" class="row d-flex justify-content-center">
+                        <div class="col-6 pr-0">
+                            <input asp-for="SearchText"
+                                   class="form-control form-control-lg"
+                                   id="inputlg"
+                                   placeholder="Search by city..." />
+                        </div>
+                        <div class="col-2">
+                            <input type="submit"
+                                   value="Search"
+                                   class="btn btn-lg text-white"
+                                   style="background-color:#FF5581">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+<!-- Hero Section End -->
+<br>
+
+<!-- TEST SECTION Begin -->
+<style>
+    /* layout.css Style */
+    .upload-drop-zone {
+        height: 100px;
+        border-width: 2px;
+        margin-bottom: 20px;
+    }
+
+    /* skin.css Style*/
+    .upload-drop-zone {
+        color: #ccc;
+        border-style: dashed;
+        border-color: #ccc;
+        line-height: 100px;
+        text-align: center
+    }
+
+        .upload-drop-zone.drop {
+            color: #222;
+            border-color: #222;
+        }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>Upload File</strong></div>
+                <div class="panel-body">
+
+                    <!-- Standard Form -->
+                    <h5>Select file from your computer</h5>
+                    <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="file" name="files[]" id="js-upload-files" multiple>
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-primary" id="js-upload-submit">Upload file</button>
+                        </div>
+                    </form>
+
+                    <!-- Drop Zone -->
+                    <h5>Or drag and drop file below</h5>
+                    <div class="upload-drop-zone" id="drop-zone">
+                        Just drag and drop file here
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+<!-- TEST SECTION End -->
+
+<br />
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <hr class="hr-2" />
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function($) {
+    'use strict';
+
+    // UPLOAD CLASS DEFINITION
+    // ======================
+
+    var dropZone = document.getElementById('drop-zone');
+    var uploadForm = document.getElementById('js-upload-form');
+
+    var startUpload = function(files) {
+    console.log(files)
+    }
+
+    uploadForm.addEventListener('submit', function(e) {
+    var uploadFiles = document.getElementById('js-upload-files').files;
+    e.preventDefault()
+
+    startUpload(uploadFiles)
+    })
+
+    dropZone.ondrop = function(e) {
+    e.preventDefault();
+    this.className = 'upload-drop-zone';
+
+    startUpload(e.dataTransfer.files)
+    }
+
+    dropZone.ondragover = function() {
+    this.className = 'upload-drop-zone drop';
+    return false;
+    }
+
+    dropZone.ondragleave = function() {
+    this.className = 'upload-drop-zone';
+    return false;
+    }
+
+    }(jQuery);
+    </script>
+}

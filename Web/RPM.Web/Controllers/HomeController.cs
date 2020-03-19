@@ -84,8 +84,6 @@
             return this.View(model);
          }
 
-        
-
         public async Task<IActionResult> Search(SearchFormModel model)
         {
             var viewModel = new SearchViewModel
@@ -103,6 +101,11 @@
             viewModel.Properties = result;
 
             return this.View(viewModel);
+        }
+
+        public async Task<IActionResult> Test()
+        {
+            return this.View();
         }
 
         public IActionResult Privacy()

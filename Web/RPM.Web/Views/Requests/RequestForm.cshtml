@@ -1,4 +1,5 @@
-﻿
+﻿@model RequestFormInputModel
+
 @{
     ViewData["Title"] = "RequestForm";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,19 +13,26 @@
     <div class="container-fluid">
         <div class="row pl-lg-5">
             <div class="col-5">
-                <form asp-controller="Request" asp-action="RequestForm" enctype="multipart/form-data" method="post">
+                <form asp-controller="Request"
+                      asp-action="RequestForm"
+                      enctype="multipart/form-data"
+                      method="post"
+                      id="js-upload-form">
+
                     <div class="formBox mt-0 pt-2">
                         <div class="row">
                             <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <h2>Request for Rental</h2>
                                 <div class="row">
                                     <div class="col-8">
                                         <hr class="hr-2 mt-1 pb-4" />
                                     </div>
                                 </div>
-                                @if (string.IsNullOrEmpty("some field is empty"))
+                                @if (string.IsNullOrEmpty(Model.User.About)
+                              || Model.User.PhoneNumber == null)
                                 {
-                                    <h4 class="pt-2">Please fill the empty fields</h4>
+                                    <h4 class="pb-5 text-danger">Please fill the empty fields</h4>
                                 }
                             </div>
                         </div>
@@ -32,14 +40,14 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="inputField">
-                                    <div class="inputText">First Name</div>
+                                    <div class="inputTextFixed">@Model.User.FirstName</div>
                                     <input readonly type="text" name="" class="input">
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="inputField">
-                                    <div class="inputText">Last Name</div>
+                                    <div class="inputTextFixed">@Model.User.LastName</div>
                                     <input readonly type="text" name="" class="input">
                                 </div>
                             </div>
@@ -48,15 +56,24 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="inputField">
-                                    <div class="inputText">Email</div>
+                                    <div class="inputTextFixed">@Model.User.Email</div>
                                     <input readonly type="text" name="" class="input">
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="inputField">
-                                    <div class="inputText">Mobile</div>
-                                    <input readonly type="text" name="" class="input">
+                                    @if (Model.User.PhoneNumber == null)
+                                    {
+                                        <div class="inputText text-danger">Phone</div>
+                                        <input asp-for="User.PhoneNumber" class="input">
+                                    }
+                                    else
+                                    {
+                                        <div class="inputText">@Model.User.PhoneNumber</div>
+                                        <input readonly type="text" name="" class="input">
+                                    }
+                                    <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -64,8 +81,19 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="inputField">
-                                    <div class="inputText">About</div>
-                                    <textarea class="input" rows="7"></textarea>
+                                    @if (string.IsNullOrWhiteSpace(Model.User.About))
+                                    {
+                                        <div class="inputText text-danger">About</div>
+                                        <textarea asp-for="@Model.User.About"
+                                                  class="input" rows="7">
+                                        </textarea>
+                                    }
+                                    else
+                                    {
+                                        <div class="inputText">@Model.User.About</div>
+                                        <textarea readonly class="input" rows="7"></textarea>
+                                    }
+                                    <span asp-validation-for="User.About" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -73,14 +101,36 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="inputField">
-                                    <div class="inputText">Your Message</div>
-                                    <textarea class="input" rows="7"></textarea>
+                                    <div class="inputText text-danger">Your Message</div>
+                                    <textarea asp-for="Message" class="input" rows="7"></textarea>
+                                    <span asp-validation-for="Message" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
 
-                        <p>
-                            <a method="post" asp-controller="Requests" asp-action="Submit" class="btn btn-success">Submit Request</a>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+
+                                        <!-- Standard Form -->
+                                        <h5 class="text-danger pb-2" style="opacity: .5;">
+                                            Select or drag and drop PDF file of your ID
+                                        </h5>
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <input type="file" asp-for="Document" accept=".pdf"/>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <span asp-validation-for="Document" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <p class="pt-5">
+                            <a tupe="submit" class="btn btn-success" asp-controller="Requests" asp-action="Submit">Submit Request</a>
                         </p>
 
                     </div>
@@ -89,14 +139,14 @@
             <div class="col-7 pt-1 pr-3">
                 <div class="row">
                     <div class="col-12">
-                        <img src="~/img/wp2406709.jpg" class="img-fluid" alt="Responsive image">
+                        <img src="@Model.PropertyDetails.Image" class="img-fluid" alt="Responsive image">
                     </div>
                     <div class="col-12">
                         <h2 class="text-left pt-2">
-                            <strong>Great Apartment in Berlin Pankow</strong>
+                            <strong>@Model.PropertyDetails.Name</strong>
                         </h2>
                         <div class="text-left">
-                            <div class="text-muted pt-2">17, Damerowstrasse, 13187<span class="float-right"><strong>Price: $900/ Month</strong></span></div>
+                            <div class="text-muted pt-2">@Model.PropertyDetails.Name<span class="float-right"><strong>Price: $@Model.PropertyDetails.Price/ Month</strong></span></div>
                             <hr />
                             <strong><i class="far fa-file-alt mr-1"></i>Listing Details</strong>
                             <div class="row">
@@ -105,9 +155,7 @@
                                 </div>
                             </div>
                             <p class="text-muted">
-                                In fact, a similar anger exists within segments of the white community. I have unequivocally prohibited the use of torture by the United States, and I have ordered the prison at Guantanamo Bay closed by early next year.
-
-                                If there's a senior citizen somewhere who can't pay for their prescription drugs, and has to choose between medicine and the rent, that makes my life poorer, even if it's not my grandparent. The hope of a young naval lieutenant bravely patrolling the Mekong Delta. But what I will not do is suggest that the Senator takes his positions for political purposes. The victims were innocent men, women and children from America and many other nations who had done nothing to harm anybody. Since the Islamic Revolution, Iran has played a role in acts of hostage-taking and violence against U.S.
+                                @Model.PropertyDetails.Description
                             </p>
                             <hr />
                         </div>
@@ -120,6 +168,15 @@
 </section>
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.2.1.js">
+    </script>
+    <script type="text/javascript">
+        $(".input").focus(function () {
+            $(this).parent().addClass("focus");
+        })
+    </script>
+
+
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
 

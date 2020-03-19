@@ -7,21 +7,23 @@
 
     using RPM.Data;
     using RPM.Data.Models;
+    using RPM.Services.Common.Models.Listing;
     using RPM.Services.Common.Models.Request;
 
     public class RequestService : IRequestService
     {
         private readonly ApplicationDbContext context;
+        private readonly IListingService listingService;
 
         public RequestService(ApplicationDbContext context)
         {
             this.context = context;
         }
 
-        public async Task<RequestFormServiceModel> GetFormDataAsync(string id, User user)
+        public async Task<bool> CreateRequestAsync(RequestCreateServiceModel model)
         {
-
-            return null;
+            return true;
         }
+
     }
 }

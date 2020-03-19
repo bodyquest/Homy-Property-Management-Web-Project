@@ -3,9 +3,8 @@
     using System;
     using System.Threading.Tasks;
 
-    using RPM.Data.Common;
-
     using Microsoft.EntityFrameworkCore;
+    using RPM.Data.Common;
 
     public class DbQueryRunner : IDbQueryRunner
     {

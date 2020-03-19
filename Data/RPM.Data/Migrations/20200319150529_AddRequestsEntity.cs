@@ -16,7 +16,7 @@ namespace RPM.Data.Migrations
                     Type = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
                     HomeId = table.Column<string>(nullable: false),
-                    Document = table.Column<byte[]>(maxLength: 2097152, nullable: false)
+                    Document = table.Column<byte[]>(maxLength: 2097152, nullable: false),
                 },
                 constraints: table =>
                 {

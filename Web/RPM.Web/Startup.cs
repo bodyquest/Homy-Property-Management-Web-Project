@@ -113,6 +113,7 @@
             services.AddTransient<IOwnerListingService, OwnerListingService>();
             services.AddTransient<IOwnerRequestService, OwnerRequestService>();
             services.AddTransient<IOwnerRentalService, OwnerRentalService>();
+            services.AddTransient<IRequestService, RequestService>();
 
             services.AddMvc(options =>
             {
