@@ -1,14 +1,15 @@
 ﻿namespace RPM.Services.Common
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
     using System.Threading.Tasks;
     using RPM.Services.Common.Models.Home;
+    using RPM.Services.Common.Models.Listing;
 
     public interface IListingService
     {
         Task<IEnumerable<PropertyListServiceModel>> GetPropertiesAsync();
+
+        Task<PropertyDetailsServiceModel> GetDetailsAsync(string id);
 
         Task<IEnumerable<PropertyListServiceModel>> GetAllByStatusAsync(string status);
 

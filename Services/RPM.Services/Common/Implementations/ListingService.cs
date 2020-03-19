@@ -9,9 +9,9 @@
     using RPM.Data;
     using RPM.Data.Models.Enums;
     using RPM.Services.Common.Models.Home;
-
-    using static RPM.Common.GlobalConstants;
+    using RPM.Services.Common.Models.Listing;
     using static RPM.Common.Extensions.StringExtensionMethod;
+    using static RPM.Common.GlobalConstants;
 
     public class ListingService : IListingService
     {
@@ -43,6 +43,32 @@
                     Image = x.Images.Select(i => i.PictureUrl).FirstOrDefault(),
                 })
                 .ToListAsync();
+
+            return model;
+        }
+
+        public async Task<PropertyDetailsServiceModel> GetDetailsAsync(string id)
+        {
+            var model = await this.context.Homes
+                .Where(h => h.Id == id)
+                .Include(x => x.City)
+                .Include(x => x.City.Country)
+                .Include(h => h.Images)
+                .Select(x => new PropertyDetailsServiceModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    OwnerName = x.Owner.FirstName,
+                    City = x.City.Name,
+                    Address = x.Address,
+                    Country = x.City.Country.Name,
+                    Description = x.Description,
+                    Price = x.Price,
+                    Status = x.Status,
+                    Category = x.Category,
+                    Image = x.Images.Select(i => i.PictureUrl).FirstOrDefault(),
+                })
+                .FirstOrDefaultAsync();
 
             return model;
         }
