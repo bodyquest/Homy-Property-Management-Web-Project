@@ -61,6 +61,12 @@
         [ActionName("Create")]
         public async Task<IActionResult> CreateAsync(AdminListingCreateInputModel model)
         {
+            // TODO: check why validation for textarea does not work
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
             var imgResult = await this.imageService
                 .UploadImageAsync(model.Image);
 

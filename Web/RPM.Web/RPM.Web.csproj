@@ -57,6 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Requests\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\themes\main\" />
   </ItemGroup>

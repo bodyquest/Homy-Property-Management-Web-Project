@@ -22,6 +22,11 @@
         {
             var model = await this.listingService.GetDetailsAsync(id);
 
+            if (model == null)
+            {
+                return this.NotFound();
+            }
+
             var viewModel = new PropertyDetailsViewModel
             {
                 Id = model.Id,
@@ -37,12 +42,9 @@
                 Image = model.Image,
             };
 
-            if (viewModel == null)
-            {
-                return this.NotFound();
-            }
-
             return this.View(viewModel);
         }
+
+
     }
 }
