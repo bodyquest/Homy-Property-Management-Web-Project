@@ -22,8 +22,29 @@
 
         public async Task<bool> CreateRequestAsync(RequestCreateServiceModel model)
         {
-            return true;
-        }
+            var request = new Request
+            {
+                Date = model.Date,
+                Type = model.Type,
+                UserId = model.UserId,
+                HomeId = model.HomeId,
+                Document = model.Document,
+            };
 
+            if (request == null)
+            {
+                return false;
+            }
+
+            await this.context.Requests.AddAsync(request);
+            int result = await this.context.SaveChangesAsync();
+
+            if (result > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

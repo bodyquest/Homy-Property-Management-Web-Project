@@ -5,9 +5,12 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using RPM.Common.Extensions;
     using RPM.Data.Models;
+    using RPM.Data.Models.Enums;
     using RPM.Services.Common;
     using RPM.Services.Common.Models.Request;
     using RPM.Web.Infrastructure.Extensions;
@@ -54,8 +57,8 @@
         }
 
         [HttpPost]
-        [ActionName("Submit")]
-        public async Task<IActionResult> SubmitAsync(RequestFormInputModel model)
+        [ActionName("RequestForm")]
+        public async Task<IActionResult> RequestFormAsync(string id, string about, string phone, string message, IFormFile document)
         {
             if (!this.User.Identity.IsAuthenticated)
             {
@@ -63,13 +66,78 @@
                     .WithDanger(string.Empty, YouMustBeLoggedIn);
             }
 
+            var userId = this.userManager.GetUserId(this.User);
+            var user = await this.userManager.FindByIdAsync(userId);
+            var homeFromDb = await this.listingService.GetDetailsAsync(id);
+
+            if (!this.ModelState.IsValid)
+            {
+                var viewModel = new RequestFormInputModel
+                {
+                    PropertyDetails = homeFromDb,
+                    User = user,
+                };
+
+                return this.View(viewModel);
+            }
+
+            if (document.Length > RequestDocumentMaxSize)
+            {
+                this.TempData.AddErrorMessage(FileTooLarge);
+                var viewModel = new RequestFormInputModel
+                {
+                    PropertyDetails = homeFromDb,
+                    User = user,
+                };
+
+                return this.View(viewModel);
+            }
+
+            if (
+                (string.IsNullOrWhiteSpace(about) && string.IsNullOrWhiteSpace(user.About))
+                || (string.IsNullOrWhiteSpace(phone) && string.IsNullOrWhiteSpace(user.PhoneNumber))
+                || string.IsNullOrWhiteSpace(message))
+            {
+                this.TempData.AddErrorMessage(EmptyFields);
+                var viewModel = new RequestFormInputModel
+                {
+                    PropertyDetails = homeFromDb,
+                    User = user,
+                };
+
+                return this.View(viewModel);
+            }
+
+            if (!string.IsNullOrWhiteSpace(about))
+            {
+                user.About = about;
+                await this.userManager.UpdateAsync(user);
+            }
+
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                user.PhoneNumber = phone;
+                await this.userManager.UpdateAsync(user);
+            }
+
+            var fileContents = await document.ToByteArrayAsync();
+
             var modelForDb = new RequestCreateServiceModel
             {
-
+                Date = DateTime.UtcNow,
+                Type = (RequestType)homeFromDb.Status,
+                UserId = userId,
+                HomeId = homeFromDb.Id,
+                Document = fileContents,
             };
 
             bool isCreated = await this.requestService.CreateRequestAsync(modelForDb);
 
+            if (isCreated)
+            {
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty })
+                    .WithSuccess(string.Empty, SuccessfullySubmittedRequest);
+            }
 
             return this.View();
         }

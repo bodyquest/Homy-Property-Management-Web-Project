@@ -31,6 +31,16 @@
                                    class="btn btn-lg text-white"
                                    style="background-color:#FF5581">
                         </div>
+
+                        <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                            <div class="input-group">
+                                <input type="search" placeholder="What're you searching for?" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                                <div class="input-group-append">
+                                    <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
             </div>
@@ -65,7 +75,17 @@ else
                                    class="btn btn-lg text-white"
                                    style="background-color:#FF5581">
                         </div>
+
                     </form>
+
+                    <!--TO TEST FURTHER-->
+                    <div class="col-6 searchbar">
+                        <input asp-for="SearchText"
+                               class="search_input"
+                               placeholder="Search by city..." />
+                        <a class="search_icon"><ion-icon name="search-outline"></ion-icon></a>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -97,6 +117,10 @@ else
             border-color: #222;
         }
 </style>
+
+
+
+
 
 <div class="container">
     <div class="row">

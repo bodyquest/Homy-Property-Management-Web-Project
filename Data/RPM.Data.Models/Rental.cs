@@ -12,12 +12,14 @@
 
         [ForeignKey(nameof(Home))]
         public string HomeId { get; set; }
-        public Home Home { get; set; }
+        public virtual Home Home { get; set; }
 
         [ForeignKey(nameof(User))]
         public string TenantId { get; set; }
-        public User Tenant { get; set; }
+        public virtual User Tenant { get; set; }
 
-        public virtual ICollection<Document> Documents { get; set; }
+        [ForeignKey(nameof(Contract))]
+        public string ContractId { get; set; }
+        public virtual Contract Contract { get; set; }
     }
 }

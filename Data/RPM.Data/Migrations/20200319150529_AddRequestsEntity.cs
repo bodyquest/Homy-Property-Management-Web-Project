@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace RPM.Data.Migrations
+﻿namespace RPM.Data.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddRequestsEntity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -13,13 +13,23 @@
 
     public class RequestFormInputModel
     {
+        public string Id { get; set; }
+
         public PropertyDetailsServiceModel PropertyDetails { get; set; }
 
         public User User { get; set; }
 
+        [Phone]
         [Required]
-        [MinLength(MessageMinLength)]
-        [MaxLength(MessageMaxLength)]
+        [Display(Name = "Phone")]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [MaxLength(AboutMaxLength)]
+        public string About { get; set; }
+
+        [Required]
+        [StringLength(MessageMaxLength, MinimumLength = MessageMinLength, ErrorMessage = "The message must have minimum {2} characters")]
         public string Message { get; set; }
 
         [Required]

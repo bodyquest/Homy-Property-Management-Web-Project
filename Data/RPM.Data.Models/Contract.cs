@@ -8,9 +8,9 @@
 
     using static RPM.Common.GlobalConstants;
 
-    public class Document
+    public class Contract
     {
-        public Document()
+        public Contract()
         {
             this.Id = Guid.NewGuid().ToString();
         }
@@ -18,16 +18,15 @@
         public string Id { get; set; }
 
         [Required]
-        [MaxLength(DocTitleMaxLength)]
+        [StringLength(ContractTitleMaxLength, ErrorMessage = TitleTooLong)]
         public string Title { get; set; }
 
         [Required]
-        public string DocumentPath { get; set; }
+        [MaxLength(ContractDocumentMaxSize)]
+        public byte[] ContractDocument { get; set; }
 
-        [Required]
-        [ForeignKey(nameof(User))]
-        public string UserId { get; set; }
-
-        public User DocumeOwner { get; set; }
+        [ForeignKey(nameof(Rental))]
+        public int RentalId { get; set; }
+        public virtual Rental Rental { get; set; }
     }
 }

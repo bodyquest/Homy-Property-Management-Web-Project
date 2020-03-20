@@ -27,7 +27,7 @@
         public DbSet<Home> Homes { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
-        public DbSet<Document> Documents { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<CloudImage> CloudImages { get; set; }

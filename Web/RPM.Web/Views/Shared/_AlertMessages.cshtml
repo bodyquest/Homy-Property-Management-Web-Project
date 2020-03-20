@@ -5,7 +5,10 @@
 }
 @if (!string.IsNullOrEmpty(type))
 {
-    <div class="alert alert-@type alert-dismissible text-center" role="alert">
+    <div 
+         class="alert alert-@type alert-dismissible text-center" 
+         role="alert"
+         style="z-index: 100;">
         <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <strong>@title</strong> @body
     </div>

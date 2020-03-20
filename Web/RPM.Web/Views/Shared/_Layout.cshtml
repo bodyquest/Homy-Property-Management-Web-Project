@@ -42,7 +42,7 @@
     </div>
 
     <!-- Header Section Begin -->
-    <nav class="sticky-top">
+
         <header class="header-section">
             <div class="container-fluid">
                 <div class="logo pl-5">
@@ -106,13 +106,13 @@
                 }
             </div>
         </header>
-    </nav>
+
     <!-- Header End -->
 
 
     <main role="main">
-        @this.RenderBody()
         <partial name="_AlertMessages" />
+        @this.RenderBody()
         <partial name="_CookieConsentPartial" />
     </main>
 

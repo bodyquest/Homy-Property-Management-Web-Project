@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace RPM.Data.Migrations
+﻿namespace RPM.Data.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddInitialDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,7 +54,7 @@ namespace RPM.Data.Migrations
                     PictureUrl = table.Column<string>(nullable: true),
                     PictureThumbnailUrl = table.Column<string>(nullable: true),
                     Length = table.Column<long>(nullable: false),
-                    UserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -74,7 +74,7 @@ namespace RPM.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
-                    Code = table.Column<string>(nullable: false)
+                    Code = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -88,7 +88,7 @@ namespace RPM.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
-                    CountryId = table.Column<int>(nullable: false)
+                    CountryId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -114,7 +114,7 @@ namespace RPM.Data.Migrations
                     Category = table.Column<int>(nullable: false),
                     ManagerId = table.Column<string>(nullable: true),
                     CountryId = table.Column<int>(nullable: false),
-                    CityId = table.Column<int>(nullable: true)
+                    CityId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -147,7 +147,7 @@ namespace RPM.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RentDate = table.Column<DateTime>(nullable: false),
                     HomeId = table.Column<string>(nullable: true),
-                    TenantId = table.Column<string>(nullable: true)
+                    TenantId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -174,7 +174,7 @@ namespace RPM.Data.Migrations
                     Title = table.Column<string>(maxLength: 30, nullable: false),
                     DocumentPath = table.Column<string>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
-                    RentalId = table.Column<int>(nullable: true)
+                    RentalId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {

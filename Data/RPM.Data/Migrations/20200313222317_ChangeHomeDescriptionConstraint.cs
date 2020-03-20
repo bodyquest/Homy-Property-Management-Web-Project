@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace RPM.Data.Migrations
+﻿namespace RPM.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class ChangeHomeDescriptionConstraint : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

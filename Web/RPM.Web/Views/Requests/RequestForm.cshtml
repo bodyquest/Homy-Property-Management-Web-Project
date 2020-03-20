@@ -13,12 +13,11 @@
     <div class="container-fluid">
         <div class="row pl-lg-5">
             <div class="col-5">
-                <form asp-controller="Request"
-                      asp-action="RequestForm"
+                <form asp-action="RequestForm"
                       enctype="multipart/form-data"
                       method="post"
                       id="js-upload-form">
-
+                    <input type="hidden" asp-for="Id" />
                     <div class="formBox mt-0 pt-2">
                         <div class="row">
                             <div class="col-sm-12">
@@ -29,8 +28,9 @@
                                         <hr class="hr-2 mt-1 pb-4" />
                                     </div>
                                 </div>
-                                @if (string.IsNullOrEmpty(Model.User.About)
-                              || Model.User.PhoneNumber == null)
+
+                                @if (string.IsNullOrEmpty(@Model.User.About)
+                            || @Model.User.PhoneNumber == null)
                                 {
                                     <h4 class="pb-5 text-danger">Please fill the empty fields</h4>
                                 }
@@ -41,14 +41,14 @@
                             <div class="col-sm-6">
                                 <div class="inputField">
                                     <div class="inputTextFixed">@Model.User.FirstName</div>
-                                    <input readonly type="text" name="" class="input">
+                                    <input readonly="readonly" type="text" name="" class="input">
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="inputField">
                                     <div class="inputTextFixed">@Model.User.LastName</div>
-                                    <input readonly type="text" name="" class="input">
+                                    <input readonly="readonly" type="text" name="" class="input">
                                 </div>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             <div class="col-sm-6">
                                 <div class="inputField">
                                     <div class="inputTextFixed">@Model.User.Email</div>
-                                    <input readonly type="text" name="" class="input">
+                                    <input readonly="readonly" type="text" name="" class="input">
                                 </div>
                             </div>
 
@@ -66,14 +66,14 @@
                                     @if (Model.User.PhoneNumber == null)
                                     {
                                         <div class="inputText text-danger">Phone</div>
-                                        <input asp-for="User.PhoneNumber" class="input">
+                                        <input asp-for="@Model.PhoneNumber" class="input">
                                     }
                                     else
                                     {
-                                        <div class="inputText">@Model.User.PhoneNumber</div>
-                                        <input readonly type="text" name="" class="input">
+                                        <div class="inputTextFixed">@Model.User.PhoneNumber</div>
+                                        <input readonly="readonly" type="text" name="" class="input">
                                     }
-                                    <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -84,16 +84,15 @@
                                     @if (string.IsNullOrWhiteSpace(Model.User.About))
                                     {
                                         <div class="inputText text-danger">About</div>
-                                        <textarea asp-for="@Model.User.About"
+                                        <textarea asp-for="@Model.About"
                                                   class="input" rows="7">
                                         </textarea>
                                     }
                                     else
                                     {
-                                        <div class="inputText">@Model.User.About</div>
-                                        <textarea readonly class="input" rows="7"></textarea>
+                                        <textarea class="inputFixed textAreaFixed" readonly="readonly" asp-for="@Model.User.About" type="text" name=""></textarea>
                                     }
-                                    <span asp-validation-for="User.About" class="text-danger"></span>
+                                    <span asp-validation-for="About" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -115,11 +114,11 @@
 
                                         <!-- Standard Form -->
                                         <h5 class="text-danger pb-2" style="opacity: .5;">
-                                            Select or drag and drop PDF file of your ID
+                                            Select a PDF file of your ID or Passport
                                         </h5>
                                         <div class="form-inline">
                                             <div class="form-group">
-                                                <input type="file" asp-for="Document" accept=".pdf"/>
+                                                <input type="file" asp-for="Document" accept=".pdf" />
                                             </div>
                                         </div>
 
@@ -129,9 +128,9 @@
                             </div>
                         </div>
 
-                        <p class="pt-5">
-                            <a tupe="submit" class="btn btn-success" asp-controller="Requests" asp-action="Submit">Submit Request</a>
-                        </p>
+                        <div class="pt-5">
+                            <button type="submit" class="btn btn-success text-white">Submit Request</button>
+                        </div>
 
                     </div>
                 </form>
@@ -176,9 +175,5 @@
         })
     </script>
 
-
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
-
-
-
