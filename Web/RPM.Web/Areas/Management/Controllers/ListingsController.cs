@@ -17,5 +17,23 @@
         {
             return this.View();
         }
+
+        [ActionName("Create")]
+        public async Task<IActionResult> CreateAsync()
+        {
+            return this.View();
+        }
+
+        [ActionName("Details")]
+        public async Task<IActionResult> DetailsAsync(string id)
+        {
+            return this.View();
+        }
+
+        [ActionName("All")]
+        public async Task<IActionResult> AllAsync(string id)
+        {
+            return this.View();
+        }
     }
 }

@@ -8,9 +8,11 @@
     {
         public string Id { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public string Type { get; set; }
+
+        public string FullName { get; set; }
 
         public string Location { get; set; }
     }

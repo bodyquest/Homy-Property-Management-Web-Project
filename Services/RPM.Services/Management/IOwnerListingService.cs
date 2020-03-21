@@ -8,6 +8,6 @@
 
     public interface IOwnerListingService
     {
-        Task<IEnumerable<OwnerIndexListingsServiceModel>> GetMyPropertiesAsync();
+        Task<IEnumerable<OwnerIndexListingsServiceModel>> GetMyPropertiesAsync(string id);
     }
 }

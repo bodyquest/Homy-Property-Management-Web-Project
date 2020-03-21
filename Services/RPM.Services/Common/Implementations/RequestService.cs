@@ -46,5 +46,10 @@
 
             return false;
         }
+
+        public async Task<IEnumerable<RequestListServiceModel>> GetRequestsAsync(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

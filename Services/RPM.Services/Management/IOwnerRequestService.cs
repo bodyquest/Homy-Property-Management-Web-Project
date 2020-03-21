@@ -9,6 +9,6 @@
 
     public interface IOwnerRequestService
     {
-        Task<IEnumerable<OwnerIndexRequestsServiceModel>> GetRequestsAsync();
+        Task<IEnumerable<OwnerIndexRequestsServiceModel>> GetRequestsAsync(string id);
     }
 }

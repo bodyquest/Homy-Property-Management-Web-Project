@@ -31,6 +31,11 @@
                 return this.RedirectToAction("Index", "Dashboard", new { area = AdminArea });
             }
 
+            if (this.User.Identity.IsAuthenticated && this.User.IsInRole(OwnerRoleName))
+            {
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea });
+            }
+
             var housesCountModel = await this.listingService.GetPropertyCountByCategoryAsync(House);
             var apartmentsCountModel = await this.listingService.GetPropertyCountByCategoryAsync(Apartment);
             var roomsCountModel = await this.listingService.GetPropertyCountByCategoryAsync(Room);

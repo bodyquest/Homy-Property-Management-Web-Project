@@ -11,5 +11,7 @@
     public interface IRequestService
     {
         Task<bool> CreateRequestAsync(RequestCreateServiceModel model);
+
+        Task<IEnumerable<RequestListServiceModel>> GetRequestsAsync(string id);
     }
 }

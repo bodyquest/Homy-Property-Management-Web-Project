@@ -2,6 +2,7 @@
 
 @{
     this.ViewData["Title"] = "Management Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <h1 class="text-center text-info">@this.ViewData["Title"]</h1>
@@ -37,32 +38,55 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach (var home in Model.Properties)
+                                    {
+                                        if (Model.Properties.Any())
+                                        {
+                                            <tr>
+                                                <td class="col-1 py-1 pl-3 pr-1"
+                                                    style='vertical-align:middle'>
+                                                    @home.City
+                                                </td>
 
-                                    <tr>
-                                        <td class="col-1 py-1 pl-3 pr-1"
-                                            style='vertical-align:middle'>
-                                            Berlin
-                                        </td>
+                                                <td class="col-8 py-1 pl-2 pr-1" style='vertical-align:middle'>@home.Address</td>
 
-                                        <td class="col-8 py-1 pl-2 pr-1" style='vertical-align:middle'>17, Damerowstrasse, 13187</td>
+                                                <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                                    <span class="badge badge-info">@home.Category</span>
+                                                </td>
 
-                                        <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                            <span class="badge badge-info">Apartment</span>
-                                        </td>
+                                                <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                                    @if (home.Status == "ToRent")
+                                                    {
+                                                        <span class="badge badge-danger">@home.Status</span>
+                                                    }
+                                                    else if (home.Status == "ToManage")
+                                                    {
+                                                        <span class="badge badge-warning">@home.Status</span>
+                                                    }
+                                                    else if (home.Status == "Managed")
+                                                    {
+                                                        <span class="badge badge-success">@home.Status</span>
+                                                    }
+                                                </td>
 
-                                        <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                            <span class="badge badge-success">Managed</span>
-                                        </td>
-
-                                        <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
-                                            <a asp-controller="Properties"
-                                               asp-action="Details"
-                                               asp-route-Id="id"
-                                               style="display:block; margin-bottom:-10px">
-                                                <ion-icon size="large" name="list-outline"></ion-icon>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                                <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
+                                                    <a asp-controller="Listings"
+                                                       asp-action="Details"
+                                                       asp-route-Id="@home.Id"
+                                                       style="display:block; margin-bottom:-10px">
+                                                        <ion-icon size="large" name="list-outline"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr class="col-12 py-1 px-3 text-secondary text-center"
+                                                style='vertical-align:middle'>
+                                                No listed properties yet
+                                            </tr>
+                                        }
+                                    }
                                     <tr>
                                         <td class="col-1 py-1 pl-3 pr-1"
                                             style='vertical-align:middle'>
@@ -125,7 +149,7 @@
                         </div>
                         <div class="col-5 pl-0 m-0" style="display: inline-block;">
                             <p class="text-right p-0 m-0">
-                                <a asp-controller="Listings" asp-action="Index" class="btn btn-secondary"><i class="fas fa-eye"></i> &nbsp; View More</a>
+                                <a asp-controller="Listings" asp-action="Index" class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i> &nbsp; View More</a>
                             </p>
                         </div>
                     </div>
@@ -159,20 +183,36 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="col-1 py-1 px-3" style='vertical-align:middle'>12/03/2020</td>
-                                        <td class="col-1 py-1" style='vertical-align:middle'><span class="badge badge-success">To Rent</span></td>
-                                        <td class="col-3 py-1 px-3" style='vertical-align:middle'>Darincho Rusevski</td>
-                                        <td class="col-5 py-1 px-3" style='vertical-align:middle'>Berlin, 17, Damerowstrasse, 13187</td>
-                                        <td class="col-1 py-1 pl-0 pr-3" style='vertical-align:middle'>
-                                            <a asp-controller="Requests"
-                                               asp-action="Details"
-                                               asp-route-Id="id"
-                                               style="display:block; margin-bottom:-10px">
-                                                <ion-icon size="large" name="list-outline"></ion-icon>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    @foreach (var request in Model.Requests)
+                                    {
+                                        if (Model.Requests.Any())
+                                        {
+                                            <tr>
+                                                <td class="col-1 py-1 px-3"
+                                                    style='vertical-align:middle'>@request.Date</td>
+                                                <td class="col-1 py-1" style='vertical-align:middle'>
+                                                    <span class="badge badge-success">@request.Type</span>
+                                                </td>
+                                                <td class="col-3 py-1 px-3"
+                                                    style='vertical-align:middle'>@request.FullName</td>
+                                                <td class="col-5 py-1 px-3"
+                                                    style='vertical-align:middle'>@request.Location</td>
+                                                <td class="col-1 py-1 pl-0 pr-3" style='vertical-align:middle'>
+                                                    <a asp-controller="Requests"
+                                                       asp-action="Details"
+                                                       asp-route-Id="id"
+                                                       style="display:block; margin-bottom:-10px">
+                                                        <ion-icon size="large" name="list-outline"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr class="col-12 py-1 px-3 text-secondary text-center"
+                                                style='vertical-align:middle'>No pending requests</tr>
+                                        }
+                                    }
                                     <tr>
                                         <td class="col-1 py-1 px-3" style='vertical-align:middle'>12/03/2020</td>
                                         <td class="col-2 py-1" style='vertical-align:middle'><span class="badge badge-warning">To Manage</span></td>
@@ -225,7 +265,7 @@
                     <div class="card-footer row justify-content-end m-0 pr-3">
                         <div class="col-12">
                             <p class="text-right p-0 m-0">
-                                <a asp-controller="Requests" asp-action="Index" class="btn btn-secondary"><i class="fas fa-eye"></i> &nbsp; View All</a>
+                                <a asp-controller="Requests" asp-action="Index" class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i> &nbsp; View All</a>
                             </p>
                         </div>
                     </div>
@@ -346,7 +386,7 @@
                     <div class="card-footer row justify-content-end m-0 px-0">
                         <div class="col-12">
                             <p class="text-right p-0 m-0">
-                                <a asp-controller="Rentals" asp-action="Index" class="btn btn-secondary"><i class="fas fa-eye"></i> &nbsp; View More</a>
+                                <a asp-controller="Rentals" asp-action="Index" class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i> &nbsp; View More</a>
                             </p>
                         </div>
                     </div>
