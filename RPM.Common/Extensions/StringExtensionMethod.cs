@@ -25,7 +25,7 @@
                 return input;
             }
 
-            return input.Length > length ? $"{input.Substring(length)}..." : input;
+            return input.Length > length ? $"{input.Substring(0, length)}..." : input;
         }
     }
 }

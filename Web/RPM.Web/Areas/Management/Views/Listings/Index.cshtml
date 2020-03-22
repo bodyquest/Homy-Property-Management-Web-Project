@@ -1,0 +1,123 @@
+﻿@using static RPM.Common.Extensions.StringExtensionMethod
+
+@model OwnerAllPropertiesWithDetailsViewModel
+
+@{
+    this.ViewData["Title"] = "Listings Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+
+                <!-- TABLE: Add New Listing -->
+                @if (Model.MyProperties.Any())
+                {
+                    @foreach (var property in Model.MyProperties)
+                    {
+                    <div class="col-md-4 pt-4">
+                        <div class="card">
+                            <div class="card-header border-transparent">
+                                <h3 class="card-title text-info">
+                                    <a class="text-info"
+                                       asp-controller="Listings"
+                                       asp-action="Details"
+                                       asp-route-id="@property.Id">
+                                    <strong>@property.Name.Shortify(30)  &nbsp; $ @property.Price</strong>
+                                    </a>
+                                </h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                <!-- form start -->
+
+                                <div class="row px-4 pb-4">
+                                    <a asp-controller="Listings"
+                                       asp-action="Details"
+                                       asp-route-id="@property.Id">
+                                       <img src="@property.Image" class="img-fluid" alt="Responsive image">
+                                    </a>
+                                </div>
+
+                                <div class="row px-3">
+                                    <div class="col-12">
+                                        <div class="text-muted text-left">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>
+                                            @property.Country &nbsp; | &nbsp; @property.City &nbsp; | &nbsp; @property.Address
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row px-3">
+                                    <div class="col-12">
+                                        <div class="text-muted text-left">
+                                            <i class="far fa-file-alt mr-1"></i>
+                                            @property.Description.Shortify(100)
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row px-3">
+                                    <div class="col-12">
+                                        <div class="text-muted text-left">
+                                            <i class="fas fa-home mr-1"></i>
+                                            @property.Category.ToString() &nbsp; | &nbsp;
+                                            @if (property.Status.ToString() == "ToRent")
+                                            {
+                                                <span class="badge badge-danger">To Rent</span>
+                                            }
+                                            else if (property.Status.ToString() == "ToManage")
+                                            {
+                                                <span class="badge badge-warning">To Manage</span>
+                                            }
+                                            else if (property.Status.ToString() == "Managed")
+                                            {
+                                                <span class="badge badge-success">Managed</span>
+                                            }
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                    }
+                }
+                else
+                {
+                    <h4 class="text-danger text-center">
+                        No listed properties yet
+                    </h4>
+                }
+                <!-- /.card -->
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

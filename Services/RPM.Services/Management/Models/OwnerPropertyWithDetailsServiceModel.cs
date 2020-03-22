@@ -1,11 +1,11 @@
 ﻿namespace RPM.Services.Management.Models
 {
-    using RPM.Data.Models.Enums;
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using RPM.Data.Models.Enums;
 
-    public class OwnerListingFullDetailsServiceModel
+    public class OwnerPropertyWithDetailsServiceModel
     {
         public string Id { get; set; }
 
@@ -26,7 +26,5 @@
         public HomeCategory Category { get; set; }
 
         public string Image { get; set; }
-
-        public OwnerRentalInfoServiceModel RentalInfo { get; set; }
     }
 }

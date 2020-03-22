@@ -34,7 +34,15 @@
 
         public async Task<IActionResult> Index()
         {
-            return this.View();
+            var userId = this.userManager.GetUserId(this.User);
+            var model = await this.listingService.GetMyPropertiesWithDetailsAsync(userId);
+
+            var viewModel = new OwnerAllPropertiesWithDetailsViewModel
+            {
+                MyProperties = model,
+            };
+
+            return this.View(viewModel);
         }
 
         [ActionName("Create")]

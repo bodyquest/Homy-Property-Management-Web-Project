@@ -80,5 +80,30 @@
 
             return model;
         }
+
+        public async Task<IEnumerable<OwnerPropertyWithDetailsServiceModel>> GetMyPropertiesWithDetailsAsync(string userId)
+        {
+            var model = await this.context.Homes
+               .Where(h => h.OwnerId == userId)
+               .Include(x => x.City)
+               .Include(x => x.City.Country)
+               .Include(h => h.Images)
+               .Select(x => new OwnerPropertyWithDetailsServiceModel
+               {
+                   Id = x.Id,
+                   Name = x.Name,
+                   City = x.City.Name,
+                   Country = x.City.Country.Name,
+                   Address = x.Address,
+                   Description = x.Description,
+                   Price = x.Price,
+                   Status = x.Status,
+                   Category = x.Category,
+                   Image = x.Images.Select(i => i.PictureUrl).FirstOrDefault(),
+               })
+               .ToListAsync();
+
+            return model;
+        }
     }
 }

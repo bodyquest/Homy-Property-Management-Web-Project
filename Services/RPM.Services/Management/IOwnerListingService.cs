@@ -11,5 +11,7 @@
         Task<IEnumerable<OwnerIndexListingsServiceModel>> GetMyPropertiesAsync(string id);
 
         Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id);
+
+        Task<IEnumerable<OwnerPropertyWithDetailsServiceModel>> GetMyPropertiesWithDetailsAsync(string userId);
     }
 }
