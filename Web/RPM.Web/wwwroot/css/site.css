@@ -192,3 +192,25 @@ textAreaFixed {
     text-decoration: none;
     
 }
+
+.hero {
+    /* Sizing */
+    width: 100vw;
+    height: 100vh;
+    /* Flexbox stuff */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Background styles */
+    background-image: url("../img/account_ny_hero.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.backgroundWhite {
+    background-color: #ffffff99;
+    margin-top: 160px;
+}
+

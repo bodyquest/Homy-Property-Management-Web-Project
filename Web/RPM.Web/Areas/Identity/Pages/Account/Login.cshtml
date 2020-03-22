@@ -5,62 +5,60 @@
     ViewData["Title"] = "Log in";
 }
 
-<br />
-<br />
-<br />
-<br />
-<br />
 
-<div class="container-fluid">
-    <h2 class="text-center text-info">@ViewData["Title"]</h2>
-    <br />
-    <br />
-    <div class="row justify-content-around">
-        <div class="col-md-4 pl-lg-5">
-            <section>
-                @{
-                    string referer = this.HttpContext.Request.Headers["Referer"].ToString();
-                    Uri baseUri = new Uri(referer);
-                 }
-                <form id="account" asp-route-returnUrl="@baseUri.AbsolutePath" method="post">
-                    <h4>Use a local account to log in.</h4>
-                    <hr />
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Input.Username"></label>
-                        <input asp-for="Input.Username" class="form-control" />
-                        <span asp-validation-for="Input.Username" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Input.Password"></label>
-                        <input asp-for="Input.Password" class="form-control" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label asp-for="Input.RememberMe">
-                                <input asp-for="Input.RememberMe" />
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
+<section class="hero">
+    <div class="container-fluid">
+        <div class="row justify-content-around">
+            <div class="col-md-4">
+                <section>
+                    @{
+                        string referer = this.HttpContext.Request.Headers["Referer"].ToString();
+                        Uri baseUri = new Uri(referer);
+                    }
+                    <form class="my-5" id="account" asp-route-returnUrl="@baseUri.AbsolutePath" method="post">
+                        <div class="backgroundWhite p-4">
+                            <h2 class="text-center text-primary py-1">@ViewData["Title"]</h2>
+                            <h4>Use a local account to log in.</h4>
+                            <hr />
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Input.Username"></label>
+                                <input asp-for="Input.Username" class="form-control" />
+                                <span asp-validation-for="Input.Username" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Password"></label>
+                                <input asp-for="Input.Password" class="form-control" />
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label asp-for="Input.RememberMe">
+                                        <input asp-for="Input.RememberMe" />
+                                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Log in</button>
+                            </div>
+                            <div class="form-group">
+                                <p>
+                                    <a id="forgot-password" asp-page="./ForgotPassword"><strong>Forgot your password?</strong></a>
+                                </p>
+                                <p>
+                                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"><strong>Register as a new user</strong></a>
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Log in</button>
-                    </div>
-                    <div class="form-group">
-                        <p>
-                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                        </p>
-                        <p>
-                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                        </p>
-                    </div>
-                </form>
-            </section>
-        </div>
+                    </form>
+                </section>
+            </div>
 
+        </div>
     </div>
-</div>
+</section>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

@@ -192,7 +192,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                    with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
                         <!--********************************************************-->
                         <!--MY ADMIN MENU-->
                         @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
@@ -278,6 +278,14 @@
                         }
                         else if (User.IsInRole(GlobalConstants.OwnerRoleName))
                         {
+                            <li class="nav-item">
+                                <a asp-area="Management" asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Dashboard
+                                    </p>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a asp-area="Management" asp-controller="Listings" asp-action="Index" class="nav-link">
                                     <i class="nav-icon fas fa-home"></i>
