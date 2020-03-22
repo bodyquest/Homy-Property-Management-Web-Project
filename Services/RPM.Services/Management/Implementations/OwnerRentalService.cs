@@ -20,5 +20,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public async Task<OwnerRentalInfoServiceModel> GetRentalAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

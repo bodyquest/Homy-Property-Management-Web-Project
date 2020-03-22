@@ -18,6 +18,7 @@
 
             this.Homes = new HashSet<Home>();
             this.Rentals = new HashSet<Rental>();
+            this.ManagedRentals = new HashSet<Rental>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -48,6 +49,8 @@
         public virtual ICollection<Home> Homes { get; set; }
 
         public virtual ICollection<Rental> Rentals { get; set; }
+
+        public virtual ICollection<Rental> ManagedRentals { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

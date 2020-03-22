@@ -5,17 +5,23 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using RPM.Data;
+    using RPM.Data.Models;
     using RPM.Services.Management.Models;
 
     public class OwnerListingService : IOwnerListingService
     {
         private readonly ApplicationDbContext context;
+        private readonly UserManager<User> userManager;
 
-        public OwnerListingService(ApplicationDbContext context)
+        public OwnerListingService(
+            ApplicationDbContext context,
+            UserManager<User> userManager)
         {
             this.context = context;
+            this.userManager = userManager;
         }
 
         public async Task<IEnumerable<OwnerIndexListingsServiceModel>> GetMyPropertiesAsync(string id)
@@ -33,6 +39,46 @@
                 .ToListAsync();
 
             return homes;
+        }
+
+        public async Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id)
+        {
+            var rental = await this.context.Rentals
+                .Where(r => r.HomeId == id)
+                .Include(r => r.Contract)
+                .Include(r => r.Tenant)
+                .Include(r => r.Manager)
+                .Select(r => new OwnerRentalInfoServiceModel
+                {
+                    RentalDate = r.RentDate.ToString("dd/MM/yyyy"),
+                    Duration = r.Duration,
+                    TenantFullName = r.Tenant.FirstName + " " + r.Tenant.LastName,
+                    ManagerFullName = r.Manager.FirstName + " " + r.Manager.LastName,
+                })
+                .FirstOrDefaultAsync();
+
+            var model = await this.context.Homes
+               .Where(h => h.OwnerId == userId && h.Id == id)
+               .Include(x => x.City)
+               .Include(x => x.City.Country)
+               .Include(h => h.Images)
+               .Select(x => new OwnerListingFullDetailsServiceModel
+               {
+                   Id = x.Id,
+                   Name = x.Name,
+                   City = x.City.Name,
+                   Country = x.City.Country.Name,
+                   Address = x.Address,
+                   Description = x.Description,
+                   Price = x.Price,
+                   Status = x.Status,
+                   Category = x.Category,
+                   Image = x.Images.Select(i => i.PictureUrl).FirstOrDefault(),
+                   RentalInfo = rental,
+               })
+               .FirstOrDefaultAsync();
+
+            return model;
         }
     }
 }

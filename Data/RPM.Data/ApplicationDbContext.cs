@@ -6,11 +6,11 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using RPM.Data.Common.Models;
-    using RPM.Data.Models;
-
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+
+    using RPM.Data.Common.Models;
+    using RPM.Data.Models;
 
     public class ApplicationDbContext : IdentityDbContext<User, ApplicationRole, string>
     {
@@ -55,6 +55,18 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
             // Needed for Identity models configuration
+            builder.Entity<Rental>()
+                   .HasOne(r => r.Tenant)
+                   .WithMany(t => t.Rentals)
+                   .HasForeignKey(r => r.TenantId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Rental>()
+                   .HasOne(r => r.Manager)
+                   .WithMany(m => m.ManagedRentals)
+                   .HasForeignKey(r => r.ManagerId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
 
             ConfigureUserIdentityRelations(builder);

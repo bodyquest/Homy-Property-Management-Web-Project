@@ -14,9 +14,17 @@
         public string HomeId { get; set; }
         public virtual Home Home { get; set; }
 
-        [ForeignKey(nameof(User))]
         public string TenantId { get; set; }
+
+        [ForeignKey("TenantId")]
         public virtual User Tenant { get; set; }
+
+        public string ManagerId { get; set; }
+
+        [ForeignKey("ManagerId")]
+        public virtual User Manager { get; set; }
+
+        public int? Duration { get; set; }
 
         [ForeignKey(nameof(Contract))]
         public string ContractId { get; set; }

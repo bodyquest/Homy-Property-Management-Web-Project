@@ -4,26 +4,32 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using RPM.Data.Models;
     using RPM.Services.Admin;
     using RPM.Services.Common;
+    using RPM.Services.Management;
     using RPM.Web.Areas.Management.Models.Listings;
 
     public class ListingsController : ManagementController
     {
-        private readonly IListingService listingService;
+        private readonly IOwnerListingService listingService;
         private readonly ICityService cityService;
         private readonly ICountryService countryService;
+        private readonly UserManager<User> userManager;
 
         public ListingsController(
-            IListingService listingService,
+            IOwnerListingService listingService,
             ICityService cityService,
-            ICountryService countryService)
+            ICountryService countryService,
+            UserManager<User> userManager)
         {
             this.listingService = listingService;
             this.cityService = cityService;
             this.countryService = countryService;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -66,7 +72,10 @@
         [ActionName("Details")]
         public async Task<IActionResult> DetailsAsync(string id)
         {
-            return this.View();
+            var userId = this.userManager.GetUserId(this.User);
+            var model = await this.listingService.GetDetailsAsync(userId, id);
+
+            return this.View(model);
         }
 
         [ActionName("All")]

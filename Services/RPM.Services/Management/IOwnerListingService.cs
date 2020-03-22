@@ -9,5 +9,7 @@
     public interface IOwnerListingService
     {
         Task<IEnumerable<OwnerIndexListingsServiceModel>> GetMyPropertiesAsync(string id);
+
+        Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id);
     }
 }

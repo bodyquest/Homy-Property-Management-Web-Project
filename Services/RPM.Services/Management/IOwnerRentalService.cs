@@ -9,5 +9,7 @@
     public interface IOwnerRentalService
     {
         Task<IEnumerable<OwnerIndexRentalServiceModel>> GetRentalsAsync();
+
+        Task<OwnerRentalInfoServiceModel> GetRentalAsync();
     }
 }
