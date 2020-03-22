@@ -114,6 +114,8 @@
             services.AddTransient<IOwnerRequestService, OwnerRequestService>();
             services.AddTransient<IOwnerRentalService, OwnerRentalService>();
             services.AddTransient<IRequestService, RequestService>();
+            services.AddTransient<ICityService, CityService>();
+            services.AddTransient<ICountryService, CountryService>();
 
             services.AddMvc(options =>
             {
