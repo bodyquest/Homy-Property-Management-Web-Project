@@ -24,6 +24,8 @@
         [Required]
         public RequestType Type { get; set; }
 
+        public string Message { get; set; }
+
         [Required]
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }

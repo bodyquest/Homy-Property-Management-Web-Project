@@ -1,0 +1,271 @@
+﻿@model RequestDetailsViewModel
+
+@{
+    this.ViewData["Title"] = "Requests Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+
+            <div class="col-6 pt-4">
+                <!-- TABLE: Add New Listing -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Request Details</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <strong><i class="far fa-calendar-alt mr-1"></i>Date: &nbsp;</strong>
+                                <span class="text-muted">@Model.Date</span>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <hr class="hr-2 mt-1" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <strong><i class="fas fa-user mr-1"></i>From: &nbsp;</strong>
+                                <span class="text-muted">@Model.UserFirstName &nbsp; @Model.UserLastName</span>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <hr class="hr-2 mt-1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <strong><i class="far fa-file-alt mr-1"></i>Request Message</strong>
+                        <div class="row">
+                            <div class="col-5">
+                                <hr class="hr-2 mt-1" />
+                            </div>
+                        </div>
+                        <p class="text-muted">
+                            @Model.Message
+                        </p>
+
+                        <strong><i class="far fa-file-alt mr-1"></i>About</strong>
+                        <div class="row">
+                            <div class="col-5">
+                                <hr class="hr-2 mt-1" />
+                            </div>
+                        </div>
+                        <p class="text-muted">
+                            @Model.About
+                        </p>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <strong><i class="fas fa-at mr-1"></i>Email</strong>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <hr class="hr-2 mt-1" />
+                                    </div>
+                                </div>
+                                <p class="text-muted">
+                                    @Model.Email
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <strong><i class="fas fa-phone-alt mr-1"></i>Phone</strong>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <hr class="hr-2 mt-1" />
+                                    </div>
+                                </div>
+                                <p class="text-muted">
+                                    @Model.Phone
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <strong><i class="far fa-file-pdf mr-1"></i>Request Document</strong>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <hr class="hr-2 mt-1" />
+                                    </div>
+                                </div>
+                                <p class="text-muted pr-5">
+                                    <a asp-action="DownloadFile" asp-route-requestid="@Model.Id" class="btn btn-sm btn-primary btn-block"><strong class="text-white">Download ID Document</strong></a>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <strong><i class="far fa-handshake mr-1"></i>Proceed</strong>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <hr class="hr-2 mt-1" />
+                                    </div>
+                                </div>
+                                <div class="row d-flex justify-content-between">
+                                    <div class="col-6">
+                                        <p class="text-left p-0 m-0">
+                                            <a asp-controller="Requests"
+                                               asp-action="Approve"
+                                               asp-route-id="@Model.Id"
+                                               class="btn btn-sm btn-success btn-block">
+                                                Approve
+                                            </a>
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="text-left p-0 m-0">
+                                            <a asp-controller="Requests"
+                                               asp-action="Reject"
+                                               asp-route-id="@Model.Id"
+                                               class="btn btn-sm btn-danger btn-block">
+                                                Reject
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+            <div class="col-6 pt-4">
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-4">
+                                <h3 class="card-title text-info"><strong>Listing Details</strong></h3>
+                            </div>
+                            <div class="col-4 text-right">
+                                <p class="card-title text-info pl-4">
+                                    <strong>
+                                        $ @Model.HomeInfo.Price / Month
+                                    </strong>
+                                </p>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool pl-0" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="row px-4 pb-4">
+                            <img src="@Model.HomeInfo.Image" class="img-fluid" alt="Responsive image">
+                        </div>
+                        <div class="col-12 px-4">
+
+                            <strong><i class="far fa-file-alt mr-1"></i>Title</strong>
+                            <div class="row">
+                                <div class="col-2">
+                                    <hr class="hr-2 mt-1" />
+                                </div>
+                            </div>
+                            <p class="text-muted">
+                                @Model.HomeInfo.Name
+                            </p>
+
+                            <strong><i class="far fa-file-alt mr-1"></i>Description</strong>
+                            <div class="row">
+                                <div class="col-3">
+                                    <hr class="hr-2 mt-1" />
+                                </div>
+                            </div>
+                            <p class="text-muted">
+                                @Model.HomeInfo.Description
+                            </p>
+
+                            <div class="row">
+                                <div class="col-3">
+                                    <strong><i class="fas fa-globe mr-1"></i>Country</strong>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <hr class="hr-2 mt-1" />
+                                        </div>
+                                    </div>
+                                    <p class="text-muted">
+                                        @Model.HomeInfo.Country
+                                    </p>
+                                </div>
+                                <div class="col-3">
+                                    <strong><i class="fas fa-city mr-1"></i>City</strong>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <hr class="hr-2 mt-1" />
+                                        </div>
+                                    </div>
+                                    <p class="text-muted">
+                                        @Model.HomeInfo.City
+                                    </p>
+                                </div>
+                                <div class="col-6">
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i>Address</strong>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <hr class="hr-2 mt-1" />
+                                        </div>
+                                    </div>
+                                    <p class="text-muted">
+                                        @Model.HomeInfo.Address
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong><i class="fas fa-question mr-1"></i>Status</strong>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <hr class="hr-2 mt-1" />
+                                        </div>
+                                    </div>
+                                    @if (Model.HomeInfo.Status.ToString() == "ToRent")
+                                    {
+                                        <span class="badge badge-danger">To Rent</span>
+                                    }
+                                    else if (Model.HomeInfo.Status.ToString() == "ToManage")
+                                    {
+                                        <span class="badge badge-warning">To Manage</span>
+                                    }
+                                    else if (Model.HomeInfo.Status.ToString() == "Managed")
+                                    {
+                                        <span class="badge badge-success">Managed</span>
+                                    }
+                                </div>
+                                <div class="col-6">
+                                    <strong><i class="far fa-file-alt mr-1"></i>Category</strong>
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <hr class="hr-2 mt-1" />
+                                        </div>
+                                    </div>
+                                    <p class="text-muted">
+                                        @Model.HomeInfo.Category.ToString()
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

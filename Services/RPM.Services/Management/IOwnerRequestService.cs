@@ -10,5 +10,11 @@
     public interface IOwnerRequestService
     {
         Task<IEnumerable<OwnerIndexRequestsServiceModel>> GetRequestsAsync(string id);
+
+        Task<byte[]> GetFileAsync(string requestId);
+
+        Task<OwnerRequestInfoServiceModel> GetRequestInfoAsync(string requestId);
+
+        Task<OwnerRequestDetailsServiceModel> GetRequestDetailsAsync(string requestId);
     }
 }

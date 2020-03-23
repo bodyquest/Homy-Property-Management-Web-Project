@@ -127,6 +127,7 @@
                 Date = DateTime.UtcNow,
                 Type = (RequestType)homeFromDb.Status,
                 UserId = userId,
+                Message = message,
                 HomeId = homeFromDb.Id,
                 Document = fileContents,
             };

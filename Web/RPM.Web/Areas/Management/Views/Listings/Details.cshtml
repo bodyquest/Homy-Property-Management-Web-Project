@@ -16,18 +16,27 @@
                 <!-- TABLE: Add New Listing -->
                 <div class="card">
                     <div class="card-header border-transparent">
-                        <h3 class="card-title text-info"><strong>Listing Details</strong></h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
+                       <div class="row d-flex justify-content-between">
+                           <div class="col-4">
+                               <h3 class="card-title text-info"><strong>Listing Details</strong></h3>
+                           </div>
+                           <div class="col-4 text-right">
+                               <p class="card-title text-info pl-3">
+                                   <strong>
+                                       $ @Model.Price / Month
+                                   </strong>
+                               </p>
+                               <div class="card-tools">
+                                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                       <i class="fas fa-minus"></i>
+                                   </button>
+                               </div>
+                           </div>
+                       </div>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body p-0">
+                    <div class="card-body">
                         <!-- form start -->
-
-                        <div class="card-body">
 
                             <strong><i class="far fa-file-alt mr-1"></i>Title</strong>
                             <div class="row">
@@ -129,7 +138,6 @@
                                 </div>
                             </div>
                             
-                        </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
                                 <button asp-controller="Listings" asp-action="Edit" asp-route-id="Id" class="btn btn-info">Edit Listing</button>
