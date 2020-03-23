@@ -1,6 +1,8 @@
 ﻿namespace RPM.Web.Areas.Management.Models.Requests
 {
+    using Microsoft.AspNetCore.Http;
     using RPM.Services.Management.Models;
+    using System.ComponentModel.DataAnnotations;
 
     public class RequestDetailsViewModel
     {
@@ -24,7 +26,9 @@
 
         public byte[] Document { get; set; }
 
-        public OwnerRequestListingDetailsServiceModel HomeInfo { get; set; }
+        [Required]
+        public IFormFile Contract { get; set; }
 
+        public OwnerRequestListingDetailsServiceModel HomeInfo { get; set; }
     }
 }

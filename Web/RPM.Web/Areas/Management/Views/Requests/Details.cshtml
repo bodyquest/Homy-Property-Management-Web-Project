@@ -16,7 +16,25 @@
                 <!-- TABLE: Add New Listing -->
                 <div class="card">
                     <div class="card-header border-transparent">
-                        <h3 class="card-title text-info"><strong>Request Details</strong></h3>
+                        <h3 class="card-title text-info">
+                            <strong class="pr-3">Request Details</strong>
+                            @if (Model.RequestType == "ToRent")
+                            {
+                                <span class="badge badge-success">To Rent</span>
+                            }
+                            else if (Model.RequestType == "ToManage")
+                            {
+                                <span class="badge badge-warning">To Manage</span>
+                            }
+                            else if (Model.RequestType == "CancelRent")
+                            {
+                                <span class="badge badge-danger">Cancel Rent</span>
+                            }
+                            else if (Model.RequestType == "CancelManage")
+                            {
+                                <span class="badge badge-danger">Cancel Manage</span>
+                            }
+                        </h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -110,28 +128,41 @@
                                         <hr class="hr-2 mt-1" />
                                     </div>
                                 </div>
-                                <div class="row d-flex justify-content-between">
-                                    <div class="col-6">
-                                        <p class="text-left p-0 m-0">
-                                            <a asp-controller="Requests"
-                                               asp-action="Approve"
-                                               asp-route-id="@Model.Id"
-                                               class="btn btn-sm btn-success btn-block">
-                                                Approve
-                                            </a>
+                                <form asp-action="Approve"
+                                      asp-route-id="@Model.Id"
+                                      enctype="multipart/form-data"
+                                      method="post">
+                                    <div class="row">
+
+                                        <p class="text-danger pl-2">
+                                            Upload contract in pdf format
                                         </p>
+                                        <div class="form-inline pb-3 pl-2">
+                                            <div class="form-group">
+                                                <input type="file" name="contract" accept=".pdf" />
+                                            </div>
+                                        </div>
+
                                     </div>
-                                    <div class="col-6">
-                                        <p class="text-left p-0 m-0">
-                                            <a asp-controller="Requests"
-                                               asp-action="Reject"
-                                               asp-route-id="@Model.Id"
-                                               class="btn btn-sm btn-danger btn-block">
-                                                Reject
-                                            </a>
-                                        </p>
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-6">
+                                            <p class="text-left p-0 m-0">
+                                                <input type="submit"
+                                                     class="btn btn-sm btn-success btn-block" value="Approve"/>
+                                            </p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="text-left p-0 m-0">
+                                                <a asp-controller="Requests"
+                                                   asp-action="Reject"
+                                                   asp-route-id="@Model.Id"
+                                                   class="btn btn-sm btn-danger btn-block">
+                                                    Reject
+                                                </a>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
 

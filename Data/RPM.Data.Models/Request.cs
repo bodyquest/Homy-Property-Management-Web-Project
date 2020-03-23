@@ -39,5 +39,9 @@
         [Required]
         [MaxLength(RequestDocumentMaxSize)]
         public byte[] Document { get; set; }
+
+        public bool IsApproved { get; set; } = false;
+
+        public bool IsRejected { get; set; } = false;
     }
 }

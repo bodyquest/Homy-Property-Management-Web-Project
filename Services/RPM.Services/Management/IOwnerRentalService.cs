@@ -8,6 +8,8 @@
 
     public interface IOwnerRentalService
     {
+        Task<bool> StartRent(string id, byte[] fileContent);
+
         Task<IEnumerable<OwnerIndexRentalServiceModel>> GetRentalsAsync();
 
         Task<OwnerRentalInfoServiceModel> GetRentalAsync();

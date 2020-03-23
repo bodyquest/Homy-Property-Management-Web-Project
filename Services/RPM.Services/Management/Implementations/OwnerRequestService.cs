@@ -54,6 +54,7 @@
                 .Where(r => r.Id == requestId)
                 .Select(r => new OwnerRequestInfoServiceModel
                 {
+                    UserId = r.User.Id,
                     UserFirstName = r.User.FirstName,
                     UserLastName = r.User.LastName,
                     RequestType = r.Type.ToString(),
