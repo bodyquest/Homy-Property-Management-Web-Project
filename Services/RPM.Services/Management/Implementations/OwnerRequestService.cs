@@ -41,6 +41,28 @@
             return requestsFromDb;
         }
 
+        public async Task<IEnumerable<OwnerAllRequestsServiceModel>>
+            GetAllRequestsWthDetailsAsync(string id)
+        {
+            var requests = await this.context.Requests
+                .Where(r => r.Home.OwnerId == id)
+                .Select(r => new OwnerAllRequestsServiceModel
+                {
+                    Id = r.Id,
+                    Date = r.Date.ToString("dd/MM/yyyy h:mm tt"),
+                    Type = r.Type.ToString(),
+                    FullName = string.Format(DashboardRequestFullName, r.User.FirstName, r.User.LastName),
+                    Username = r.User.UserName,
+                    Email = r.User.Email,
+                    Phone = r.User.PhoneNumber,
+                    Status = r.Status.ToString(),
+                    Location = string.Format(DashboardRequestLocation, r.Home.City.Name, r.Home.Address),
+                })
+                .ToListAsync();
+
+            return requests;
+        }
+
         public async Task<Request> ApproveRentRequestAsync(string id)
         {
             var request = await this.context.Requests

@@ -33,10 +33,14 @@
 
         public async Task<IActionResult> Index()
         {
-            // var model = await this.requestService.GetAllRequestsAsync();
-            // var viewModel = new OwnerRequestsWithDetailsViewModel{};
+            var userId = this.userManager.GetUserId(this.User);
+            var model = await this.requestService.GetAllRequestsWthDetailsAsync(userId);
+            var viewModel = new OwnerRequestsWithDetailsViewModel
+            {
+                Requests = model,
+            };
 
-            return this.View();
+            return this.View(viewModel);
         }
 
         [ActionName("Details")]

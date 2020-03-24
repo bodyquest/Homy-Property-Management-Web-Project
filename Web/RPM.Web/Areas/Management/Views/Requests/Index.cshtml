@@ -1,0 +1,279 @@
+﻿@model OwnerRequestsWithDetailsViewModel
+
+@{
+    this.ViewData["Title"] = "Requests Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!--Settings: this.Model.SettingsCount-->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+
+            <div class="col-12 pt-4">
+                <!-- TABLE: REQUESTS -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Requests</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th class="px-3">Date</th>
+                                        <th>Type</th>
+                                        <th style='text-align:center;'>Status</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Location</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var request in Model.Requests)
+                                    {
+                                        if (Model.Requests.Any())
+                                        {
+                                    <tr>
+                                        <td class="col-1 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            @request.Date
+                                        </td>
+                                        <td class="col-1 py-1" style='vertical-align:middle'>
+                                            <span class="badge badge-success">@request.Type</span>
+                                        </td>
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
+                                            @if (request.Status == NA)
+                                            {
+                                                <span class="text-secondary">N/A</span>
+                                            }
+                                            else if (request.Status == Approved)
+                                            {
+                                                <span class="text-success">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">
+                                                    <i class="fas fa-times"></i>
+                                                </span>
+                                            }
+                                        </td>
+                                        <td class="col-1 py-1 pl-1 pr-3"
+                                            style='vertical-align:middle'>
+                                            @request.FullName
+                                        </td>
+                                        <td class="col-1 py-1 pl-1 pr-3"
+                                            style='vertical-align:middle'>
+                                            @request.Username
+                                        </td>
+                                        <td class="col-2 py-1 pl-1 pr-3"
+                                            style='vertical-align:middle'>
+                                            @request.Email
+                                        </td>
+                                        <td class="col-2 py-1 pl-1 pr-3"
+                                            style='vertical-align:middle'>
+                                            @request.Phone
+                                        </td>
+                                        <td class="col-2 py-1 pl-1 pr-3"
+                                            style='vertical-align:middle'>
+                                            @request.Location
+                                        </td>
+
+                                        <td class="col-1 py-1 pl-0 pr-3" style='vertical-align:middle'>
+                                            <a asp-controller="Requests"
+                                               asp-action="Details"
+                                               asp-route-Id="@request.Id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr class="col-12 py-1 px-3 text-secondary text-center"
+                                                style='vertical-align:middle'>
+                                                No pending requests
+                                            </tr>
+                                        }
+                                    }
+                                <tr>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        12/03/2020
+                                    </td>
+                                    <td class="col-1 py-1"
+                                        style='vertical-align:middle'>
+                                        <span class="badge badge-warning">
+                                            To Manage
+                                        </span>
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='text-align:center; vertical-align:middle'>
+                                        <span class="text-danger">
+                                            <i class="fas fa-times"></i>
+                                        </span>
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Kanalin Tsolov
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        UserName
+                                    </td>
+                                    <td class="col-2 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Email
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        +359 111 222 333
+                                    </td>
+                                    <td class="col-3 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Sofia, 17, Studentski Grad, 1000
+                                    </td>
+                                    <td class="col-1 py-1 pl-0 pr-3"
+                                        style='vertical-align:middle'>
+                                        <a asp-controller="Requests"
+                                           asp-action="Details"
+                                           asp-route-Id="id"
+                                           style="display:block; margin-bottom:-10px">
+                                            <ion-icon size="large" name="list-outline"></ion-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        12/03/2020
+                                    </td>
+                                    <td class="col-1 py-1"
+                                        style='vertical-align:middle'>
+                                        <span class="badge badge-danger">
+                                            Cancel Rent
+                                        </span>
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='text-align:center; vertical-align:middle'>
+                                        <span class="text-secondary">
+                                            N/A
+                                        </span>
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Kanalin Tsolov
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        UserName
+                                    </td>
+                                    <td class="col-2 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Email
+                                    </td>
+                                    <td class="col-2 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        +359 111 222 333
+                                    </td>
+                                    <td class="col-2 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Sofia, 17, Studentski Grad, 1000
+                                    </td>
+                                    <td class="col-1 py-1 pl-0 pr-3"
+                                        style='vertical-align:middle'>
+                                        <a asp-controller="Requests"
+                                           asp-action="Details"
+                                           asp-route-Id="id"
+                                           style="display:block; margin-bottom:-10px">
+                                            <ion-icon size="large" name="list-outline"></ion-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        12/03/2020
+                                    </td>
+                                    <td class="col-1 py-1"
+                                        style='vertical-align:middle'>
+                                        <span class="badge badge-danger">
+                                            Cancel Manage
+                                        </span>
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='text-align:center; vertical-align:middle'>
+                                        <span class="text-secondary">
+                                            N/A
+                                        </span>
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Prasemir Butonoskov
+                                    </td>
+                                    <td class="col-1 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        but4e_89
+                                    </td>
+                                    <td class="col-2 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Email@email.com
+                                    </td>
+                                    <td class="col-2 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        +359 111 222 333
+                                    </td>
+                                    <td class="col-2 py-1 px-3"
+                                        style='vertical-align:middle'>
+                                        Sofia, 17, Studentski Grad, 1000
+                                    </td>
+                                    <td class="col-1 py-1 pl-0 pr-3"
+                                        style='vertical-align:middle'>
+                                        <a asp-controller="Requests"
+                                           asp-action="Details"
+                                           asp-route-Id="id"
+                                           style="display:block; margin-bottom:-10px">
+                                            <ion-icon size="large" name="list-outline"></ion-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer row justify-content-end m-0 pr-3">
+                        <div class="col-12">
+                           
+                        </div>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

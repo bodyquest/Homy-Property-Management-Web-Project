@@ -11,6 +11,8 @@
     {
         Task<IEnumerable<OwnerIndexRequestsServiceModel>> GetRequestsAsync(string id);
 
+        Task<IEnumerable<OwnerAllRequestsServiceModel>> GetAllRequestsWthDetailsAsync(string id);
+
         Task<Request> ApproveRentRequestAsync(string id);
 
         Task<byte[]> GetFileAsync(string requestId);
