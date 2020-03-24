@@ -49,7 +49,7 @@
                 .Select(r => new OwnerAllRequestsServiceModel
                 {
                     Id = r.Id,
-                    Date = r.Date.ToString("dd/MM/yyyy h:mm tt"),
+                    Date = r.Date.ToString(DateFormatWithTime),
                     Type = r.Type.ToString(),
                     FullName = string.Format(DashboardRequestFullName, r.User.FirstName, r.User.LastName),
                     Username = r.User.UserName,

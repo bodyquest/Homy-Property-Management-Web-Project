@@ -98,9 +98,45 @@
             return true;
         }
 
-       
+        public async Task<IEnumerable<OwnerAllRentalsServiceModel>> GetAllRentalsWithDetailsAsync(string id)
+        {
+            var rentals = await this.context.Rentals
+                .Include(r => r.Home)
+                .Include(r => r.Home.City)
+                .Include(r => r.Tenant)
+                .Include(r => r.Manager)
+                .Where(r => r.Home.OwnerId == id)
+                .Select(r => new OwnerAllRentalsServiceModel
+                {
+                    Id = r.Id,
+                    Date = r.RentDate.ToString(StandartDateFormat),
+                    Duration = r.Duration,
 
+                    Location = string.Format(
+                        RentalLocation,
+                        r.Home.City.Country.Name,
+                        r.Home.City.Name,
+                        r.Home.Address),
 
+                    FullName = string.Format(
+                        TenantFullName,
+                        r.Tenant.FirstName,
+                        r.Tenant.LastName),
+                    Username = r.Tenant.UserName,
+
+                    ManagerName = string.Format(
+                        ManagerFullName,
+                        r.Manager.FirstName,
+                        r.Manager.LastName),
+
+                    Price = r.Home.Price,
+                    HomeCategory = r.Home.Category.ToString(),
+                    HomeImage = r.Home.Images.Select(i => i.PictureUrl).FirstOrDefault(),
+                })
+                .ToListAsync();
+
+            return rentals;
+        }
 
         public async Task<IEnumerable<OwnerIndexRentalServiceModel>> GetRentalsAsync(string userId)
         {
@@ -111,7 +147,7 @@
                 .Select(r => new OwnerIndexRentalServiceModel
                 {
                     Id = r.Id,
-                    StartDate = r.RentDate.ToString("dd/MM/yyyy"),
+                    StartDate = r.RentDate.ToString(StandartDateFormat),
                     Duration = r.Duration,
                     Address = string.Format(DashboardRentalLocation, r.Home.Address),
                     Tenant = string.Format(DashboardRentalFullName, r.Tenant.FirstName, r.Tenant.LastName),

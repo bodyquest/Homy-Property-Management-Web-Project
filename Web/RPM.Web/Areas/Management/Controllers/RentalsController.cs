@@ -4,18 +4,36 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using RPM.Data.Models;
+    using RPM.Services.Management;
+    using RPM.Web.Areas.Management.Models.Rentals;
 
     public class RentalsController : ManagementController
     {
-        public RentalsController()
-        {
+        private readonly UserManager<User> userManager;
+        private readonly IOwnerRentalService rentalService;
 
+        public RentalsController(
+            UserManager<User> userManager,
+            IOwnerRentalService rentalService)
+        {
+            this.userManager = userManager;
+            this.rentalService = rentalService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View();
+            var userId = this.userManager.GetUserId(this.User);
+
+            var model = await this.rentalService.GetAllRentalsWithDetailsAsync(userId);
+            var viewModel = new OwnerRentalsWithDetailsViewModel
+            {
+                Rentals = model,
+            };
+
+            return this.View(viewModel);
         }
     }
 }

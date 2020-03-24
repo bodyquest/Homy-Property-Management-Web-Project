@@ -53,7 +53,7 @@
                 .Include(r => r.Manager)
                 .Select(r => new OwnerRentalInfoServiceModel
                 {
-                    RentalDate = r.RentDate.ToString("dd/MM/yyyy"),
+                    RentalDate = r.RentDate.ToString(StandartDateFormat),
                     Duration = r.Duration,
                     TenantFullName = r.Tenant.FirstName + " " + r.Tenant.LastName,
                     ManagerFullName = r.Manager.FirstName + " " + r.Manager.LastName,

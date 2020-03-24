@@ -1,0 +1,131 @@
+﻿@model OwnerRentalsWithDetailsViewModel
+
+@{
+    this.ViewData["Title"] = "Rentals Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+
+            <!-- TABLE: Add New Listing -->
+            @if (Model.Rentals.Any())
+            {
+                @foreach (var rental in Model.Rentals)
+                {
+                    <div class="col-md-4 pt-4">
+                        <div class="card">
+                            <div class="card-header border-transparent">
+                                <div class="row d-flex justify-content-between">
+                                    <div class="col-3">
+                                        <h3 class="card-title text-info"><strong>@rental.Date</strong></h3>
+                                    </div>
+                                    <div class="col-1">
+                                        <strong>
+                                            @if (rental.Duration == null)
+                                            {
+                                                <ion-icon name="infinite-outline"></ion-icon>
+                                            }
+                                            else
+                                            {
+                                                <span>@rental.Duration</span>
+                                            }
+                                        </strong>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <p class="card-title text-info pr-2">
+                                            <strong>
+                                                $ @rental.Price
+                                            </strong>
+                                        </p>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool pl-0" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                <!-- form start -->
+
+                                <div class="row px-4 pb-4">
+                                    <a asp-controller="Rentals"
+                                       asp-action="Details"
+                                       asp-route-id="@rental.Id">
+                                        <img src="@rental.HomeImage" class="img-fluid" alt="Responsive image">
+                                    </a>
+                                </div>
+
+                                <div class="row px-3">
+                                    <div class="col-12">
+                                        <div class="text-muted text-left">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>
+                                            @rental.Location
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row px-3">
+                                    <div class="col-12">
+                                        <div class="text-muted text-left">
+                                            <strong><i class="fas fa-user mr-1"></i>Tenant</strong>
+                                            @rental.FullName
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row px-3">
+                                    <div class="col-12">
+                                        <div class="text-muted text-left">
+                                            <strong><i class="fas fa-user-tie mr-1"></i>Manager</strong>
+                                            @if (string.IsNullOrWhiteSpace(rental.ManagerName))
+                                            {
+                                                <p class="text-danger" style="opacity: .7;">
+                                                    No Manager
+                                                </p>
+                                            }
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h4 class="text-danger text-center">
+                    No rentals yet
+                </h4>
+            }
+            <!-- /.card -->
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
