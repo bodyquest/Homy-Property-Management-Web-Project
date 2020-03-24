@@ -7,6 +7,8 @@
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using RPM.Data;
+    using RPM.Data.Models;
+    using RPM.Data.Models.Enums;
     using RPM.Services.Management.Models;
 
     using static RPM.Common.GlobalConstants;
@@ -31,11 +33,28 @@
                     Date = r.Date.ToString("dd/MM/yyyy h:mm tt"),
                     Type = r.Type.ToString(),
                     FullName = string.Format(DashboardRequestFullName, r.User.FirstName, r.User.LastName),
+                    Status = r.Status.ToString(),
                     Location = string.Format(DashboardRequestLocation, r.Home.City.Name, r.Home.Address),
                 })
                 .ToListAsync();
 
             return requestsFromDb;
+        }
+
+        public async Task<Request> ApproveRentRequestAsync(string id)
+        {
+            var request = await this.context.Requests
+                            .Where(r => r.Id == id)
+                            .FirstOrDefaultAsync();
+
+            if (request == null)
+            {
+                return null;
+            }
+
+            request.Status = (RequestStatus)Enum.Parse(typeof(RequestStatus), Approved);
+
+            return request;
         }
 
         public async Task<byte[]> GetFileAsync(string requestId)

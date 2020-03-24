@@ -3,9 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using RPM.Data;
@@ -18,34 +16,50 @@
     public class OwnerRentalService : IOwnerRentalService
     {
         private readonly ApplicationDbContext context;
+        private readonly IOwnerRequestService requestService;
+        private readonly IOwnerListingService listingService;
+        private readonly IOwnerContractService contractService;
         private readonly UserManager<User> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
 
         public OwnerRentalService(
             ApplicationDbContext context,
+            IOwnerRequestService requestService,
+            IOwnerListingService listingService,
+            IOwnerContractService contractService,
             UserManager<User> userManager
             )
         {
             this.context = context;
+            this.requestService = requestService;
+            this.listingService = listingService;
+            this.contractService = contractService;
             this.userManager = userManager;
             this.roleManager = roleManager;
         }
 
         public async Task<bool> StartRent(string id, byte[] fileContent)
         {
-            var request = await this.context.Requests
-                .Where(r => r.Id == id)
-                .FirstOrDefaultAsync();
-
             // Approve Request
-            request.IsApproved = true;
+            var request = await this.requestService.ApproveRentRequestAsync(id);
 
-            var homeId = request.HomeId;
-            var home = await this.context.Homes.FindAsync(homeId);
-            home.Status = (HomeStatus)Enum.Parse(typeof(HomeStatus), Managed);
+            if (request == null)
+            {
+                return false;
+            }
 
+            // Change Home Status
+            string homeId = await this.listingService.ChangeHomeStatusAsync(request);
+
+            if (homeId == EntityNotFound)
+            {
+                return false;
+            }
+
+            // Add User to Role
             var userId = request.UserId;
             var user = await this.userManager.FindByIdAsync(userId);
+            await this.userManager.AddToRoleAsync(user, TenantRole);
 
             // Create Rental
             var rental = new Rental
@@ -57,19 +71,20 @@
 
             this.context.Rentals.Add(rental);
             var result = await this.context.SaveChangesAsync();
+
             if (result == 0)
             {
                 return false;
             }
 
             // Add Contract
-            var contractEntity = new Contract
+            var isSuccessful = await this.contractService
+                .CreateRentalContractAsync(fileContent, user, rental);
+
+            if (!isSuccessful)
             {
-                Title = $"{DateTime.UtcNow.Year}_{user.UserName}",
-                ContractDocument = fileContent,
-                RentalId = rental.Id,
-            };
-            this.context.Contracts.Add(contractEntity);
+                return false;
+            }
 
             // Add Rental to Tenant
             user.Rentals.Add(rental);
@@ -83,9 +98,27 @@
             return true;
         }
 
-        public async Task<IEnumerable<OwnerIndexRentalServiceModel>> GetRentalsAsync()
+       
+
+
+
+        public async Task<IEnumerable<OwnerIndexRentalServiceModel>> GetRentalsAsync(string userId)
         {
-            throw new NotImplementedException();
+            var rentalsFromDb = await this.context.Rentals
+                .Where(rentals => rentals.Home.OwnerId == userId)
+                .OrderBy(r => r.RentDate)
+                .ThenBy(r => r.Duration != null)
+                .Select(r => new OwnerIndexRentalServiceModel
+                {
+                    Id = r.Id,
+                    StartDate = r.RentDate.ToString("dd/MM/yyyy"),
+                    Duration = r.Duration,
+                    Address = string.Format(DashboardRentalLocation, r.Home.Address),
+                    Tenant = string.Format(DashboardRentalFullName, r.Tenant.FirstName, r.Tenant.LastName),
+                })
+                .ToListAsync();
+
+            return rentalsFromDb;
         }
 
         public async Task<OwnerRentalInfoServiceModel> GetRentalAsync()

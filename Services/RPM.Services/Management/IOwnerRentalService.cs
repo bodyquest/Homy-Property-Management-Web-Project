@@ -10,7 +10,7 @@
     {
         Task<bool> StartRent(string id, byte[] fileContent);
 
-        Task<IEnumerable<OwnerIndexRentalServiceModel>> GetRentalsAsync();
+        Task<IEnumerable<OwnerIndexRentalServiceModel>> GetRentalsAsync(string userId);
 
         Task<OwnerRentalInfoServiceModel> GetRentalAsync();
     }

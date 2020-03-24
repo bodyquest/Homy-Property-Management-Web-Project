@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+    using RPM.Data.Models;
     using RPM.Services.Management.Models;
 
     public interface IOwnerListingService
@@ -13,5 +14,7 @@
         Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id);
 
         Task<IEnumerable<OwnerPropertyWithDetailsServiceModel>> GetMyPropertiesWithDetailsAsync(string userId);
+
+        Task<string> ChangeHomeStatusAsync(Request request);
     }
 }

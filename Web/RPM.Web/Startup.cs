@@ -113,6 +113,7 @@
             services.AddTransient<IOwnerListingService, OwnerListingService>();
             services.AddTransient<IOwnerRequestService, OwnerRequestService>();
             services.AddTransient<IOwnerRentalService, OwnerRentalService>();
+            services.AddTransient<IOwnerContractService, OwnerContractService>();
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICountryService, CountryService>();

@@ -93,17 +93,21 @@
                                             Berlin
                                         </td>
 
-                                        <td class="col-8 py-1 px-1" style='vertical-align:middle'>17, Damerowstrasse, 13187</td>
+                                        <td class="col-8 py-1 px-1"
+                                            style='vertical-align:middle'>17, Damerowstrasse, 13187</td>
 
-                                        <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
                                             <span class="badge badge-info">Apartment</span>
                                         </td>
 
-                                        <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
                                             <span class="badge badge-warning">To Manage</span>
                                         </td>
 
-                                        <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
+                                        <td class="col-1 py-1 pl-0 pr-2"
+                                            style='vertical-align:middle'>
                                             <a asp-controller="Properties"
                                                asp-action="Details"
                                                asp-route-Id="id"
@@ -118,17 +122,21 @@
                                             Berlin
                                         </td>
 
-                                        <td class="col-8 py-1 px-1" style='vertical-align:middle'>17, Damerowstrasse, 13187</td>
+                                        <td class="col-8 py-1 px-1"
+                                            style='vertical-align:middle'>17, Damerowstrasse, 13187</td>
 
-                                        <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
                                             <span class="badge badge-info">Apartment</span>
                                         </td>
 
-                                        <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
                                             <span class="badge badge-danger">To Rent</span>
                                         </td>
 
-                                        <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
+                                        <td class="col-1 py-1 pl-0 pr-2"
+                                            style='vertical-align:middle'>
                                             <a asp-controller="Properties"
                                                asp-action="Details"
                                                asp-route-Id="id"
@@ -179,6 +187,7 @@
                                         <th>Type</th>
                                         <th>Name</th>
                                         <th>Location</th>
+                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -187,25 +196,46 @@
                                     {
                                         if (Model.Requests.Any())
                                         {
-                                            <tr>
-                                                <td class="col-1 py-1 px-3"
-                                                    style='vertical-align:middle'>@request.Date</td>
-                                                <td class="col-1 py-1" style='vertical-align:middle'>
-                                                    <span class="badge badge-success">@request.Type</span>
-                                                </td>
-                                                <td class="col-3 py-1 px-3"
-                                                    style='vertical-align:middle'>@request.FullName</td>
-                                                <td class="col-5 py-1 px-3"
-                                                    style='vertical-align:middle'>@request.Location</td>
-                                                <td class="col-1 py-1 pl-0 pr-3" style='vertical-align:middle'>
-                                                    <a asp-controller="Requests"
-                                                       asp-action="Details"
-                                                       asp-route-Id="@request.Id"
-                                                       style="display:block; margin-bottom:-10px">
-                                                        <ion-icon size="large" name="list-outline"></ion-icon>
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                    <tr>
+                                        <td class="col-1 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            @request.Date
+                                        </td>
+                                        <td class="col-1 py-1" style='vertical-align:middle'>
+                                            <span class="badge badge-success">@request.Type</span>
+                                        </td>
+                                        <td class="col-3 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            @request.FullName
+                                        </td>
+                                        <td class="col-5 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            @request.Location
+                                        </td>
+                                        <td class="col-5 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            @if (request.Status == NA)
+                                            {
+                                                <span class="text-secondary">N/A</span>
+                                            }
+                                            else if (request.Status == Approved)
+                                            {
+                                                <span class="text-success"><i class="fas fa-check"></i></span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger"><i class="fas fa-times"></i></span>
+                                            }
+                                        </td>
+                                        <td class="col-1 py-1 pl-0 pr-3" style='vertical-align:middle'>
+                                            <a asp-controller="Requests"
+                                               asp-action="Details"
+                                               asp-route-Id="@request.Id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
                                         }
                                         else
                                         {
@@ -294,13 +324,88 @@
                             <table class="table m-0">
                                 <thead>
                                     <tr>
-                                        <th class="pl-3">Start Date</th>
-                                        <th>Duration</th>
-                                        <th>Address</th>
-                                        <th>Tenant</th>
+                                        <th class="pl-3" style='vertical-align:middle'>Start Date</th>
+                                        <th style='text-align:center'>Period (Months)</th>
+                                        <th style='vertical-align:middle'>Address</th>
+                                        <th style='vertical-align:middle'>Tenant</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach (var rental in Model.Rentals)
+                                    {
+                                        if (Model.Rentals.Any())
+                                        {
+                                            <tr>
+                                                <td class="col-3 py-1 pl-3 pr-1"
+                                                    style='vertical-align:middle'>
+                                                    @rental.StartDate
+                                                </td>
+
+                                                <td class="col-1 py-1 pl-2 pr-1"
+                                                    style='vertical-align:middle'>
+                                                    @if (rental.Duration == null)
+                                                    {
+                                                        <ion-icon name="infinite-outline"></ion-icon>
+                                                    }
+                                                    else
+                                                    {
+                                                        @rental.Duration
+                                                    }
+                                                </td>
+
+                                                <td class="col-4 py-1 px-1" 
+                                                    style='text-align:center; vertical-align:middle'>
+                                                    @rental.Address
+                                                </td>
+
+                                                <td class="col-3 py-1 px-1"
+                                                    style='text-align:center; vertical-align:middle'>
+                                                    @rental.Tenant
+                                                </td>
+
+                                                <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
+                                                    <a asp-controller="Properties"
+                                                       asp-action="Details"
+                                                       asp-route-Id="id"
+                                                       style="display:block; margin-bottom:-10px">
+                                                        <ion-icon size="large" name="list-outline"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr class="col-12 py-1 px-3 text-secondary text-center"
+                                                style='vertical-align:middle'>
+                                                No rentals currently
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td class="col-3 py-1 pl-3 pr-1"
+                                            style='vertical-align:middle'>
+                                            12/03/2020
+                                        </td>
+
+                                        <td class="col-1 py-1 pl-2 pr-1" style='vertical-align:middle'>24</td>
+
+                                        <td class="col-4 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                            17, Damerowstrasse, 13187
+                                        </td>
+
+                                        <td class="col-3 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                            Shunko Svinski
+                                        </td>
+
+                                        <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
+                                            <a asp-controller="Properties"
+                                               asp-action="Details"
+                                               asp-route-Id="id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
 
                                     <tr>
                                         <td class="col-3 py-1 pl-3 pr-1"
@@ -327,31 +432,7 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="col-3 py-1 pl-3 pr-1"
-                                            style='vertical-align:middle'>
-                                            12/03/2020
-                                        </td>
 
-                                        <td class="col-1 py-1 pl-2 pr-1" style='vertical-align:middle'>24</td>
-
-                                        <td class="col-4 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                            17, Damerowstrasse, 13187
-                                        </td>
-
-                                        <td class="col-3 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                            Shunko Svinski
-                                        </td>
-
-                                        <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
-                                            <a asp-controller="Properties"
-                                               asp-action="Details"
-                                               asp-route-Id="id"
-                                               style="display:block; margin-bottom:-10px">
-                                                <ion-icon size="large" name="list-outline"></ion-icon>
-                                            </a>
-                                        </td>
-                                    </tr>
                                     <tr>
                                         <td class="col-3 py-1 pl-3 pr-1"
                                             style='vertical-align:middle'>

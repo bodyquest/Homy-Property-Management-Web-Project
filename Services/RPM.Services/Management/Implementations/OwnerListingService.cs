@@ -9,7 +9,10 @@
     using Microsoft.EntityFrameworkCore;
     using RPM.Data;
     using RPM.Data.Models;
+    using RPM.Data.Models.Enums;
     using RPM.Services.Management.Models;
+
+    using static RPM.Common.GlobalConstants;
 
     public class OwnerListingService : IOwnerListingService
     {
@@ -104,6 +107,20 @@
                .ToListAsync();
 
             return model;
+        }
+
+        public async Task<string> ChangeHomeStatusAsync(Request request)
+        {
+            var homeId = request.HomeId;
+            var home = await this.context.Homes.FindAsync(homeId);
+
+            if (home == null)
+            {
+                return EntityNotFound;
+            }
+
+            home.Status = (HomeStatus)Enum.Parse(typeof(HomeStatus), Managed);
+            return homeId;
         }
     }
 }

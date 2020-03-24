@@ -38,13 +38,13 @@
 
             var properties = await this.listingService.GetMyPropertiesAsync(userId);
             var requests = await this.requestService.GetRequestsAsync(userId);
-            //var rentals = await this.rentalService.GetRentalsAsync();
+            var rentals = await this.rentalService.GetRentalsAsync(userId);
 
             var viewModel = new OwnerDashboardViewModel
             {
                 Properties = properties,
                 Requests = requests,
-                //Rentals = rentals,
+                Rentals = rentals,
             };
 
             return this.View(viewModel);

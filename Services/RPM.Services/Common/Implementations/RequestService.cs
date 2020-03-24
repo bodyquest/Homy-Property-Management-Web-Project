@@ -7,8 +7,11 @@
 
     using RPM.Data;
     using RPM.Data.Models;
+    using RPM.Data.Models.Enums;
     using RPM.Services.Common.Models.Listing;
     using RPM.Services.Common.Models.Request;
+
+    using static RPM.Common.GlobalConstants;
 
     public class RequestService : IRequestService
     {
@@ -29,6 +32,7 @@
                 UserId = model.UserId,
                 HomeId = model.HomeId,
                 Document = model.Document,
+                Status = (RequestStatus)Enum.Parse(typeof(RequestStatus), NA),
             };
 
             if (request == null)
