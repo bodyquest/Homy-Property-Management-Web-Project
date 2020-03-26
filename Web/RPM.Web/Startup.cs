@@ -3,7 +3,7 @@
     using System.Reflection;
 
     using CloudinaryDotNet;
-
+    using Hangfire;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -80,7 +80,6 @@
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             });
 
-
             Account account = new Account(
                 this.configuration["Cloudinary:CloudName"],
                 this.configuration["Cloudinary:ApiKey"],
@@ -88,6 +87,9 @@
 
             var cloudUtility = new Cloudinary(account);
             services.AddSingleton(cloudUtility);
+
+            services.AddHangfire(x => x.UseSqlServerStorage(this.configuration.GetConnectionString("HangfireConnection")));
+            services.AddHangfireServer();
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -107,13 +109,16 @@
 
             services.AddTransient<ICloudImageService, CloudImageService>();
             services.AddTransient<IImageDbService, ImageDbService>();
-            //services.AddTransient<ICloudImageService, CloudImageService>();
             services.AddTransient<IListingService, ListingService>();
 
             services.AddTransient<IOwnerListingService, OwnerListingService>();
             services.AddTransient<IOwnerRequestService, OwnerRequestService>();
             services.AddTransient<IOwnerRentalService, OwnerRentalService>();
             services.AddTransient<IOwnerContractService, OwnerContractService>();
+            services.AddTransient<IOwnerTransactionRequestService, OwnerTransactionRequestService>();
+
+            services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<IRentalService, RentalService>();
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICountryService, CountryService>();
@@ -169,6 +174,8 @@
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseHangfireDashboard();
 
             app.UseEndpoints(
                 endpoints =>

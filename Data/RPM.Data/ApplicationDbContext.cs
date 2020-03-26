@@ -30,6 +30,8 @@
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<Request> Requests { get; set; }
+        public DbSet<TransactionRequest> TransactionRequests { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<CloudImage> CloudImages { get; set; }
         public DbSet<Setting> Settings { get; set; }
 

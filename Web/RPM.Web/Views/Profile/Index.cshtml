@@ -1,0 +1,365 @@
+﻿@using RPM.Common
+@using System.Text
+
+
+@model ProfileIndexViewModel
+
+<link rel="stylesheet" href="~/css/sitecustom.css">
+
+@{
+    this.ViewData["Title"] = "Home Page";
+}
+<!-- Hero Section Begin -->
+@if (this.User.Identity.IsAuthenticated &&
+(this.User.IsInRole(GlobalConstants.ViewerRoleName)
+|| this.User.IsInRole(GlobalConstants.ManagerRoleName)))
+{
+    <section class="jumbotron jumbotron-fluid jumboHeroImage">
+        <div class="container">
+            <div class="row pt-5">
+                <div class="col-lg-12 pt-5">
+                    <!-- <form asp-action="Search" class="row d-flex justify-content-center">
+                        <div class="col-6 pr-0">
+                            <input asp-for="SearchText"
+                                   class="form-control form-control-lg"
+                                   id="inputlg"
+                                   placeholder="Search by city..." />
+                        </div>
+                        <div class="col-2">
+                            <input type="submit"
+                                   value="Search"
+                                   class="btn btn-lg text-white"
+                                   style="background-color:#FF5581">
+                        </div>
+
+                        <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                            <div class="input-group">
+                                <input type="search" placeholder="What're you searching for?" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                                <div class="input-group-append">
+                                    <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>-->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+}
+else
+{
+    <section class="hero-section set-bg" data-setbg="/img/hero-bg.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hero-text">
+                        <img src="/img/placeholder.png" alt="">
+                        <h1>Rent or Manage a Home</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-5">
+                <div class="col-lg-12">
+                    <!--TO TEST -->
+                    <!--TO TEST -->
+                    <!--<form asp-action="Search" class="row d-flex justify-content-center">
+                        <div class="col-6 pr-0">
+                            <input asp-for="SearchText"
+                                   class="form-control form-control-lg"
+                                   id="inputlg"
+                                   placeholder="Search by city..." />
+                        </div>
+                        <div class="col-2">
+                            <input type="submit"
+                                   value="Search"
+                                   class="btn btn-lg text-white"
+                                   style="background-color:#FF5581">
+                        </div>
+
+                    </form>-->
+                    <!--TO TEST -->
+                    <!--TO TEST -->
+                    <!--TO TEST FURTHER-->
+                    <!--<div class="col-6 searchbar">
+                        <input asp-for="SearchText"
+                               class="search_input"
+                               placeholder="Search by city..." />
+                        <a class="search_icon"><ion-icon name="search-outline"></ion-icon></a>
+                    </div>-->
+
+                </div>
+            </div>
+        </div>
+    </section>
+}
+<!-- Hero Section End -->
+<br>
+
+<!-- TEST SECTION Begin -->
+<style>
+    /* layout.css Style */
+    .upload-drop-zone {
+        height: 100px;
+        border-width: 2px;
+        margin-bottom: 20px;
+    }
+
+    /* skin.css Style*/
+    .upload-drop-zone {
+        color: #ccc;
+        border-style: dashed;
+        border-color: #ccc;
+        line-height: 100px;
+        text-align: center
+    }
+
+        .upload-drop-zone.drop {
+            color: #222;
+            border-color: #222;
+        }
+</style>
+
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row d-flex justify-content-center">
+
+            <div class="col-8 pt-4">
+                <!-- TABLE: PAYMENT REQUESTS -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Payments</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th class="px-3">Date</th>
+                                        <th>To</th>
+                                        <th>Reason</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Payments.Any())
+                                    {
+                                        @foreach (var payment in Model.Payments)
+                                        {
+                                            <tr>
+                                                <td class="col-1 py-1 px-3"
+                                                    style='vertical-align:middle'>
+                                                    @payment.Date
+                                                </td>
+                                                <td class="col-4 py-1 px-1"
+                                                    style='vertical-align:middle'>
+                                                    Recipient
+                                                </td>
+                                                <td class="col-3 py-1 px-1"
+                                                    style='vertical-align:middle'>
+                                                    @payment.Reason
+                                                </td>
+                                                <td class="col-2 py-1 px-1"
+                                                    style='text-align:center;vertical-align:middle'>
+                                                    @payment.Amount
+                                                </td>
+                                                @if (payment.Status.ToString() == "Complete")
+                                                {
+                                                    <td class="col-3 py-1"
+                                                        style='text-align:center;vertical-align:middle'>
+                                                        <span class="text-success"><i class="fas fa-check"></i></span>
+
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="col-2 py-1 text-danger"
+                                                        style='text-align:center;vertical-align:middle'>
+                                                        Pending
+                                                    </td>
+                                                }
+
+                                                <td class="col-1 py-1 pl-0 pr-3"
+                                                    style='vertical-align:middle'>
+                                                    <a asp-controller="Payments"
+                                                       asp-action="Details"
+                                                       asp-route-Id="id"
+                                                       style="display:block; margin-bottom:-10px">
+                                                        <ion-icon size="large" name="list-outline"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr class="col-12 py-1 px-3 text-secondary text-center"
+                                            style='vertical-align:middle'>
+                                            No payments for your rentals
+                                        </tr>
+                                    }
+
+                                    <tr>
+                                        <td class="col-1 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            12/03/2020
+                                        </td>
+                                        <td class="col-4 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Kanalin Tsolov
+                                        </td>
+                                        <td class="col-3 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Rent Payment
+                                        </td>
+                                        <td class="col-2 py-1 px-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            $900
+                                        </td>
+                                        <td class="col-3 py-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            <span class="badge badge-success">
+                                                YES
+                                            </span>
+                                        </td>
+                                        <td class="col-3 py-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            <span class="text-success"><i class="fas fa-check"></i></span>
+                                        </td>
+
+                                        <td class="col-1 py-1 pl-0 pr-3"
+                                            style='vertical-align:middle'>
+                                            <a asp-controller="Payments"
+                                               asp-action="Details"
+                                               asp-route-Id="id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-1 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            12/03/2020
+                                        </td>
+                                        <td class="col-4 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Schunko Svinski
+                                        </td>
+                                        <td class="col-4 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Repair Works
+                                        </td>
+                                        <td class="col-2 py-1 px-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            $350
+                                        </td>
+                                        <td class="col-2 py-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            <span class="badge badge-info">
+                                                NO
+                                            </span>
+                                        </td>
+                                        <td class="col-2 py-1 text-danger"
+                                            style='text-align:center;vertical-align:middle'>
+                                            Pending
+                                        </td>
+                                        <td class="col-1 py-1 pl-0 pr-3"
+                                            style='vertical-align:middle'>
+                                            <a asp-controller="Payments"
+                                               asp-action="Details"
+                                               asp-route-Id="id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer row justify-content-between m-0 px-0">
+                        <div class="col-5 pl-0 m-0" style="display: inline-block;">
+                            <p class="text-right p-0 m-0">
+                                <a asp-controller="Payments" asp-action="All" class="btn btn-sm btn-secondary">View All</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- TEST SECTION End -->
+
+<br />
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <hr class="hr-2" />
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function($) {
+            'use strict';
+
+            // UPLOAD CLASS DEFINITION
+            // ======================
+
+            var dropZone = document.getElementById('drop-zone');
+            var uploadForm = document.getElementById('js-upload-form');
+
+            var startUpload = function (files) {
+                console.log(files)
+            }
+
+            uploadForm.addEventListener('submit', function (e) {
+                var uploadFiles = document.getElementById('js-upload-files').files;
+                e.preventDefault()
+
+                startUpload(uploadFiles)
+            })
+
+            dropZone.ondrop = function (e) {
+                e.preventDefault();
+                this.className = 'upload-drop-zone';
+
+                startUpload(e.dataTransfer.files)
+            }
+
+            dropZone.ondragover = function () {
+                this.className = 'upload-drop-zone drop';
+                return false;
+            }
+
+            dropZone.ondragleave = function () {
+                this.className = 'upload-drop-zone';
+                return false;
+            }
+
+        } (jQuery);
+    </script>
+}

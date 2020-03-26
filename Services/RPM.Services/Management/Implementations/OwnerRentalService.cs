@@ -157,9 +157,21 @@
             return rentalsFromDb;
         }
 
-        public async Task<OwnerRentalInfoServiceModel> GetRentalAsync()
+        public async Task<IEnumerable<OwnerTransactionListOfRentalsServiceModel>>
+            GetTransactionRentalsAsync(string userId)
         {
-            throw new NotImplementedException();
+            var rentals = await this.context.Rentals
+                .Include(r => r.Home)
+                .Include(r => r.Home.City)
+                .Where(r => r.Home.OwnerId == userId)
+                .Select(r => new OwnerTransactionListOfRentalsServiceModel
+                {
+                    Id = r.Id,
+                    Name = string.Format(DashboardRequestLocation, r.Home.City.Name, r.Home.Address),
+                })
+                .ToListAsync();
+
+            return rentals;
         }
     }
 }

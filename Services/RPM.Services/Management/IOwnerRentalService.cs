@@ -14,6 +14,7 @@
 
         Task<IEnumerable<OwnerIndexRentalServiceModel>> GetRentalsAsync(string userId);
 
-        Task<OwnerRentalInfoServiceModel> GetRentalAsync();
+        Task<IEnumerable<OwnerTransactionListOfRentalsServiceModel>>
+            GetTransactionRentalsAsync(string userId);
     }
 }

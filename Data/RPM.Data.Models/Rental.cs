@@ -6,6 +6,12 @@
 
     public class Rental
     {
+        public Rental()
+        {
+            this.TransactionRequests = new HashSet<TransactionRequest>();
+            this.Payments = new HashSet<Payment>();
+        }
+
         public int Id { get; set; }
 
         public DateTime RentDate { get; set; }
@@ -29,5 +35,8 @@
         [ForeignKey(nameof(Contract))]
         public string ContractId { get; set; }
         public virtual Contract Contract { get; set; }
+
+        public ICollection<TransactionRequest> TransactionRequests { get; set; }
+        public ICollection<Payment> Payments { get; set; }
     }
 }

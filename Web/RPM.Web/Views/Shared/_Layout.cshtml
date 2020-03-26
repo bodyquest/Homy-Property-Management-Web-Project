@@ -67,6 +67,10 @@
                             <li><a href="listings.html">Cities</a></li>
                             <li><a href="contact.html">Help</a></li>
                             <li><a asp-controller="Home" asp-action="Test">TestPage</a></li>
+                            @if (this.User.IsInRole(GlobalConstants.TenantRole))
+                            {
+                                <li><a asp-controller="Profile" asp-action="Index">Profile</a></li>
+                            }
                         </ul>
                     </nav>
                     <div class="header-right">
