@@ -85,11 +85,18 @@
 
             if (this.ModelState.IsValid)
             {
-                var isCreated = await this.transactionRequestService.CreateAsync(userId, modelForDb);
+                var isCreatedId = await this.transactionRequestService.CreateAsync(userId, modelForDb);
 
-                if (!isCreated)
+                if (isCreatedId == null)
                 {
-                    return this.View(model);
+                    var rentals = await this.rentalService.GetTransactionRentalsAsync(userId);
+
+                    var viewModel = new OwnerTransactionRequestsCreateInputModel
+                    {
+                        RentalsList = rentals,
+                    };
+
+                    return this.View(viewModel);
                 }
 
                 var schedule = model.RecurringSchedule;
@@ -97,9 +104,9 @@
                 var cronType = this.GetCronFromRecurringType(schedule);
 
                 RecurringJob.AddOrUpdate(
-                    model.Id,
+                    isCreatedId,
                     () => this.paymentService.AddPaymentRequestToUserAsync(
-                        model.Id), cronType);
+                        isCreatedId), cronType);
 
                 return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea }).WithSuccess(string.Empty, RecordCreatedSuccessfully);
             }
@@ -134,7 +141,8 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(OwnerTransactionRequestsCreateInputModel modelForEdit)
+        [ActionName("Edit")]
+        public async Task<IActionResult> EditAsync(OwnerTransactionRequestsCreateInputModel modelForEdit)
         {
             var userId = this.userManager.GetUserId(this.User);
 
@@ -157,7 +165,6 @@
 
             return this.View(modelForEdit);
         }
-
 
         private Func<string> GetCronFromRecurringType(
             RecurringScheduleType recurringSchedule)

@@ -47,6 +47,7 @@
                     Date = p.Date,
                     To = string.Format(RecipientFullName, p.Recipient.FirstName, p.Recipient.LastName),
                     Reason = p.Reason,
+                    Amount = p.Amount,
                     Status = p.Status,
                     RentalAddress = string.Format(
                         PaymentRentalLocation, p.Rental.Home.City.Name, p.Rental.Home.Address),

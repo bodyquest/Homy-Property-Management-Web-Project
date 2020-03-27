@@ -61,4 +61,10 @@
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\themes\main\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\bootstrap.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

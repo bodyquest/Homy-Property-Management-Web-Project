@@ -34,8 +34,7 @@
 
             var transactionRequests = await this.context.TransactionRequests
                 .Include(t => t.Rental)
-                .Include(t => t.SenderId)
-                .Include(t => t.Rental.Home)
+                .Include(t => t.Sender)
                 .Where(t => t.RecipientId == userId)
                 .Select(t => new OwnerAllTransactionRequestsServiceModel
                 {
@@ -52,7 +51,7 @@
             return transactionRequests;
         }
 
-        public async Task<bool> CreateAsync(
+        public async Task<string> CreateAsync(
             string recipientId, OwnerTransactionRequestsCreateInputServiceModel model)
         {
             var rental = await this.context.Rentals
@@ -63,6 +62,13 @@
 
             var senderId = rental.TenantId;
             var amount = rental.Home.Price;
+
+            var transactionRequestFromDb = rental.TransactionRequests.FirstOrDefault(t => t.IsRecurring == true);
+
+            if (transactionRequestFromDb != null)
+            {
+                return null;
+            }
 
             var transactionRequest = new TransactionRequest
             {
@@ -81,18 +87,12 @@
 
             if (result == 0)
             {
-                return false;
+                return null;
             }
 
-            rental.TransactionRequests.Add(transactionRequest);
-            result = await this.context.SaveChangesAsync();
+            var id = transactionRequest.Id;
 
-            if (result == 0)
-            {
-                return false;
-            }
-
-            return true;
+            return id;
         }
 
         public async Task<bool> UpdateAsync(TransactionRequest transactionRequest)
@@ -110,7 +110,11 @@
 
         public async Task<TransactionRequest> FindByIdAsync(string id)
         {
-            var transactionRequest = await this.context.TransactionRequests.FindAsync(id);
+            var transactionRequest = await this.context.TransactionRequests
+                .Include(t => t.Rental)
+                .Include(t => t.Rental.Home)
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync();
 
             return transactionRequest;
         }

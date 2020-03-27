@@ -14,7 +14,7 @@
 
         <div class="row">
 
-            <div class="col-8 pt-4">
+            <div class="col-10 pt-4">
                 <div class="col-12">
                     <!-- TABLE: TRANSACTION REQUESTS -->
                     <div class="card">
@@ -38,6 +38,8 @@
                                             <th>Amount</th>
                                             <th>Recurring</th>
                                             <th>Status</th>
+                                            <th></th>
+                                            <th></th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -78,7 +80,9 @@
                                                         style='text-align:center;vertical-align:middle'>
                                                         @if (transactionRequest.Status == "Complete")
                                                         {
-                                                            <span class="text-success"><i class="fas fa-check"></i></span>
+                                                            <span class="text-success">
+                                                                <i class="fas fa-check"></i>
+                                                            </span>
                                                         }
                                                         else if (transactionRequest.Status == "Pending")
                                                         {
@@ -88,11 +92,12 @@
 
                                                     <td class="col-1 py-1 pl-0 pr-3"
                                                         style='vertical-align:middle'>
-                                                        <a asp-controller="Requests"
+                                                        <a asp-controller="TransactionRequests"
                                                            asp-action="Details"
                                                            asp-route-Id="id"
                                                            style="display:block; margin-bottom:-10px">
-                                                            <ion-icon size="large" name="list-outline"></ion-icon>
+                                                            <ion-icon size="large" name="list-outline">
+                                                            </ion-icon>
                                                         </a>
                                                     </td>
                                                     <td class="col-1 py-1 pl-0 pr-3"
@@ -116,43 +121,54 @@
                                                 No transaction requests for your rentals
                                             </tr>
                                         }
-                                        <tr>
-                                            <td class="col-1 py-1 px-3"
-                                                style='vertical-align:middle'>
-                                                12/03/2020
-                                            </td>
-                                            <td class="col-4 py-1 px-1"
-                                                style='vertical-align:middle'>
-                                                Schunko Svinski
-                                            </td>
-                                            <td class="col-4 py-1 px-1"
-                                                style='vertical-align:middle'>
-                                                Repair Works
-                                            </td>
-                                            <td class="col-2 py-1 px-1"
-                                                style='text-align:center;vertical-align:middle'>
-                                                $350
-                                            </td>
-                                            <td class="col-2 py-1"
-                                                style='text-align:center;vertical-align:middle'>
-                                                <span class="badge badge-info">
-                                                    NO
-                                                </span>
-                                            </td>
-                                            <td class="col-2 py-1 text-danger"
-                                                style='text-align:center;vertical-align:middle'>
-                                                Pending
-                                            </td>
-                                            <td class="col-1 py-1 pl-0 pr-3"
-                                                style='vertical-align:middle'>
-                                                <a asp-controller="Requests"
-                                                   asp-action="Details"
-                                                   asp-route-Id="id"
-                                                   style="display:block; margin-bottom:-10px">
-                                                    <ion-icon size="large" name="list-outline"></ion-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td class="col-1 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            12/03/2020
+                                        </td>
+                                        <td class="col-4 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Schunko Svinski
+                                        </td>
+                                        <td class="col-4 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Repair Works
+                                        </td>
+                                        <td class="col-2 py-1 px-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            $350
+                                        </td>
+                                        <td class="col-2 py-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            <span class="badge badge-info">
+                                                NO
+                                            </span>
+                                        </td>
+                                        <td class="col-2 py-1 text-danger"
+                                            style='text-align:center;vertical-align:middle'>
+                                            Pending
+                                        </td>
+                                        <td class="col-1 py-1 pl-0 pr-3"
+                                            style='vertical-align:middle'>
+                                            <a asp-controller="Requests"
+                                               asp-action="Details"
+                                               asp-route-Id="id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                        <td class="col-1 py-1 pl-0 pr-3"
+                                            style='vertical-align:middle'>
+                                            <input type="submit"
+                                                   class="btn btn-sm btn-danger form-control"
+                                                   asp-controller="TransactionRequests"
+                                                   asp-action="RemoveRecurring"
+                                                   asp-route-id="id" value="Remove" />
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Remove", "RemoveRecurring", new { id = "Id" })
+                                        </td>
+                                    </tr>
 
                                     </tbody>
                                 </table>

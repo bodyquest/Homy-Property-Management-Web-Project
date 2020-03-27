@@ -13,7 +13,7 @@
         Task<IEnumerable<OwnerAllTransactionRequestsServiceModel>>
             GetAllTransactionRequestsAsync(string userId);
 
-        Task<bool> CreateAsync(
+        Task<string> CreateAsync(
             string senderId,
             OwnerTransactionRequestsCreateInputServiceModel model);
 

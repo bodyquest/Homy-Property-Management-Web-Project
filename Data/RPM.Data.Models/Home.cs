@@ -48,7 +48,7 @@
         [Required]
         [ForeignKey(nameof(User))]
         public string OwnerId { get; set; }
-        public User Owner { get; set; }
+        public virtual User Owner { get; set; }
 
         //[ForeignKey(nameof(User))]
         //public string ManagerId { get; set; }
