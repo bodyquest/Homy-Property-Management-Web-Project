@@ -11,7 +11,7 @@
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="row">
 
             <div class="col-8 pt-4">
@@ -53,25 +53,37 @@
                                                     </td>
                                                     <td class="col-4 py-1 px-1"
                                                         style='vertical-align:middle'>
-                                                        Kanalin Tsolov
-                                                    </td>
-                                                    <td class="col-3 py-1 px-1"
-                                                        style='vertical-align:middle'>
-                                                        Rent Payment
+                                                        @transactionRequest.Reason
                                                     </td>
                                                     <td class="col-2 py-1 px-1"
                                                         style='text-align:center;vertical-align:middle'>
-                                                        $900
+                                                        $@transactionRequest.Amount
                                                     </td>
                                                     <td class="col-3 py-1"
                                                         style='text-align:center;vertical-align:middle'>
-                                                        <span class="badge badge-success">
-                                                            YES
-                                                        </span>
+                                                        @if (transactionRequest.IsRecurring)
+                                                        {
+                                                            <span class="badge badge-success">
+                                                                YES
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge badge-info">
+                                                                NO
+                                                            </span>
+                                                        }
                                                     </td>
                                                     <td class="col-3 py-1"
                                                         style='text-align:center;vertical-align:middle'>
-                                                        <span class="text-success"><i class="fas fa-check"></i></span>
+                                                        @if (transactionRequest.Status == "Complete")
+                                                        {
+                                                            <span class="text-success"><i class="fas fa-check"></i></span>
+                                                        }
+                                                        else if (transactionRequest.Status == "Pending")
+                                                        {
+                                                            <span class="text-danger">Pending</span>
+                                                        }
                                                     </td>
 
                                                     <td class="col-1 py-1 pl-0 pr-3"
@@ -83,17 +95,16 @@
                                                             <ion-icon size="large" name="list-outline"></ion-icon>
                                                         </a>
                                                     </td>
-                                                    <td>
-                                                        <div class="col-6">
-                                                            <input type="submit"
-                                                                   class="btn btn-danger form-control"
-                                                                   asp-controller="TransactionRequests"
-                                                                   asp-action="RemoveRecurring"
-                                                                   asp-route-id="id" value="Delete" />
-                                                        </div>
+                                                    <td class="col-1 py-1 pl-0 pr-3"
+                                                        style='vertical-align:middle'>
+                                                        <input type="submit"
+                                                               class="btn btn-danger form-control"
+                                                               asp-controller="TransactionRequests"
+                                                               asp-action="RemoveRecurring"
+                                                               asp-route-id="@transactionRequest.Id" value="Remove" />
                                                     </td>
                                                     <td>
-                                                        @Html.ActionLink("Remove", "RemoveRecurring", new { id = Model.Id })
+                                                        @Html.ActionLink("Remove", "RemoveRecurring", new { id = transactionRequest.Id })
                                                     </td>
                                                 </tr>
                                             }
@@ -105,57 +116,6 @@
                                                 No transaction requests for your rentals
                                             </tr>
                                         }
-                                        <tr>
-                                            <td class="col-1 py-1 px-3"
-                                                style='vertical-align:middle'>
-                                                12/03/2020
-                                            </td>
-                                            <td class="col-4 py-1 px-1"
-                                                style='vertical-align:middle'>
-                                                Kanalin Tsolov
-                                            </td>
-                                            <td class="col-3 py-1 px-1"
-                                                style='vertical-align:middle'>
-                                                Rent Payment
-                                            </td>
-                                            <td class="col-2 py-1 px-1"
-                                                style='text-align:center;vertical-align:middle'>
-                                                $900
-                                            </td>
-                                            <td class="col-3 py-1"
-                                                style='text-align:center;vertical-align:middle'>
-                                                <span class="badge badge-success">
-                                                    YES
-                                                </span>
-                                            </td>
-                                            <td class="col-3 py-1"
-                                                style='text-align:center;vertical-align:middle'>
-                                                <span class="text-success"><i class="fas fa-check"></i></span>
-                                            </td>
-
-                                            <td class="col-1 py-1 pl-0 pr-3"
-                                                style='vertical-align:middle'>
-                                                <a asp-controller="Requests"
-                                                   asp-action="Details"
-                                                   asp-route-Id="id"
-                                                   style="display:block; margin-bottom:-10px">
-                                                    <ion-icon size="large" name="list-outline"></ion-icon>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <div class="col-6">
-                                                    <input type="submit"
-                                                           class="btn btn-danger form-control"
-                                                           asp-controller="TransactionRequests"
-                                                           asp-action="RemoveRecurring"
-                                                           asp-route-id="id" value="Delete" />
-                                                </div>
-                                            </td>
-                                            <td>
-                                                @Html.ActionLink("Remove", "RemoveRecurring", new { id = Model.Id })
-                                            </td>
-                                        </tr>
-
                                         <tr>
                                             <td class="col-1 py-1 px-3"
                                                 style='vertical-align:middle'>

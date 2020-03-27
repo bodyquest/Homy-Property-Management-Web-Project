@@ -126,6 +126,39 @@
                 .WithWarning(string.Empty, CouldNotFind);
         }
 
+        public async Task<IActionResult> Edit(string id)
+        {
+            var transactionRequestForEdit = await this.transactionRequestService.FindByIdAsync(id);
+
+            return this.View(transactionRequestForEdit);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(OwnerTransactionRequestsCreateInputModel modelForEdit)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+
+            var transactionRequestForEdit = await this.transactionRequestService.FindByIdAsync(modelForEdit.Id);
+
+            if (this.ModelState.IsValid)
+            {
+                bool isSuccessful = await this.transactionRequestService.UpdateAsync(transactionRequestForEdit);
+
+                var cronType = this.GetCronFromRecurringType(modelForEdit.RecurringSchedule);
+
+                RecurringJob.AddOrUpdate(
+                    modelForEdit.Id,
+                    () => this.paymentService.AddPaymentRequestToUserAsync(
+                        modelForEdit.Id), cronType);
+
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                .WithSuccess(string.Empty, RecordUpdatedSuccessfully);
+            }
+
+            return this.View(modelForEdit);
+        }
+
+
         private Func<string> GetCronFromRecurringType(
             RecurringScheduleType recurringSchedule)
         {
