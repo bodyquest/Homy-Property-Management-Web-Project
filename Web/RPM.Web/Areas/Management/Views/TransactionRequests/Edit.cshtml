@@ -29,7 +29,6 @@
                         <form asp-action="Edit" method="post" role="form">
                             <input type="hidden" asp-for="@Model.Id" />
                             <div asp-validation-summary="ModelOnly"></div>
-
                             <div class="card-body">
 
                                 <div class="form-group">
@@ -69,7 +68,8 @@
                             <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-info"
-                                        asp-route-id="@Model.Id">Edit
+                                        asp-route-id="@Model.Id">
+                                    Edit
                                 </button>
                             </div>
                         </form>

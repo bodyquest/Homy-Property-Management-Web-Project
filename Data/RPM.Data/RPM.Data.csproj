@@ -19,6 +19,8 @@
     <Compile Remove="Migrations\20200311124118_ChangeHomeEntityAddressConstraints.Designer.cs" />
     <Compile Remove="Migrations\20200323172500_AddColumnIsApprovedToRequest.cs" />
     <Compile Remove="Migrations\20200323172500_AddColumnIsApprovedToRequest.Designer.cs" />
+    <Compile Remove="Migrations\20200327195640_UpdateMigrations.cs" />
+    <Compile Remove="Migrations\20200327195640_UpdateMigrations.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

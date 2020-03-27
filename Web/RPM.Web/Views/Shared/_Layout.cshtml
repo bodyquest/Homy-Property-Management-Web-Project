@@ -26,9 +26,22 @@
         <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css">
         <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
         <link rel="stylesheet" href="~/css/style.css" type="text/css">
-        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
 
+        <!-- Font Awesome -->
+        <link href="~/themes/admin/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="~/themes/admin/dist/css/adminlte.min.css">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+        <!-- Bootstrap -->
+        <link href="~/themes/admin/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+
+
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
+
     <environment names="Staging,Production">
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
@@ -43,73 +56,78 @@
 
     <!-- Header Section Begin -->
 
-        <header class="header-section">
-            <div class="container-fluid">
-                <div class="logo pl-5">
-                    <a class="navbar-brand"
-                       asp-area=""
-                       asp-controller="Home"
-                       asp-action="Index"
-                       style="margin-top: -18px;">
-                        <img src="~/img/Homy_Graphic Logo_4.png" class="image-fluid">
-                    </a>
-                </div>
-                @if (this.SignInManager.IsSignedIn(this.User))
-                {
-                    if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-                    {
-                        <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Admin</a>
-                    }
-                    <nav class="main-menu mobile-menu">
-                        <ul>
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li><a href="how-it-works.html">Explore</a></li>
-                            <li><a href="listings.html">Cities</a></li>
-                            <li><a href="contact.html">Help</a></li>
-                            <li><a asp-controller="Home" asp-action="Test">TestPage</a></li>
-                            @if (this.User.IsInRole(GlobalConstants.TenantRole))
-                            {
-                                <li><a asp-controller="Profile" asp-action="Index">Profile</a></li>
-                            }
-                        </ul>
-                    </nav>
-                    <div class="header-right">
-                        <div class="user-access">
-                            <a asp-area="Identity" asp-page="/Account/Manage/Index"
-                               title="Manage" style="color:#FF5581" class="pr-2">Hello @(this.User.Identity.Name)!</a>
-                            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">Logout</a>
-                        </div>
-                        <a href="#" class="primary-btn">Add Listing</a>
-                    </div>
-                    <div id="mobile-menu-wrap"></div>
-                }
-                else
-                {
-                    <nav class="main-menu mobile-menu">
-                        <ul mr-auto>
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li><a href="how-it-works.html">Explore</a></li>
-                            <li><a href="listings.html">Cities</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-
-                        </ul>
-                    </nav>
-
-                    <div class="header-right">
-                        <div class="user-access">
-                            <a asp-area="Identity" asp-page="/Account/Register">Register/</a>
-                            <a asp-area="Identity" asp-page="/Account/Login">Login</a>
-                        </div>
-                        <a href="#" class="primary-btn">Add Listing</a>
-                    </div>
-                    <div id="mobile-menu-wrap"></div>
-                }
+    <header class="header-section">
+        <div class="container-fluid">
+            <div class="logo pl-5">
+                <a class="navbar-brand"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   style="margin-top: -18px;">
+                    <img src="~/img/Homy_Graphic Logo_4.png" class="image-fluid">
+                </a>
             </div>
-        </header>
+            @if (this.SignInManager.IsSignedIn(this.User))
+            {
+                if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Admin</a>
+                }
+                <nav class="main-menu mobile-menu">
+                    <ul>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a href="how-it-works.html">Explore</a></li>
+                        <li><a href="listings.html">Cities</a></li>
+                        <li><a href="contact.html">Help</a></li>
+                        <li><a asp-controller="Home" asp-action="Test">TestPage</a></li>
+                    </ul>
+                </nav>
+                <div class="header-right" id="MyTopnav">
+                    <div class="user-access">
+
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index"
+                           title="Manage" style="color:#FF5581" class="pr-2">Hello @(this.User.Identity.Name)!</a>
+
+                        @if (this.User.IsInRole(GlobalConstants.TenantRole))
+                        {
+                            <a asp-controller="Profile" asp-action="Index">
+                                Profile
+                            </a>
+                        }
+
+                    </div>
+                    <a href="#" class="primary-btn ml-0 px-4">Add Listing</a>
+                    <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))" class="primary-btn px-3 ml-2 mr-4" style="background-color: #01BFE1">Logout</a>
+                </div>
+                <div id="mobile-menu-wrap"></div>
+            }
+            else
+            {
+                <nav class="main-menu mobile-menu">
+                    <ul mr-auto>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a href="how-it-works.html">Explore</a></li>
+                        <li><a href="listings.html">Cities</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+
+                    </ul>
+                </nav>
+
+                <div class="header-right">
+                    <div class="user-access">
+                        <a asp-area="Identity" asp-page="/Account/Register">Register/</a>
+                        <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    </div>
+                    <a href="#" class="primary-btn">Add Listing</a>
+                </div>
+                <div id="mobile-menu-wrap"></div>
+            }
+        </div>
+    </header>
 
     <!-- Header End -->
 
@@ -152,6 +170,16 @@
         <script src="~/js/mixitup.min.js"></script>
         <script src="~/js/main.js"></script>
 
+        <!-- jQuery -->
+        <script src="~/themes/admin/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/themes/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/themes/admin/dist/js/adminlte.min.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="~/themes/admin/dist/js/demo.js"></script>
+        <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+
     </environment>
 
     <environment names="Staging,Production">
@@ -169,6 +197,7 @@
     </environment>
 
     @this.RenderSection("Scripts", required: false)
+
 </body>
 
 </html>
