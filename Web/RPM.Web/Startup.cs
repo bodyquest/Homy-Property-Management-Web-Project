@@ -14,6 +14,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
+    using RPM.Common.PaymentGateways.Stripe;
     using RPM.Data;
     using RPM.Data.Common;
     using RPM.Data.Common.Repositories;
@@ -31,6 +32,7 @@
     using RPM.Services.Messaging;
 
     using RPM.Web.ViewModels;
+    using Stripe;
 
     public class Startup
     {
@@ -90,6 +92,8 @@
 
             services.AddHangfire(x => x.UseSqlServerStorage(this.configuration.GetConnectionString("HangfireConnection")));
             services.AddHangfireServer();
+
+            services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -171,6 +175,8 @@
             app.UseCookiePolicy();
 
             app.UseRouting();
+
+            StripeConfiguration.ApiKey = this.configuration.GetSection("Stripe")["SecretKey"];
 
             app.UseAuthentication();
             app.UseAuthorization();
