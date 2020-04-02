@@ -65,7 +65,7 @@ namespace RPM.Web.Areas.Identity.Pages.Account
             // var uri = String.Format("http://example.com?page={0}", url);
             // Response.Redirect(uri);
 
-            // returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content("~/");
 
             if (this.ModelState.IsValid)
             {

@@ -211,7 +211,22 @@ textAreaFixed {
 
 .backgroundWhite {
     background-color: #ffffff99;
-    margin-top: 160px;
+    margin-top: 120px;
 }
 
 /***********************  NavBar DropDown **********************/
+
+/***********************  Icon Buttons **********************/
+.btn-label {
+    position: relative;
+    left: -8px;
+    display: inline-block;
+    padding: 4px 6px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 3px 0 0 3px;
+}
+
+.btn-labeled {
+    padding-top: 0;
+    padding-bottom: 0;
+}

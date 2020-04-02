@@ -18,7 +18,8 @@
 
             this.Homes = new HashSet<Home>();
             this.Rentals = new HashSet<Rental>();
-            this.ManagedRentals = new HashSet<Rental>();
+            this.ManagedHomes = new HashSet<Home>();
+            this.Contracts = new HashSet<Contract>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -45,12 +46,19 @@
         [MaxLength(AboutMaxLength)]
         public string About { get; set; }
 
+        // Stripe Properties
+        public string StripeConnectedAccountId { get; set; }
+        public string StripePublishableKey { get; set; }
+        public string StripeRefreshToken { get; set; }
+
         // Collections
         public virtual ICollection<Home> Homes { get; set; }
 
         public virtual ICollection<Rental> Rentals { get; set; }
 
-        public virtual ICollection<Rental> ManagedRentals { get; set; }
+        public virtual ICollection<Home> ManagedHomes { get; set; }
+
+        public virtual ICollection<Contract> Contracts { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

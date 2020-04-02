@@ -18,13 +18,19 @@
     {
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
+        private readonly IOwnerRequestService requestService;
+        private readonly IOwnerContractService contractService;
 
         public OwnerListingService(
             ApplicationDbContext context,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IOwnerRequestService requestService,
+            IOwnerContractService contractService)
         {
             this.context = context;
             this.userManager = userManager;
+            this.requestService = requestService;
+            this.contractService = contractService;
         }
 
         public async Task<IEnumerable<OwnerIndexListingsServiceModel>> GetMyPropertiesAsync(string id)
@@ -44,19 +50,45 @@
             return homes;
         }
 
+        public async Task<bool> CreateListingAsync(OwnerCreateListingServiceModel model)
+        {
+            var city = await this.context.Cities.FirstOrDefaultAsync(x => x.Id == model.CityId);
+
+            Home home = new Home
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Address = model.Address,
+                Price = model.Price,
+                City = city,
+                Category = model.Category,
+                Status = model.Status,
+                Owner = model.Owner,
+            };
+
+            home.Images.Add(model.Image);
+
+            this.context.Homes.Add(home);
+            var result = await this.context.SaveChangesAsync();
+
+            city.Homes.Add(home);
+            await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
         public async Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id)
         {
             var rental = await this.context.Rentals
                 .Where(r => r.HomeId == id)
                 .Include(r => r.Contract)
                 .Include(r => r.Tenant)
-                .Include(r => r.Manager)
                 .Select(r => new OwnerRentalInfoServiceModel
                 {
                     RentalDate = r.RentDate.ToString(StandartDateFormat),
                     Duration = r.Duration,
                     TenantFullName = r.Tenant.FirstName + " " + r.Tenant.LastName,
-                    ManagerFullName = r.Manager.FirstName + " " + r.Manager.LastName,
+                    ManagerFullName = r.Home.Manager.FirstName + " " + r.Home.Manager.LastName,
                 })
                 .FirstOrDefaultAsync();
 
@@ -120,7 +152,53 @@
             }
 
             home.Status = (HomeStatus)Enum.Parse(typeof(HomeStatus), Managed);
+            await this.context.SaveChangesAsync();
+
             return homeId;
+        }
+
+        public async Task<bool> StartHomeManage(string id, byte[] fileContent)
+        {
+            // Approve Request for Manage
+            var request = await this.requestService.ApproveRequestAsync(id);
+
+            if (request == null)
+            {
+                return false;
+            }
+
+            // Change Home Status
+            string homeId = await this.ChangeHomeStatusAsync(request);
+
+            if (homeId == EntityNotFound)
+            {
+                return false;
+            }
+
+            // Add User to Role
+            var userId = request.UserId;
+            var user = await this.userManager.FindByIdAsync(userId);
+            await this.userManager.AddToRoleAsync(user, ManagerRoleName);
+
+            // Add Contract
+            var isSuccessful = await this.contractService
+                .CreateManageContractAsync(fileContent, user);
+
+            if (!isSuccessful)
+            {
+                return false;
+            }
+
+            // Add Manager to Home
+            var home = await this.context.Homes
+                .Where(h => h.Id == request.HomeId)
+                .FirstOrDefaultAsync();
+
+            home.ManagerId = user.Id;
+
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
         }
     }
 }

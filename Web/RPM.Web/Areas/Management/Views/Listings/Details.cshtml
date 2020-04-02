@@ -139,8 +139,8 @@
                             </div>
                             
                             <!-- /.card-body -->
-                            <div class="card-footer">
-                                <button asp-controller="Listings" asp-action="Edit" asp-route-id="Id" class="btn btn-info">Edit Listing</button>
+                            <div class="card-footer pl-0 bg-white">
+                                <a asp-controller="Listings" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info shadow"><span class="text-white">Edit Listing</span></a>
                             </div>
                         <!-- /.form (start) -->
                     </div>

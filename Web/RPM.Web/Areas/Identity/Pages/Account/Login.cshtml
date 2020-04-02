@@ -15,43 +15,120 @@
                         string referer = this.HttpContext.Request.Headers["Referer"].ToString();
                         Uri baseUri = new Uri(referer);
                     }
-                    <form class="my-5" id="account" asp-route-returnUrl="@baseUri.AbsolutePath" method="post">
-                        <div class="backgroundWhite p-4">
-                            <h2 class="text-center text-primary py-1">@ViewData["Title"]</h2>
-                            <h4>Use a local account to log in.</h4>
-                            <hr />
+
+                    <div class="backgroundWhite p-4">
+                        <form id="account"
+                              method="post"
+                              class="pb-1 pt-1"
+                              asp-route-returnUrl="@baseUri.AbsolutePath">
+                            <h2 class="text-center text-primary pt-0 pb-1 mb-0">@ViewData["Title"]</h2>
+                            <h4 class="mb-0 text-dark">Use a local/external account to log in.</h4>
+                            <hr class="my-1" />
                             <div asp-validation-summary="All" class="text-danger"></div>
                             <div class="form-group">
-                                <label asp-for="Input.Username"></label>
-                                <input asp-for="Input.Username" class="form-control" />
+                                <input asp-for="Input.Username" class="form-control" placeholder="Username..."/>
                                 <span asp-validation-for="Input.Username" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Input.Password"></label>
-                                <input asp-for="Input.Password" class="form-control" />
+                                <input asp-for="Input.Password" class="form-control" placeholder="Password..."/>
                                 <span asp-validation-for="Input.Password" class="text-danger"></span>
                             </div>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <label asp-for="Input.RememberMe">
-                                        <input asp-for="Input.RememberMe" />
-                                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                                    </label>
+
+                            <div class="row">
+                                <div class="col-6 form-group mb-0">
+                                    <div class="checkbox">
+                                        <label asp-for="Input.RememberMe">
+                                            <input asp-for="Input.RememberMe" />
+                                            <span class="text-dark">@Html.DisplayNameFor(m => m.Input.RememberMe)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="row">
+                                        <p class="mb-0 col-12 text-right">
+                                            <a id="forgot-password"
+                                               asp-page="./ForgotPassword">
+                                                <strong>Forgot your password?</strong>
+                                            </a>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Log in</button>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <button type="submit"
+                                                    class="shadow btn btn-block btn-primary">
+                                                Log in
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <p>
-                                    <a id="forgot-password" asp-page="./ForgotPassword"><strong>Forgot your password?</strong></a>
-                                </p>
-                                <p>
-                                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"><strong>Register as a new user</strong></a>
-                                </p>
-                            </div>
+                            <p class="my-0 py-1 col-12 text-center text-dark">
+                                 <strong>Or continue with</strong>
+                            </p>
+                        </form>
+
+                        <div class="row">
+                            <form class="col-12 pl-2 form-horizontal" id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                                <div class="row">
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        if (provider.Name == "Facebook")
+                                        {
+                                            <p class="col-md-6">
+                                                <button type="submit"
+                                                        class="shadow btn btn-block btn-facebook text-white"
+                                                        style="background-color:#4064AC;border-color:#4064AC;"
+                                                        name="provider"
+                                                        value="@provider.Name"
+                                                        title="Log in using your @provider.DisplayName account">
+                                                    <div class="row d-flex justify-content-md-start">
+                                                        <div class=" col-3 pl-0">
+                                                            <img src="~/img/faceboo-logo.png" width="20" style="height:25px;width:25px" />
+                                                        </div>
+                                                        <div class="col-7">@provider.Name</div>
+                                                    </div>
+                                                </button>
+                                            </p>
+                                        }
+
+                                        else if (provider.Name == "Google")
+                                        {
+                                            <p class="col-md-6">
+                                                <button type="submit"
+                                                        class="shadow btn btn-block btn-google"
+                                                        style="background-color:#fff;border-color:#fff;text-decoration-color:dimgrey"
+                                                        name="provider"
+                                                        value="@provider.Name"
+                                                        title="Log in using your @provider.DisplayName account">
+                                                    <div class="row d-flex justify-content-md-start">
+                                                        <div class=" col-3">
+                                                            <img src="~/img/google-logo.png" width="20" style="height:25px;width:25px" />
+                                                        </div>
+                                                        <div class="col-7">@provider.Name</div>
+                                                    </div>
+                                                </button>
+                                            </p>
+                                        }
+                                    }
+                                </div>
+                            </form>
                         </div>
-                    </form>
+
+                        <div class="row">
+                            <p class="mb-0 col-12 text-center">
+                                <a asp-page="./Register"
+                                   asp-route-returnUrl="@Model.ReturnUrl">
+                                    <strong>Don't have an account? Register here.</strong>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
                 </section>
             </div>
 

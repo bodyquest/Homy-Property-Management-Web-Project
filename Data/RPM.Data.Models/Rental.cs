@@ -25,11 +25,6 @@
         [ForeignKey("TenantId")]
         public virtual User Tenant { get; set; }
 
-        public string ManagerId { get; set; }
-
-        [ForeignKey("ManagerId")]
-        public virtual User Manager { get; set; }
-
         public int? Duration { get; set; }
 
         [ForeignKey(nameof(Contract))]

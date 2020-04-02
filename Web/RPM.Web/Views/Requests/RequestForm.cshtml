@@ -12,7 +12,7 @@
 <section>
     <div class="container-fluid">
         <div class="row pl-lg-5">
-            <div class="col-5">
+            <div class="col-md-5">
                 <form asp-action="RequestForm"
                       enctype="multipart/form-data"
                       method="post"
@@ -22,15 +22,27 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <h2>Request for Rental</h2>
-                                <div class="row">
-                                    <div class="col-8">
-                                        <hr class="hr-2 mt-1 pb-4" />
+                                @if (Model.PropertyDetails.Status.ToString() == ToRent)
+                                {
+                                    <h2>Request for Rental</h2>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <hr class="hr-2 mt-1 pb-4" />
+                                        </div>
                                     </div>
-                                </div>
+                                }
+                                else if (Model.PropertyDetails.Status.ToString() == ToManage)
+                                {
+                                    <h2>Request for Management</h2>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <hr class="hr-2 mt-1 pb-4" />
+                                        </div>
+                                    </div>
+                                }
 
                                 @if (string.IsNullOrEmpty(@Model.User.About)
-                            || @Model.User.PhoneNumber == null)
+                       || @Model.User.PhoneNumber == null)
                                 {
                                     <h4 class="pb-5 text-danger">Please fill the empty fields</h4>
                                 }
@@ -53,27 +65,27 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row d-flex">
                             <div class="col-sm-6">
-                                <div class="inputField">
-                                    <div class="inputTextFixed">@Model.User.Email</div>
-                                    <input readonly="readonly" type="text" name="" class="input">
-                                </div>
+                                <textarea class="inputFixed textAreaFixed" readonly="readonly" asp-for="@Model.User.Email" type="text" name=""></textarea>
                             </div>
 
-                            <div class="col-sm-6">
+                            <div class="col-sm-6 align-self-stretch">
                                 <div class="inputField">
                                     @if (Model.User.PhoneNumber == null)
                                     {
+                                        
                                         <div class="inputText text-danger">Phone</div>
-                                        <input asp-for="@Model.PhoneNumber" class="input">
+                                        <textarea asp-for="@Model.PhoneNumber"
+                                                  class="input" rows="1">
+                                        </textarea>
                                     }
                                     else
                                     {
                                         <div class="inputTextFixed">@Model.User.PhoneNumber</div>
                                         <input readonly="readonly" type="text" name="" class="input">
                                     }
-                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -90,9 +102,12 @@
                                     }
                                     else
                                     {
-                                        <textarea class="inputFixed textAreaFixed" readonly="readonly" asp-for="@Model.User.About" type="text" name=""></textarea>
+                                        <textarea class="inputFixed textAreaFixed"
+                                                  readonly="readonly"
+                                                  asp-for="@Model.User.About"
+                                                  type="text" name=""></textarea>
                                     }
-                                    <span asp-validation-for="About" class="text-danger"></span>
+                                    <span asp-validation-for="@Model.About" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -101,8 +116,8 @@
                             <div class="col-sm-12">
                                 <div class="inputField">
                                     <div class="inputText text-danger">Your Message</div>
-                                    <textarea asp-for="Message" class="input" rows="7"></textarea>
-                                    <span asp-validation-for="Message" class="text-danger"></span>
+                                    <textarea asp-for="@Model.Message" class="input" rows="7"></textarea>
+                                    <span asp-validation-for="@Model.Message" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -135,7 +150,7 @@
                     </div>
                 </form>
             </div>
-            <div class="col-7 pt-1 pr-3">
+            <div class="col-md-7 pt-1 pr-3">
                 <div class="row">
                     <div class="col-12">
                         <img src="@Model.PropertyDetails.Image" class="img-fluid" alt="Responsive image">
@@ -145,7 +160,16 @@
                             <strong>@Model.PropertyDetails.Name</strong>
                         </h2>
                         <div class="text-left">
-                            <div class="text-muted pt-2">@Model.PropertyDetails.Name<span class="float-right"><strong>Price: $@Model.PropertyDetails.Price/ Month</strong></span></div>
+                            <div class="text-muted pt-2">
+                                @Model.PropertyDetails.City  &nbsp;| &nbsp; @Model.PropertyDetails.Address
+
+                                @if (Model.PropertyDetails.Status.ToString() == ToRent)
+                                {
+                                    <span class="float-right">
+                                        <strong>Price: $@Model.PropertyDetails.Price/ Month</strong>
+                                    </span>
+                                }
+                            </div>
                             <hr />
                             <strong><i class="far fa-file-alt mr-1"></i>Listing Details</strong>
                             <div class="row">

@@ -19,13 +19,12 @@
 
         public User User { get; set; }
 
-        [Phone]
         [Required]
         [Display(Name = "Phone")]
         public string PhoneNumber { get; set; }
 
         [Required]
-        [MaxLength(AboutMaxLength)]
+        [StringLength(AboutMaxLength, MinimumLength = MessageMinLength, ErrorMessage = "This section must have minimum {2} characters")]
         public string About { get; set; }
 
         [Required]

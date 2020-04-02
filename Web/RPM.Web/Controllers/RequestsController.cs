@@ -58,7 +58,7 @@
 
         [HttpPost]
         [ActionName("RequestForm")]
-        public async Task<IActionResult> RequestFormAsync(string id, string about, string phone, string message, IFormFile document)
+        public async Task<IActionResult> RequestFormAsync(string id, string about, string phoneNumber, string message, IFormFile document)
         {
             if (!this.User.Identity.IsAuthenticated)
             {
@@ -95,7 +95,7 @@
 
             if (
                 (string.IsNullOrWhiteSpace(about) && string.IsNullOrWhiteSpace(user.About))
-                || (string.IsNullOrWhiteSpace(phone) && string.IsNullOrWhiteSpace(user.PhoneNumber))
+                || (string.IsNullOrWhiteSpace(phoneNumber) && string.IsNullOrWhiteSpace(user.PhoneNumber))
                 || string.IsNullOrWhiteSpace(message))
             {
                 this.TempData.AddErrorMessage(EmptyFields);
@@ -114,9 +114,9 @@
                 await this.userManager.UpdateAsync(user);
             }
 
-            if (!string.IsNullOrWhiteSpace(phone))
+            if (!string.IsNullOrWhiteSpace(phoneNumber))
             {
-                user.PhoneNumber = phone;
+                user.PhoneNumber = phoneNumber;
                 await this.userManager.UpdateAsync(user);
             }
 

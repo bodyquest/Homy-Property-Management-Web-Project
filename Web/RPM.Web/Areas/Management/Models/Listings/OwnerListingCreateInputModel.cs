@@ -49,6 +49,8 @@
         [Required]
         public HomeCategory Category { get; set; }
 
+        public bool UserHasStripeAccount { get; set; }
+
         [Required]
         public IFormFile Image { get; set; }
 

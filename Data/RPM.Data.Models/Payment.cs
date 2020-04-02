@@ -22,6 +22,8 @@
 
         public DateTime Date { get; set; }
 
+        public DateTime? TransactionDate { get; set; }
+
         [Required]
         public string RecipientId { get; set; }
 

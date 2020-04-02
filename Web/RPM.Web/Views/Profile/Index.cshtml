@@ -1,12 +1,17 @@
 ﻿@using RPM.Common
 @using System.Text
+@using Microsoft.Extensions.Options
+
+@inject IOptions<RPM.Common.PaymentGateways.Stripe.StripeSettings> Stripe
 
 @model ProfileIndexViewModel
 
 <link rel="stylesheet" href="~/css/sitecustom.css">
+<script src="https://js.stripe.com/v3"></script>
 
 @{
     this.ViewData["Title"] = "Profile Page";
+    
 }
 <!-- Hero Section Begin -->
 @if (this.User.Identity.IsAuthenticated &&
@@ -143,7 +148,129 @@ else
             </div>
         </div>
 
-        <div class="col-4 pt-1 pr-2">
+            <div class="col-10 pt-1 px-4">
+                <!-- TABLE: PAYMENT REQUESTS -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Payments</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped m-0">
+                                <thead>
+                                    <tr>
+                                        <th class="px-3">Date</th>
+                                        <th>To</th>
+                                        <th>Reason</th>
+                                        <th style='text-align:center;vertical-align:middle'>Amount</th>
+                                        <th style='text-align:center;vertical-align:middle'>Status</th>
+                                        <th style='text-align:center;vertical-align:middle'>Details</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Payments.Any())
+                                    {
+                                        @foreach (var payment in Model.Payments)
+                                        {
+                                            <tr>
+                                                <td class="col-2 py-1 pl-3 pr-1"
+                                                    style='vertical-align:middle'>
+                                                    @payment.Date
+                                                </td>
+                                                <td class="col-3 py-1 px-1"
+                                                    style='vertical-align:middle'>
+                                                    @payment.To
+                                                </td>
+                                                <td class="col-2 py-1 px-1"
+                                                    style='vertical-align:middle'>
+                                                    @payment.Reason
+                                                </td>
+                                                <td class="col-1 py-1 px-1"
+                                                    style='text-align:center;vertical-align:middle'>
+                                                    @payment.Amount
+                                                </td>
+                                                @if (payment.Status.ToString() == "Complete")
+                                                {
+                                                    <td class="col-1 py-1"
+                                                        style='text-align:center;vertical-align:middle'>
+                                                        <span class="text-success"><i class="fas fa-check"></i></span>
+
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="col-1 py-1 text-danger"
+                                                        style='text-align:center;vertical-align:middle'>
+                                                        Pending
+                                                    </td>
+                                                }
+
+                                                <td class="col-1 py-1 pl-0 pr-1"
+                                                    style='text-align:center;vertical-align:middle'>
+                                                    <a asp-controller="Payments"
+                                                       asp-action="Details"
+                                                       asp-route-Id="id"
+                                                       style="display:block; margin-bottom:-10px">
+                                                        <ion-icon size="large" name="list-outline"></ion-icon>
+                                                    </a>
+                                                </td>
+                                                <td class="col-1 py-1 pl-0 pr-2"
+                                                    style='text-align:center;vertical-align:middle'>
+                                                    <div>
+                                                        @{
+                                                            var id = payment.Id;
+                                                        }
+                                                            <a
+                                                                    value="Pay"
+                                                                    asp-controller="Payment"
+                                                                    asp-action="Pay"
+                                                                    asp-route-Id="@payment.Id"
+                                                                    class="btn btn-sm btn-labeled btn-success">
+                                                                <span class="btn-label">
+                                                                    <ion-icon name="card-outline"></ion-icon>
+                                                                </span>Pay
+                                                            </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr class="col-12 py-1 px-3 text-secondary text-center"
+                                            style='vertical-align:middle'>
+                                            No payments for your rentals
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer row justify-content-between m-0 px-0">
+                        <div class="col-12 pl-0 m-0" style="display: inline-block;">
+                            <p class="text-right p-0 m-0 pr-4">
+                                <a asp-controller="Payment" asp-action="All" class="btn btn-sm btn-secondary">View All</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+    </div>
+    <div class="row">
+        <div class="col-8 offset-2 pt-1 px-4">
             <!-- TABLE: RENTALS -->
             <div class="card">
                 <div class="card-header border-transparent">
@@ -233,172 +360,6 @@ else
             </div>
             <!-- /.card -->
         </div>
-
-        <div class="col-5 pt-1 px-4">
-            <!-- TABLE: PAYMENT REQUESTS -->
-            <div class="card">
-                <div class="card-header border-transparent">
-                    <h3 class="card-title text-info"><strong>Payments</strong></h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-striped m-0">
-                            <thead>
-                                <tr>
-                                    <th class="px-3">Date</th>
-                                    <th>To</th>
-                                    <th>Reason</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.Payments.Any())
-                                {
-                                    @foreach (var payment in Model.Payments)
-                                    {
-                                        <tr>
-                                            <td class="col-1 py-1 px-3"
-                                                style='vertical-align:middle'>
-                                                @payment.Date
-                                            </td>
-                                            <td class="col-4 py-1 px-1"
-                                                style='vertical-align:middle'>
-                                                @payment.To
-                                            </td>
-                                            <td class="col-3 py-1 px-1"
-                                                style='vertical-align:middle'>
-                                                @payment.Reason
-                                            </td>
-                                            <td class="col-2 py-1 px-1"
-                                                style='text-align:center;vertical-align:middle'>
-                                                @payment.Amount
-                                            </td>
-                                            @if (payment.Status.ToString() == "Complete")
-                                            {
-                                                <td class="col-3 py-1"
-                                                    style='text-align:center;vertical-align:middle'>
-                                                    <span class="text-success"><i class="fas fa-check"></i></span>
-
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td class="col-2 py-1 text-danger"
-                                                    style='text-align:center;vertical-align:middle'>
-                                                    Pending
-                                                </td>
-                                            }
-
-                                            <td class="col-1 py-1 pl-0 pr-3"
-                                                style='vertical-align:middle'>
-                                                <a asp-controller="Payments"
-                                                   asp-action="Details"
-                                                   asp-route-Id="id"
-                                                   style="display:block; margin-bottom:-10px">
-                                                    <ion-icon size="large" name="list-outline"></ion-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
-                                    <tr class="col-12 py-1 px-3 text-secondary text-center"
-                                        style='vertical-align:middle'>
-                                        No payments for your rentals
-                                    </tr>
-                                }
-
-                                <tr>
-                                    <td class="col-1 py-1 px-3"
-                                        style='vertical-align:middle'>
-                                        12/03/2020
-                                    </td>
-                                    <td class="col-4 py-1 px-1"
-                                        style='vertical-align:middle'>
-                                        Kanalin Tsolov
-                                    </td>
-                                    <td class="col-3 py-1 px-1"
-                                        style='vertical-align:middle'>
-                                        Rent Payment
-                                    </td>
-                                    <td class="col-2 py-1 px-1"
-                                        style='text-align:center;vertical-align:middle'>
-                                        $900
-                                    </td>
-                                    <td class="col-3 py-1"
-                                        style='text-align:center;vertical-align:middle'>
-                                        <span class="text-success"><i class="fas fa-check"></i></span>
-                                    </td>
-
-                                    <td class="col-1 py-1 pl-0 pr-3"
-                                        style='vertical-align:middle'>
-                                        <a asp-controller="Payments"
-                                           asp-action="Details"
-                                           asp-route-Id="id"
-                                           style="display:block; margin-bottom:-10px">
-                                            <ion-icon size="large" name="list-outline"></ion-icon>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="col-1 py-1 px-3"
-                                        style='vertical-align:middle'>
-                                        12/03/2020
-                                    </td>
-                                    <td class="col-4 py-1 px-1"
-                                        style='vertical-align:middle'>
-                                        Schunko Svinski
-                                    </td>
-                                    <td class="col-4 py-1 px-1"
-                                        style='vertical-align:middle'>
-                                        Repair Works
-                                    </td>
-                                    <td class="col-2 py-1 px-1"
-                                        style='text-align:center;vertical-align:middle'>
-                                        $350
-                                    </td>
-                                    <td class="col-2 py-1 text-danger"
-                                        style='text-align:center;vertical-align:middle'>
-                                        Pending
-                                    </td>
-                                    <td class="col-1 py-1 pl-0 pr-3"
-                                        style='vertical-align:middle'>
-                                        <a asp-controller="Payments"
-                                           asp-action="Details"
-                                           asp-route-Id="id"
-                                           style="display:block; margin-bottom:-10px">
-                                            <ion-icon size="large" name="list-outline"></ion-icon>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer row justify-content-between m-0 px-0">
-                    <div class="col-12 pl-0 m-0" style="display: inline-block;">
-                        <p class="text-right p-0 m-0 pr-2">
-                            <a asp-controller="Payments" asp-action="All" class="btn btn-sm btn-secondary">View All</a>
-                        </p>
-                    </div>
-                </div>
-                <!-- /.card-footer -->
-            </div>
-            <!-- /.card -->
-        </div>
-
     </div>
 </section>
 <!-- /.content -->
@@ -414,44 +375,5 @@ else
 </div>
 
 @section Scripts{
-    <script>
-        function($) {
-            'use strict';
-
-            // UPLOAD CLASS DEFINITION
-            // ======================
-
-            var dropZone = document.getElementById('drop-zone');
-            var uploadForm = document.getElementById('js-upload-form');
-
-            var startUpload = function (files) {
-                console.log(files)
-            }
-
-            uploadForm.addEventListener('submit', function (e) {
-                var uploadFiles = document.getElementById('js-upload-files').files;
-                e.preventDefault()
-
-                startUpload(uploadFiles)
-            })
-
-            dropZone.ondrop = function (e) {
-                e.preventDefault();
-                this.className = 'upload-drop-zone';
-
-                startUpload(e.dataTransfer.files)
-            }
-
-            dropZone.ondragover = function () {
-                this.className = 'upload-drop-zone drop';
-                return false;
-            }
-
-            dropZone.ondragleave = function () {
-                this.className = 'upload-drop-zone';
-                return false;
-            }
-
-        } (jQuery);
-    </script>
+    
 }

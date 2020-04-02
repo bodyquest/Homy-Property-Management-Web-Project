@@ -1,0 +1,251 @@
+﻿@model OwnerListingCreateInputModel
+
+@{
+    this.ViewData["Title"] = "Listings Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row d-flex justify-content-start">
+
+            <div class="col-7 pt-4">
+                <!-- TABLE: Add New Listing -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Edit Listing</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <!-- form start -->
+                        <form method="post" role="form" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly"></div>
+
+                            <div class="card-body">
+
+                                <div class="form-group">
+
+                                    <label asp-for="Name" class="col-form-label">Title</label>
+                                    <input asp-for="Name" class="form-control" placeholder="Title...">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Description" class="col-form-label">Description</label>
+                                    <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter description..."></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Country</label>
+                                            <input class="form-control" disabled placeholder="Germany">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>City</label>
+                                            <input class="form-control" disabled placeholder="Berlin">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input class="form-control" disabled placeholder="Damerowstrasse 17">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Price">Price</label>
+                                    <input type="number"
+                                           step="0.01"
+                                           class="form-control"
+                                           id="price"
+                                           placeholder="Price..."
+                                           asp-for="Price">
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="Status">Status</label>
+                                            <select asp-for="Status"
+                                                    asp-items="Html.GetEnumSelectList<HomeStatus>().OrderBy(x => x.Value)"
+                                                    class="form-control"
+                                                    placeholder="Status..."></select>
+                                            <span asp-validation-for="Status" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="Category">Category</label>
+                                            <select asp-for="Category"
+                                                    asp-items="Html.GetEnumSelectList<HomeCategory>().OrderBy(x => x.Value)"
+                                                    class="form-control"
+                                                    placeholder="Category..."></select>
+                                            <span asp-validation-for="Category" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label asp-for="Image"></label>
+                                <div class="input-group">
+                                    <input type="file"
+                                           id="image"
+                                           placeholder="Image...">
+                                    <span asp-validation-for="Image" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-info">Edit Listing</button>
+                            </div>
+                        </form>
+                        <!-- /.form (start) -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-5 pt-4">
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Image</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="row px-4 pb-4">
+                            <img src="@Model.Image" class="img-fluid" alt="Responsive image">
+                        </div>
+                        <div class="col-12">
+                                <h4 class="text-danger text-center pb-4">
+                                    You are managing the property
+                                </h4>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong><i class="far fa-calendar-alt mr-1"></i>Rental Date</strong>
+
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                        <p class="text-muted">
+                                            RentalDate
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong><i class="far fa-clock mr-1"></i>Duration</strong>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                        <p class="text-muted">
+                                            Duration Months
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong><i class="fas fa-user mr-1"></i>Tenant Name</strong>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                        <p class="text-muted">
+                                            TenantFullName
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong><i class="fas fa-user-tie mr-1"></i>Manager Name</strong>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                            <p class="text-muted">
+                                                ManagerFullName
+                                            </p>
+                                    </div>
+                                </div>
+                            <!--
+                  else
+                  {
+                      <div class="col-6">
+                          <strong><i class="far fa-file-alt mr-1"></i>Status</strong>
+                          <div class="row">
+                              <div class="col-3">
+                                  <hr class="hr-2 mt-1" />
+                              </div>
+                          </div>
+                          <h4 class="text-success">
+                              The listing is not rented yet
+                          </h4>
+                      </div>
+                  }
+                -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+@section Scripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getCity();
+            $('#CountryId').change(function () {
+                getCity();
+            });
+        });
+
+        function getCity() { 
+
+            var url = '@Url.Content("~/")' + "Management/Listings/GetCity";
+            
+            var ddlSource = '#CountryId';
+
+            $.getJSON(url, { id: $(ddlSource).val() }, function (data) {
+
+                var items = '';
+
+                $('#CityId').empty();
+
+                $.each(data, function (i, city) {
+                    items += "<option value ='" + city.value + "'>" + city.text + "</option>";
+                });
+
+                $('#CityId').html(items);
+            })
+        }
+        </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

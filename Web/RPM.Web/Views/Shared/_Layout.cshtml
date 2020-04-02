@@ -132,7 +132,7 @@
     <!-- Header End -->
 
 
-    <main role="main">
+    <main role="main" style="min-height:100vh;">
         <partial name="_AlertMessages" />
         @this.RenderBody()
         <partial name="_CookieConsentPartial" />
@@ -140,14 +140,14 @@
 
 
     <!-- Footer Section Begin -->
-    <footer class="footer-section spad">
+    <footer class="footer-section spad" style="position:absolute;width:100%;">
         <div class="container">
             <span class="text-primary">&copy; @DateTime.Now.Year - @GlobalConstants.SystemName &nbsp;</span>
             <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 
-            <div class="row footer-bottom">
+            <div class="row footer-bottom pt-4">
                 <div class="col-lg-5 order-2 order-lg-1">
-                    <div class="copyright">
+                    <div class="copyright pb-0 mb-0">
                         <p class="text-secondary">
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             All rights reserved | This template is made by<a href="https://colorlib.com" target="_blank">&nbsp; Colorlib</a>

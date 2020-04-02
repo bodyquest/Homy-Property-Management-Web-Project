@@ -63,10 +63,22 @@
                    .HasForeignKey(r => r.TenantId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Rental>()
-                   .HasOne(r => r.Manager)
-                   .WithMany(m => m.ManagedRentals)
-                   .HasForeignKey(r => r.ManagerId)
+            builder.Entity<User>()
+                   .HasMany(u => u.Rentals)
+                   .WithOne(r => r.Tenant)
+                   .HasForeignKey(r => r.TenantId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Home>()
+                   .HasOne(h => h.Manager)
+                   .WithMany(m => m.ManagedHomes)
+                   .HasForeignKey(h => h.ManagerId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>()
+                   .HasMany(u => u.ManagedHomes)
+                   .WithOne(h => h.Manager)
+                   .HasForeignKey(h => h.ManagerId)
                    .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

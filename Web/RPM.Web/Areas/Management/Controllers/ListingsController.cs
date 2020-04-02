@@ -11,24 +11,34 @@
     using RPM.Services.Admin;
     using RPM.Services.Common;
     using RPM.Services.Management;
+    using RPM.Services.Management.Models;
     using RPM.Web.Areas.Management.Models.Listings;
+
+    using RPM.Web.Infrastructure.Extensions;
+    using static RPM.Common.GlobalConstants;
 
     public class ListingsController : ManagementController
     {
         private readonly IOwnerListingService listingService;
         private readonly ICityService cityService;
         private readonly ICountryService countryService;
+        private readonly ICloudImageService imageService;
+        private readonly IImageDbService imageDbService;
         private readonly UserManager<User> userManager;
 
         public ListingsController(
             IOwnerListingService listingService,
             ICityService cityService,
             ICountryService countryService,
+            ICloudImageService imageService,
+            IImageDbService imageDbService,
             UserManager<User> userManager)
         {
             this.listingService = listingService;
             this.cityService = cityService;
             this.countryService = countryService;
+            this.imageService = imageService;
+            this.imageDbService = imageDbService;
             this.userManager = userManager;
         }
 
@@ -45,14 +55,30 @@
             return this.View(viewModel);
         }
 
+        [ActionName("All")]
+        public async Task<IActionResult> AllAsync(string id)
+        {
+            return this.View();
+        }
+
         [ActionName("Create")]
         public async Task<IActionResult> Create()
         {
             var cities = await this.cityService.AllCitiesAsync();
             var countries = await this.countryService.AllCountriesAsync();
 
+            var user = await this.userManager.GetUserAsync(this.User);
+            var userStripeAccount = user.StripeConnectedAccountId;
+            bool hasStripe = true;
+
+            if (string.IsNullOrWhiteSpace(userStripeAccount))
+            {
+                hasStripe = false;
+            }
+
             var viewModel = new OwnerListingCreateInputModel
             {
+                UserHasStripeAccount = hasStripe,
                 Cities = cities,
                 Countries = countries,
             };
@@ -60,21 +86,78 @@
             return this.View(viewModel);
         }
 
-        [ActionName("GetCity")]
-        public async Task<IActionResult> GetCityAsync(int id)
+        [HttpPost]
+        [ActionName("Create")]
+        public async Task<IActionResult> CreatePostAsync(OwnerListingCreateInputModel model)
         {
-            var model = await this.cityService.AllCitiesByCountryAsync(id);
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
 
-            return this.Json(new SelectList(model, "Id", "Name"));
+            var userId = this.userManager.GetUserId(this.User);
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            var imgResult = await this.imageService
+                .UploadImageAsync(model.Image);
+
+            string imgUrl = imgResult.SecureUri.AbsoluteUri;
+            string imgPubId = imgResult.PublicId;
+
+            var imageToWrite = new CloudImage
+            {
+                PictureUrl = imgUrl,
+                PicturePublicId = imgPubId,
+            };
+
+            var homeCreateServiceModel = new OwnerCreateListingServiceModel
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Address = model.Address,
+                Price = model.Price,
+                CityId = model.CityId,
+                Category = model.Category,
+                Status = model.Status,
+                Owner = user,
+                Image = imageToWrite,
+            };
+
+            bool isCreated = await this.listingService.CreateListingAsync(homeCreateServiceModel);
+
+            if (!isCreated)
+            {
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                    .WithWarning(string.Empty, CouldNotCreateRecord);
+            }
+
+            await this.imageDbService.WriteToDatabasebAsync(imgUrl, imgPubId);
+
+            return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                .WithSuccess(string.Empty, RecordCreatedSuccessfully);
+        }
+
+        [ActionName("Edit")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            // TO DO: Make View Model and Service Model Similar like Create Method
+            // but without lists of cities and countries
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var home = await this.listingService.GetDetailsAsync(user.Id, id);
+
+            var viewModel = new OwnerListingCreateInputModel
+            {
+            };
+
+            return this.View(viewModel);
         }
 
         [HttpPost]
-        [ActionName("Create")]
-        public async Task<IActionResult> CreatePostAsync()
+        [ActionName("Edit")]
+        public async Task<IActionResult> EditPostAsync()
         {
-            var viewModel = new OwnerListingCreateInputModel();
-
-            return this.View(viewModel);
+            throw new NotImplementedException();
         }
 
         [ActionName("Details")]
@@ -86,10 +169,12 @@
             return this.View(model);
         }
 
-        [ActionName("All")]
-        public async Task<IActionResult> AllAsync(string id)
+        [ActionName("GetCity")]
+        public async Task<IActionResult> GetCityAsync(int id)
         {
-            return this.View();
+            var model = await this.cityService.AllCitiesByCountryAsync(id);
+
+            return this.Json(new SelectList(model, "Id", "Name"));
         }
     }
 }

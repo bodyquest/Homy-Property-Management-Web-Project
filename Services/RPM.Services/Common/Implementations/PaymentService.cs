@@ -10,6 +10,7 @@
     using RPM.Data;
     using RPM.Data.Models;
     using RPM.Data.Models.Enums;
+    using RPM.Services.Common.Models.Payment;
     using RPM.Services.Common.Models.Profile;
     using RPM.Services.Management;
 
@@ -46,6 +47,7 @@
                     Id = p.Id,
                     Date = p.Date,
                     To = string.Format(RecipientFullName, p.Recipient.FirstName, p.Recipient.LastName),
+                    ToStripeAccountId = p.Recipient.StripeConnectedAccountId,
                     Reason = p.Reason,
                     Amount = p.Amount,
                     Status = p.Status,
@@ -55,6 +57,54 @@
                 .ToListAsync();
 
             return payments;
+        }
+
+        public async Task<UserPaymentDetailsServiceModel> GetPaymentDetailsAsync(string paymentId, string userId)
+        {
+            var payment = await this.context.Rentals
+                .Where(r => r.TenantId == userId)
+                .SelectMany(r => r.Payments)
+                .Where(r => r.Id == paymentId)
+                .Select(p => new UserPaymentDetailsServiceModel
+                {
+                    Id = p.Id,
+                    Date = p.Date,
+                    TransactionDate = p.TransactionDate,
+                    To = string.Format(RecipientFullName, p.Recipient.FirstName, p.Recipient.LastName),
+                    ToStripeAccountId = p.Recipient.StripeConnectedAccountId,
+                    Reason = p.Reason,
+                    Amount = p.Amount,
+                    Status = p.Status,
+                    RentalAddress = string.Format(
+                        PaymentRentalLocation, p.Rental.Home.City.Name, p.Rental.Home.Address),
+                })
+                .FirstOrDefaultAsync();
+
+            return payment;
+        }
+
+        public async Task<bool> EditPaymentStatusAsync(string paymentId, string userId, PaymentStatus status, DateTime? date)
+        {
+            var payment = await this.context.Rentals
+                .Where(r => r.TenantId == userId)
+                .SelectMany(r => r.Payments)
+                .Where(r => r.Id == paymentId)
+                .FirstOrDefaultAsync();
+
+            if (!string.IsNullOrWhiteSpace(paymentId)
+                && !string.IsNullOrWhiteSpace(userId)
+                && Enum.IsDefined(typeof(PaymentStatus), status))
+            {
+                payment.Status = status;
+                payment.TransactionDate = date;
+
+                this.context.Payments.Update(payment);
+                var result = await this.context.SaveChangesAsync();
+
+                return result > 0;
+            }
+
+            return false;
         }
 
         public async Task<bool> AddPaymentRequestToUserAsync(string requestId)

@@ -1,0 +1,131 @@
+﻿@using Microsoft.Extensions.Options
+@inject IOptions<RPM.Common.PaymentGateways.Stripe.StripeSettings> Stripe
+
+@model CheckoutPaymentViewModel
+
+@{
+    ViewData["Title"] = "Pay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<section class="jumbotron jumbotron-fluid jumboHeroImage">
+    <div class="container">
+        <div class="row pt-5">
+            <div class="col-lg-12 pt-5">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-4 pl-4 py-xl-4">
+            <div class="card">
+                <div class="card-header border-transparent text-center">
+                    <h3 class="card-title text-info">
+                        <a class="text-info"
+                           asp-controller="Rentals"
+                           asp-action="Details"
+                           asp-route-id="@Model.Id">
+                            <strong>@Model.RentalAddress</strong>
+                        </a>
+                    </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+
+                    <div class="row px-3">
+                        <div class="col-6 text-center">
+                            <strong><i class="far fa-calendar-alt mr-1"></i>Payment Request Date</strong>
+                            <div class="row">
+                                <div class="col-12">
+                                    <hr class="hr-2 mt-1" />
+                                </div>
+                            </div>
+                            <p class="text-muted">
+                                @Model.Date
+                            </p>
+                        </div>
+                        <div class="col-6 text-center">
+                            <strong><i class="far fa-file-alt mr-1"></i>Reason</strong>
+                            <div class="row">
+                                <div class="col-12">
+                                    <hr class="hr-2 mt-1" />
+                                </div>
+                            </div>
+                            <p class="text-muted">
+                                @Model.Reason
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row px-3">
+                        <div class="col-6 text-center">
+                            <strong><i class="fas fa-user-tie mr-1"></i>Pay To</strong>
+                            <div class="row">
+                                <div class="col-12">
+                                    <hr class="hr-2 mt-1" />
+                                </div>
+                            </div>
+                            <p class="text-muted">
+                                @Model.To
+                            </p>
+                        </div>
+                        <div class="col-6 text-center">
+                            <strong><i class="far fa-file-alt mr-1"></i>Status</strong>
+                            <div class="row">
+                                <div class="col-12">
+                                    <hr class="hr-2 mt-1" />
+                                </div>
+                            </div>
+                            <span class="badge badge-danger">Pending</span>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+                <!-- /.card-footer -->
+                <script src="https://js.stripe.com/v3"></script>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-6 py-4 text-center">
+                        <button id="checkout-button"
+                                value="Pay"
+                                class="btn btn-sm btn-labeled btn-primary">
+                            <span class="btn-label">
+                                <ion-icon name="card-outline"></ion-icon>
+                            </span>Pay &nbsp; $ @Model.Amount
+                        </button>
+                    </div>
+                </div>
+                <script>
+                var stripe = Stripe('@HomyTestPublishableKey');
+
+                var payButton = document.getElementById('checkout-button');
+
+                payButton.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    stripe.redirectToCheckout({
+                      sessionId: sessionId
+                    });
+                });
+
+                var sessionId;
+
+                fetch('/Payment/CreateSession/', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                         id: '@Model.Id',
+                })
+                .then(function (r) { return r.json();})
+                .then(function (response) { sessionId = response.id;});
+                </script>
+            </div>
+        </div>
+    </div>
+</section>
+

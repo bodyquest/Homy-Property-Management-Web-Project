@@ -8,6 +8,8 @@
 
     public interface IOwnerContractService
     {
-        Task<bool>CreateRentalContractAsync(byte[] fileContent, User user, Rental rental);
+        Task<bool> CreateRentalContractAsync(byte[] fileContent, User user, Rental rental);
+
+        Task<bool> CreateManageContractAsync(byte[] fileContent, User user);
     }
 }

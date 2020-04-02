@@ -12,7 +12,11 @@
 
         public DateTime Date { get; set; }
 
+        public DateTime? TransactionDate { get; set; }
+
         public string To { get; set; }
+
+        public string ToStripeAccountId { get; set; }
 
         public string Reason { get; set; }
 

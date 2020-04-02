@@ -8,6 +8,11 @@
 
     public class ProfileIndexViewModel
     {
+        public ProfileIndexViewModel()
+        {
+            this.Payments = new HashSet<UserPaymentListServiceModel>();
+        }
+
         public IEnumerable<UserPaymentListServiceModel> Payments { get; set; }
     }
 }

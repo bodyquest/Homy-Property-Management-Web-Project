@@ -45,10 +45,16 @@
         [Required]
         public HomeCategory Category { get; set; }
 
-        [Required]
-        [ForeignKey(nameof(User))]
         public string OwnerId { get; set; }
+
+        [Required]
+        [ForeignKey("OwnerId")]
         public virtual User Owner { get; set; }
+
+        public string ManagerId { get; set; }
+
+        [ForeignKey("ManagerId")]
+        public virtual User Manager { get; set; }
 
         //[ForeignKey(nameof(User))]
         //public string ManagerId { get; set; }

@@ -16,7 +16,7 @@
             this.context = context;
         }
 
-        public async Task<bool>CreateRentalContractAsync(byte[] fileContent, User user, Rental rental)
+        public async Task<bool> CreateRentalContractAsync(byte[] fileContent, User user, Rental rental)
         {
             var contractEntity = new Contract
             {
@@ -28,12 +28,23 @@
             this.context.Contracts.Add(contractEntity);
             var isSuccessful = await this.context.SaveChangesAsync();
 
-            if (isSuccessful > 0)
-            {
-                return true;
-            }
+            return isSuccessful > 0;
+        }
 
-            return false;
+        public async Task<bool> CreateManageContractAsync(byte[] fileContent, User user)
+        {
+            var contractEntity = new Contract
+            {
+                Title = $"{DateTime.UtcNow.Year}_{user.UserName}",
+                ContractDocument = fileContent,
+            };
+
+            contractEntity.ManagerId = user.Id;
+
+            this.context.Contracts.Add(contractEntity);
+            var isSuccessful = await this.context.SaveChangesAsync();
+
+            return isSuccessful > 0;
         }
     }
 }

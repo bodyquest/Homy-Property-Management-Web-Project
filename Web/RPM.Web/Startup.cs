@@ -34,6 +34,8 @@
     using RPM.Web.ViewModels;
     using Stripe;
 
+    using static RPM.Common.GlobalConstants;
+
     public class Startup
     {
         private readonly IConfiguration configuration;
@@ -82,7 +84,7 @@
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             });
 
-            Account account = new Account(
+            var account = new CloudinaryDotNet.Account(
                 this.configuration["Cloudinary:CloudName"],
                 this.configuration["Cloudinary:ApiKey"],
                 this.configuration["Cloudinary:ApiSecret"]);
@@ -126,6 +128,19 @@
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICountryService, CountryService>();
+
+            // External Authentications
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = FaceBookAppId;
+                facebookOptions.AppSecret = FaceBookAppSecret;
+            });
+
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = GoogleClientId;
+                options.ClientSecret = GoogleClientSecret;
+            });
 
             services.AddMvc(options =>
             {

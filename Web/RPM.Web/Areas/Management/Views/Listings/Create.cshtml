@@ -15,13 +15,34 @@
             <div class="col-8 pt-4">
                 <!-- TABLE: Add New Listing -->
                 <div class="card">
-                    <div class="card-header border-transparent">
-                        <h3 class="card-title text-info"><strong>Add New Listing</strong></h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                    <div class="card-header border-transparent pb-0">
+                        <div class="row">
+                            <div class="col-4">
+                                <h3 class="card-title text-info"><strong>Add New Listing</strong></h3>
+                            </div>
+                            <div class="col-4 text-center">
+                                @if (!Model.UserHasStripeAccount)
+                                {
+                                    <a href=@HomyStrypeTestModeClientIdConnectLink class="btn btn-primary">
+                                        Connect to Stripe
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-info" disabled>
+                                        Connected to Stripe
+                                    </a>
+                                }
+                            </div>
+                            <div class="col-4 text-right">
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                        
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0">

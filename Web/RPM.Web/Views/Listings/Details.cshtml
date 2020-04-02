@@ -46,7 +46,14 @@
 
                     <hr>
                     <p>
-                        <a asp-controller="Requests" asp-action="RequestForm" asp-route-Id="@Model.Id" class="btn btn-success">Request To Rent</a>
+                        @if (Model.Status == "ToRent")
+                        {
+                            <a asp-controller="Requests" asp-action="RequestForm" asp-route-Id="@Model.Id" class="btn btn-success">Request To Rent</a>
+                        }
+                        else if (Model.Status == "ToManage")
+                        {
+                            <a asp-controller="Requests" asp-action="RequestForm" asp-route-Id="@Model.Id" class="btn btn-warning">Request To Manage</a>
+                        }
                     </p>
                 </div>
             </div>

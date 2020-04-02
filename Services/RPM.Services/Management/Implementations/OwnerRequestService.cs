@@ -63,7 +63,7 @@
             return requests;
         }
 
-        public async Task<Request> ApproveRentRequestAsync(string id)
+        public async Task<Request> ApproveRequestAsync(string id)
         {
             var request = await this.context.Requests
                             .Where(r => r.Id == id)

@@ -13,7 +13,7 @@
 
         Task<IEnumerable<OwnerAllRequestsServiceModel>> GetAllRequestsWthDetailsAsync(string id);
 
-        Task<Request> ApproveRentRequestAsync(string id);
+        Task<Request> ApproveRequestAsync(string id);
 
         Task<byte[]> GetFileAsync(string requestId);
 

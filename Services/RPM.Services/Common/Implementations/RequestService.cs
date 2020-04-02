@@ -31,6 +31,7 @@
                 Type = model.Type,
                 UserId = model.UserId,
                 HomeId = model.HomeId,
+                Message = model.Message,
                 Document = model.Document,
                 Status = (RequestStatus)Enum.Parse(typeof(RequestStatus), NA),
             };

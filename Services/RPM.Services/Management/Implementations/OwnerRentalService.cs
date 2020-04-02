@@ -20,28 +20,25 @@
         private readonly IOwnerListingService listingService;
         private readonly IOwnerContractService contractService;
         private readonly UserManager<User> userManager;
-        private readonly RoleManager<ApplicationRole> roleManager;
 
         public OwnerRentalService(
             ApplicationDbContext context,
             IOwnerRequestService requestService,
             IOwnerListingService listingService,
             IOwnerContractService contractService,
-            UserManager<User> userManager
-            )
+            UserManager<User> userManager)
         {
             this.context = context;
             this.requestService = requestService;
             this.listingService = listingService;
             this.contractService = contractService;
             this.userManager = userManager;
-            this.roleManager = roleManager;
         }
 
         public async Task<bool> StartRent(string id, byte[] fileContent)
         {
             // Approve Request
-            var request = await this.requestService.ApproveRentRequestAsync(id);
+            var request = await this.requestService.ApproveRequestAsync(id);
 
             if (request == null)
             {
@@ -104,7 +101,7 @@
                 .Include(r => r.Home)
                 .Include(r => r.Home.City)
                 .Include(r => r.Tenant)
-                .Include(r => r.Manager)
+                .Include(r => r.Home.Manager)
                 .Where(r => r.Home.OwnerId == id)
                 .Select(r => new OwnerAllRentalsServiceModel
                 {
@@ -126,8 +123,8 @@
 
                     ManagerName = string.Format(
                         ManagerFullName,
-                        r.Manager.FirstName,
-                        r.Manager.LastName),
+                        r.Home.Manager.FirstName,
+                        r.Home.Manager.LastName),
 
                     Price = r.Home.Price,
                     HomeCategory = r.Home.Category.ToString(),

@@ -20,15 +20,18 @@
         private readonly UserManager<User> userManager;
         private readonly IOwnerRequestService requestService;
         private readonly IOwnerRentalService rentalService;
+        private readonly IOwnerListingService listingService;
 
         public RequestsController(
             UserManager<User> userManager,
             IOwnerRequestService requestService,
-            IOwnerRentalService rentalService)
+            IOwnerRentalService rentalService,
+            IOwnerListingService listingService)
         {
             this.userManager = userManager;
             this.requestService = requestService;
             this.rentalService = rentalService;
+            this.listingService = listingService;
         }
 
         public async Task<IActionResult> Index()
@@ -95,7 +98,9 @@
             var request = await this.requestService.GetRequestInfoAsync(id);
             var requestType = request.RequestType;
             var userId = request.UserId;
-            var user = this.userManager.FindByIdAsync(userId);
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            var userFullName = string.Format(ManagerFullName, user.FirstName, user.LastName);
 
             if (user == null)
             {
@@ -124,7 +129,15 @@
             }
             else if (requestType == ToManage)
             {
+                var isManageContractSuccessful = await this.listingService.StartHomeManage(id, fileContents);
 
+                if (!isManageContractSuccessful)
+                {
+                    return this.BadRequest();
+                }
+
+                return this.RedirectToAction("Index", "Dashboard", new { area = "Management" })
+                    .WithSuccess(string.Empty, string.Format(ManagerAddedSuccessfully, userFullName));
             }
             else if (requestType == CancelRent)
             {

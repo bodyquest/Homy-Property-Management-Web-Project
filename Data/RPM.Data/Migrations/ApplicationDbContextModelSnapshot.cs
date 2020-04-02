@@ -217,6 +217,9 @@ namespace RPM.Data.Migrations
                         .HasColumnType("varbinary(max)")
                         .HasMaxLength(4194304);
 
+                    b.Property<string>("ManagerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("RentalId")
                         .HasColumnType("int");
 
@@ -227,7 +230,10 @@ namespace RPM.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RentalId");
+                    b.HasIndex("ManagerId");
+
+                    b.HasIndex("RentalId")
+                        .IsUnique();
 
                     b.ToTable("Contracts");
                 });
@@ -274,6 +280,9 @@ namespace RPM.Data.Migrations
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
 
+                    b.Property<string>("ManagerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(40)")
@@ -292,6 +301,8 @@ namespace RPM.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
+
+                    b.HasIndex("ManagerId");
 
                     b.HasIndex("OwnerId");
 
@@ -328,6 +339,9 @@ namespace RPM.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("TransactionDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RecipientId");
@@ -355,11 +369,11 @@ namespace RPM.Data.Migrations
                     b.Property<string>("HomeId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ManagerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("RentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("RentalId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TenantId")
                         .HasColumnType("nvarchar(450)");
@@ -369,8 +383,6 @@ namespace RPM.Data.Migrations
                     b.HasIndex("ContractId");
 
                     b.HasIndex("HomeId");
-
-                    b.HasIndex("ManagerId");
 
                     b.HasIndex("TenantId");
 
@@ -578,6 +590,15 @@ namespace RPM.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StripeConnectedAccountId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StripePublishableKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StripeRefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -671,9 +692,13 @@ namespace RPM.Data.Migrations
 
             modelBuilder.Entity("RPM.Data.Models.Contract", b =>
                 {
+                    b.HasOne("RPM.Data.Models.User", "Manager")
+                        .WithMany("Contracts")
+                        .HasForeignKey("ManagerId");
+
                     b.HasOne("RPM.Data.Models.Rental", "Rental")
-                        .WithMany()
-                        .HasForeignKey("RentalId")
+                        .WithOne()
+                        .HasForeignKey("RPM.Data.Models.Contract", "RentalId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -685,6 +710,11 @@ namespace RPM.Data.Migrations
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("RPM.Data.Models.User", "Manager")
+                        .WithMany("ManagedHomes")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("RPM.Data.Models.User", "Owner")
                         .WithMany("Homes")
@@ -723,11 +753,6 @@ namespace RPM.Data.Migrations
                     b.HasOne("RPM.Data.Models.Home", "Home")
                         .WithMany()
                         .HasForeignKey("HomeId");
-
-                    b.HasOne("RPM.Data.Models.User", "Manager")
-                        .WithMany("ManagedRentals")
-                        .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("RPM.Data.Models.User", "Tenant")
                         .WithMany("Rentals")

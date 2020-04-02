@@ -25,8 +25,14 @@
         [MaxLength(ContractDocumentMaxSize)]
         public byte[] ContractDocument { get; set; }
 
-        [ForeignKey(nameof(Rental))]
         public int RentalId { get; set; }
+
+        [ForeignKey("RentalId")]
         public virtual Rental Rental { get; set; }
+
+        public string ManagerId { get; set; }
+
+        [ForeignKey("ManagerId")]
+        public virtual User Manager { get; set; }
     }
 }

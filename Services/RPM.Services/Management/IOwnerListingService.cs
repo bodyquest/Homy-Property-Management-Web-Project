@@ -11,10 +11,14 @@
     {
         Task<IEnumerable<OwnerIndexListingsServiceModel>> GetMyPropertiesAsync(string id);
 
+        Task<bool> CreateListingAsync(OwnerCreateListingServiceModel model);
+
         Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id);
 
         Task<IEnumerable<OwnerPropertyWithDetailsServiceModel>> GetMyPropertiesWithDetailsAsync(string userId);
 
         Task<string> ChangeHomeStatusAsync(Request request);
+
+        Task<bool> StartHomeManage(string id, byte[] fileContent);
     }
 }
