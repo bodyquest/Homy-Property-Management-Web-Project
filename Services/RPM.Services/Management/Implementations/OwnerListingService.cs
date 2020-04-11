@@ -77,6 +77,27 @@
             return result > 0;
         }
 
+        public async Task<bool> EditListingAsync(OwnerEditListingServiceModel model)
+        {
+            var home = await this.context.Homes.FirstOrDefaultAsync(h => h.Id == model.Id);
+
+            home.Name = model.Name;
+            home.Description = model.Description;
+            home.Price = model.Price;
+            home.Category = model.Category;
+            home.Status = model.Status;
+
+            if (model.Image != null)
+            {
+                home.Images.Add(model.Image);
+            }
+
+            this.context.Update(home);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
         public async Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id)
         {
             var rental = await this.context.Rentals
@@ -89,6 +110,46 @@
                     Duration = r.Duration,
                     TenantFullName = r.Tenant.FirstName + " " + r.Tenant.LastName,
                     ManagerFullName = r.Home.Manager.FirstName + " " + r.Home.Manager.LastName,
+                })
+                .FirstOrDefaultAsync();
+
+            var model = await this.context.Homes
+               .Where(h => h.OwnerId == userId && h.Id == id)
+               .Include(x => x.City)
+               .Include(x => x.City.Country)
+               .Include(h => h.Images)
+               .Select(x => new OwnerListingFullDetailsServiceModel
+               {
+                   Id = x.Id,
+                   Name = x.Name,
+                   City = x.City.Name,
+                   Country = x.City.Country.Name,
+                   Address = x.Address,
+                   Description = x.Description,
+                   Price = x.Price,
+                   Status = x.Status,
+                   Category = x.Category,
+                   Image = x.Images.Select(i => i.PictureUrl).FirstOrDefault(),
+                   RentalInfo = rental,
+               })
+               .FirstOrDefaultAsync();
+
+            return model;
+        }
+
+        public async Task<OwnerListingFullDetailsServiceModel> GetEditModelAsync(string userId, string id)
+        {
+            var rental = await this.context.Rentals
+                .Where(r => r.HomeId == id)
+                .Include(r => r.Home.Manager)
+                .Include(r => r.Contract)
+                .Include(r => r.Tenant)
+                .Select(r => new OwnerRentalInfoServiceModel
+                {
+                    RentalDate = r.RentDate.ToString(StandartDateFormat),
+                    Duration = r.Duration,
+                    TenantFullName = string.Format(TenantFullName, r.Tenant.FirstName, r.Tenant.LastName),
+                    ManagerFullName = string.Format(ManagerFullName, r.Home.Manager.FirstName, r.Home.Manager.LastName),
                 })
                 .FirstOrDefaultAsync();
 
@@ -199,6 +260,22 @@
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
+        }
+
+        public async Task<IEnumerable<OwnerTransactionListOfManagedHomesServiceModel>>
+           GetManagedHomesAsync(string userId)
+        {
+            var homes = await this.context.Homes
+                .Include(h => h.City)
+                .Where(h => h.OwnerId == userId && h.Manager != null)
+                .Select(h => new OwnerTransactionListOfManagedHomesServiceModel
+                {
+                    Id = h.Id,
+                    Name = string.Format(DashboardRequestLocation, h.City.Name, h.Address),
+                })
+                .ToListAsync();
+
+            return homes;
         }
     }
 }

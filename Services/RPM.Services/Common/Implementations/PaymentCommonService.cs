@@ -16,14 +16,14 @@
 
     using static RPM.Common.GlobalConstants;
 
-    public class PaymentService : IPaymentService
+    public class PaymentCommonService : Common.IPaymentCommonService
     {
         private readonly ApplicationDbContext context;
         private readonly IOwnerTransactionRequestService ownerTransactionRequestService;
         private readonly UserManager<User> userManager;
         private readonly IRentalService rentalService;
 
-        public PaymentService(
+        public PaymentCommonService(
             ApplicationDbContext context,
             IOwnerTransactionRequestService ownerTransactionRequestService,
             UserManager<User> userManager,

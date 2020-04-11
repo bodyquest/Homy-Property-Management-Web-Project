@@ -11,11 +11,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Homy | Template</title>
+    <title>Homy | Home Page</title>
 
     <environment names="Development">
-        <!-- Google Font -->
+
+        <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
         <!-- Css Styles -->
         <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
@@ -33,17 +35,29 @@
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <!-- overlayScrollbars -->
         <link rel="stylesheet" href="~/themes/admin/dist/css/adminlte.min.css">
-        <!-- Google Font: Source Sans Pro -->
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
         <!-- Bootstrap -->
         <link href="~/themes/admin/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
-
 
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 
     <environment names="Staging,Production">
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/fortawesome/fontawesome-free/css/all.css" rel="stylesheet" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" type="text/css" asp-append-version="true" />
+
+        <link rel="stylesheet" href="~/lib/magnific-popup/dist/magnific-popup.css" type="text/css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/slicknav/dist/slicknav.min.css" type="text/css" asp-append-version="true" />
+
+        <link rel="stylesheet" href="~/css/flaticon.css" type="text/css" />
+        <link rel="stylesheet" href="~/css/nice-select.css" type="text/css" />
+        <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css" />
+        <link rel="stylesheet" href="~/css/style.css" type="text/css" />
+
+        <link rel="stylesheet" href="~/lib/ionicons-npm/css/ionicons.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/themes/admin/dist/css/adminlte.min.css" />
+
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 </head>
@@ -78,7 +92,7 @@
                         <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a href="how-it-works.html">Explore</a></li>
                         <li><a href="listings.html">Cities</a></li>
-                        <li><a href="contact.html">Help</a></li>
+                        <li><a asp-controller="ContactUs" asp-action="Index">Help</a></li>
                         <li><a asp-controller="Home" asp-action="Test">TestPage</a></li>
                     </ul>
                 </nav>
@@ -94,9 +108,19 @@
                                 Profile
                             </a>
                         }
+                        else if (this.User.IsInRole(GlobalConstants.ManagerRoleName))
+                        {
+                            <a asp-controller="Dashboard" asp-action="Index">
+                                Dashboard
+                            </a>
+                        }
 
                     </div>
-                    <a href="#" class="primary-btn ml-0 px-4">Add Listing</a>
+                    <a asp-area=""
+                       asp-controller="Listings"
+                       asp-action="Create"
+                       title="Create Listing"
+                       class="primary-btn ml-0 px-4">Add Listing</a>
                     <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))" class="primary-btn px-3 ml-2 mr-4" style="background-color: #01BFE1">Logout</a>
                 </div>
                 <div id="mobile-menu-wrap"></div>
@@ -108,7 +132,7 @@
                         <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a href="how-it-works.html">Explore</a></li>
                         <li><a href="listings.html">Cities</a></li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a asp-controller="ContactUs" asp-action="Index">Contact</a></li>
                         <li></li>
                         <li></li>
                         <li></li>
@@ -122,7 +146,10 @@
                         <a asp-area="Identity" asp-page="/Account/Register">Register/</a>
                         <a asp-area="Identity" asp-page="/Account/Login">Login</a>
                     </div>
-                    <a href="#" class="primary-btn">Add Listing</a>
+                    <a asp-area="Identity"
+                       asp-page="/Account/Login"
+                       title="Create Listing"
+                       class="primary-btn ml-0 px-4">Add Listing</a>
                 </div>
                 <div id="mobile-menu-wrap"></div>
             }
@@ -131,13 +158,11 @@
 
     <!-- Header End -->
 
-
     <main role="main" style="min-height:100vh;">
         <partial name="_AlertMessages" />
         @this.RenderBody()
         <partial name="_CookieConsentPartial" />
     </main>
-
 
     <!-- Footer Section Begin -->
     <footer class="footer-section spad" style="position:absolute;width:100%;">
@@ -161,6 +186,7 @@
     <!-- Footer Section End -->
 
     <environment names="Development">
+
         <script src="~/js/jquery-3.3.1.min.js"></script>
         <script src="~/js/bootstrap.min.js"></script>
         <script src="~/js/jquery.magnific-popup.min.js"></script>
@@ -194,10 +220,10 @@
         <script src="~js/mixitup.min.js"></script>
         <script src="~js/main.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+
     </environment>
 
     @this.RenderSection("Scripts", required: false)
 
 </body>
-
 </html>

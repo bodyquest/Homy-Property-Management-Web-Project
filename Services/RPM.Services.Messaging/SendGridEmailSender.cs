@@ -88,5 +88,31 @@
                 throw;
             }
         }
+
+        public async Task SendPlainEmailAsync(string from, string fromName, string to, string subject, string content, IEnumerable<EmailAttachment> attachments = null)
+        {
+            var fromAddress = new EmailAddress(from, fromName);
+            var toAddress = new EmailAddress(to);
+            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, content, null);
+            if (attachments?.Any() == true)
+            {
+                foreach (var attachment in attachments)
+                {
+                    message.AddAttachment(attachment.FileName, Convert.ToBase64String(attachment.Content), attachment.MimeType);
+                }
+            }
+
+            try
+            {
+                var response = await this.client.SendEmailAsync(message);
+                Console.WriteLine(response.StatusCode);
+                Console.WriteLine(await response.Body.ReadAsStringAsync());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@
         [MaxLength(ContractDocumentMaxSize)]
         public byte[] ContractDocument { get; set; }
 
-        public int RentalId { get; set; }
+        public int? RentalId { get; set; }
 
         [ForeignKey("RentalId")]
         public virtual Rental Rental { get; set; }

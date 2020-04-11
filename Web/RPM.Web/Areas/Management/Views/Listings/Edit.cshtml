@@ -1,4 +1,4 @@
-﻿@model OwnerListingCreateInputModel
+﻿@model OwnerListingEditInputModel
 
 @{
     this.ViewData["Title"] = "Listings Management";
@@ -111,7 +111,7 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-info">Edit Listing</button>
+                                <button type="submit" class="btn btn-info shadow">Edit Listing</button>
                             </div>
                         </form>
                         <!-- /.form (start) -->
@@ -132,12 +132,11 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="row px-4 pb-4">
-                            <img src="@Model.Image" class="img-fluid" alt="Responsive image">
+                            <img src="@Model.ImageFromDb" class="img-fluid" alt="Responsive image">
                         </div>
                         <div class="col-12">
-                                <h4 class="text-danger text-center pb-4">
-                                    You are managing the property
-                                </h4>
+                            @if (string.IsNullOrWhiteSpace(Model.RentalInfo.TenantFullName))
+                            {
                                 <div class="row">
                                     <div class="col-6">
                                         <strong><i class="far fa-calendar-alt mr-1"></i>Rental Date</strong>
@@ -147,8 +146,8 @@
                                                 <hr class="hr-2 mt-1" />
                                             </div>
                                         </div>
-                                        <p class="text-muted">
-                                            RentalDate
+                                        <p class="text-danger">
+                                            not rented
                                         </p>
                                     </div>
                                     <div class="col-6">
@@ -158,9 +157,10 @@
                                                 <hr class="hr-2 mt-1" />
                                             </div>
                                         </div>
-                                        <p class="text-muted">
-                                            Duration Months
+                                        <p class="text-danger">
+                                            not rented
                                         </p>
+
                                     </div>
                                 </div>
 
@@ -172,9 +172,9 @@
                                                 <hr class="hr-2 mt-1" />
                                             </div>
                                         </div>
-                                        <p class="text-muted">
-                                            TenantFullName
-                                        </p>
+                                            <p class="text-danger">
+                                                You have no tenant yet
+                                            </p>
                                     </div>
                                     <div class="col-6">
                                         <strong><i class="fas fa-user-tie mr-1"></i>Manager Name</strong>
@@ -183,27 +183,109 @@
                                                 <hr class="hr-2 mt-1" />
                                             </div>
                                         </div>
+                                        @if (string.IsNullOrWhiteSpace(Model.RentalInfo.ManagerFullName))
+                                        {
+                                            <h5 class="text-danger">
+                                                You are managing the home
+                                            </h5>
+                                        }
+                                        else
+                                        {
                                             <p class="text-muted">
-                                                ManagerFullName
+                                                @Model.RentalInfo.ManagerFullName
                                             </p>
+                                        }
+
                                     </div>
                                 </div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong><i class="far fa-calendar-alt mr-1"></i>Rental Date</strong>
+
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                        <p class="text-muted">
+                                            @Model.RentalInfo.RentalDate
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong><i class="far fa-clock mr-1"></i>Duration</strong>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                        @if (Model.RentalInfo.Duration == null)
+                                        {
+                                            <ion-icon name="infinite-outline"></ion-icon>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">
+                                                @Model.RentalInfo.Duration Months
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong><i class="fas fa-user mr-1"></i>Tenant Name</strong>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                            <p class="text-muted">
+                                                @Model.RentalInfo.TenantFullName
+                                            </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong><i class="fas fa-user-tie mr-1"></i>Manager Name</strong>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <hr class="hr-2 mt-1" />
+                                            </div>
+                                        </div>
+                                        @if (string.IsNullOrWhiteSpace(Model.RentalInfo.ManagerFullName))
+                                        {
+                                            <h6 class="text-danger">
+                                                You are managing the home
+                                            </h6>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">
+                                                @Model.RentalInfo.ManagerFullName
+                                            </p>
+                                        }
+
+                                    </div>
+                                </div>
+                            }
+
                             <!--
-                  else
-                  {
-                      <div class="col-6">
-                          <strong><i class="far fa-file-alt mr-1"></i>Status</strong>
-                          <div class="row">
-                              <div class="col-3">
-                                  <hr class="hr-2 mt-1" />
-                              </div>
-                          </div>
-                          <h4 class="text-success">
-                              The listing is not rented yet
-                          </h4>
-                      </div>
-                  }
-                -->
+                              else
+                              {
+                                  <div class="col-6">
+                                      <strong><i class="far fa-file-alt mr-1"></i>Status</strong>
+                                      <div class="row">
+                                          <div class="col-3">
+                                              <hr class="hr-2 mt-1" />
+                                          </div>
+                                      </div>
+                                      <h4 class="text-success">
+                                          The listing is not rented yet
+                                      </h4>
+                                  </div>
+                              }
+                            -->
                         </div>
                     </div>
 
@@ -217,35 +299,6 @@
 <!-- /.content-wrapper -->
 
 @section Scripts {
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            getCity();
-            $('#CountryId').change(function () {
-                getCity();
-            });
-        });
-
-        function getCity() { 
-
-            var url = '@Url.Content("~/")' + "Management/Listings/GetCity";
-            
-            var ddlSource = '#CountryId';
-
-            $.getJSON(url, { id: $(ddlSource).val() }, function (data) {
-
-                var items = '';
-
-                $('#CityId').empty();
-
-                $.each(data, function (i, city) {
-                    items += "<option value ='" + city.value + "'>" + city.text + "</option>";
-                });
-
-                $('#CityId').html(items);
-            })
-        }
-        </script>
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

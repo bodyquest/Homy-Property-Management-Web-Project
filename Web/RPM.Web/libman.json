@@ -36,5 +36,43 @@
         "dist/jquery.validate.unobtrusive.min.js"
       ]
     }
+  ,
+{
+  "provider": "unpkg",
+  "library": "font-awesome@4.7.0",
+  "destination": "wwwroot/lib/font-awesome/"
+}
+,
+{
+  "provider": "unpkg",
+  "library": "magnific-popup@1.1.0",
+  "destination": "wwwroot/lib/magnific-popup/"
+}
+,
+{
+  "provider": "unpkg",
+  "library": "slicknav@1.0.8",
+  "destination": "wwwroot/lib/slicknav/"
+}
+,
+{
+  "provider": "unpkg",
+  "library": "@fortawesome/fontawesome-free@5.13.0",
+  "destination": "wwwroot/lib/@fortawesome/fontawesome-free/",
+  "files": [
+    "css/all.css",
+    "css/all.min.css"
   ]
+}
+,
+{
+  "provider": "unpkg",
+  "library": "mixitup@3.3.1",
+  "destination": "wwwroot/lib/mixitup/",
+  "files": [
+    "dist/mixitup.js",
+    "dist/mixitup.min.js"
+  ]
+}
+]
 }

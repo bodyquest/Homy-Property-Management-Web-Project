@@ -13,12 +13,19 @@
 
         Task<bool> CreateListingAsync(OwnerCreateListingServiceModel model);
 
+        Task<bool> EditListingAsync(OwnerEditListingServiceModel model);
+
         Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id);
+
+        Task<OwnerListingFullDetailsServiceModel> GetEditModelAsync(string userId, string id);
 
         Task<IEnumerable<OwnerPropertyWithDetailsServiceModel>> GetMyPropertiesWithDetailsAsync(string userId);
 
         Task<string> ChangeHomeStatusAsync(Request request);
 
         Task<bool> StartHomeManage(string id, byte[] fileContent);
+
+        Task<IEnumerable<OwnerTransactionListOfManagedHomesServiceModel>>
+           GetManagedHomesAsync(string userId);
     }
 }

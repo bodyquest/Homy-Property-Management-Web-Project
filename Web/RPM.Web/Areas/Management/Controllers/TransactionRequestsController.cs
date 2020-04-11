@@ -24,19 +24,22 @@
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
         private readonly IOwnerRentalService rentalService;
+        private readonly IOwnerListingService listingService;
         private readonly IOwnerTransactionRequestService transactionRequestService;
-        private readonly IPaymentService paymentService;
+        private readonly IPaymentCommonService paymentService;
 
         public TransactionRequestsController(
             ApplicationDbContext context,
             UserManager<User> userManager,
             IOwnerRentalService rentalService,
+            IOwnerListingService listingService,
             IOwnerTransactionRequestService transactionRequestService,
-            IPaymentService paymentService)
+            IPaymentCommonService paymentService)
         {
             this.context = context;
             this.userManager = userManager;
             this.rentalService = rentalService;
+            this.listingService = listingService;
             this.transactionRequestService = transactionRequestService;
             this.paymentService = paymentService;
         }
@@ -61,6 +64,7 @@
             var userId = this.userManager.GetUserId(this.User);
 
             var rentals = await this.rentalService.GetTransactionRentalsAsync(userId);
+            var managedHomes = await this.listingService.GetManagedHomesAsync(userId);
 
             var model = new OwnerTransactionRequestsCreateInputModel
             {
@@ -110,6 +114,20 @@
 
                 return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea }).WithSuccess(string.Empty, RecordCreatedSuccessfully);
             }
+
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> CreateTransactionPayment()
+        {
+            var userId = this.userManager.GetUserId(this.User);
+
+            var managedHomes = await this.listingService.GetManagedHomesAsync(userId);
+
+            var model = new OwnerTransactionPaymentsCreateInputModel
+            {
+                ManagedHomesList = managedHomes,
+            };
 
             return this.View(model);
         }

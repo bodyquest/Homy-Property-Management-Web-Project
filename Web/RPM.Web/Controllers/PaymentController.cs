@@ -23,11 +23,11 @@
     public class PaymentController : BaseController
     {
         private readonly UserManager<User> userManager;
-        private readonly IPaymentService paymentService;
+        private readonly IPaymentCommonService paymentService;
 
         public PaymentController(
             UserManager<User> userManager,
-            IPaymentService paymentService)
+            IPaymentCommonService paymentService)
         {
             this.userManager = userManager;
             this.paymentService = paymentService;
@@ -69,9 +69,16 @@
             return this.View(viewModel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateSession([FromBody]string id)
+        public class ParamsModel
         {
+            public string Id { get; set; }
+        }
+
+        [HttpPost]
+        [Route("createsession")]
+        public async Task<IActionResult> CreateSession()
+        {
+            var id = "68f51bff-5709-4337-a74b-d0ecb53f33ec";
             var userId = this.userManager.GetUserId(this.User);
             var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
 

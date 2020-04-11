@@ -1,0 +1,89 @@
+﻿@model OwnerTransactionPaymentsCreateInputModel
+
+@{
+    this.ViewData["Title"] = "Transaction Requests Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row d-flex justify-content-center">
+
+            <div class="col-6 pt-4">
+                <!-- TABLE: Add New Listing -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Add New Transaction Payment For Manager</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <!-- form start -->
+                        <form asp-action="Create" method="post" role="form">
+                            <div asp-validation-summary="ModelOnly"></div>
+
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label asp-for="HomeId" class="col-form-label"></label>
+                                    <select asp-for="HomeId"
+                                            asp-items="@Model.ManagedHomesList
+                                                .ToSelectStringListItem(Model.HomeId)"
+                                            class="form-control"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Reason" class="col-form-label"></label>
+                                    <textarea asp-for="Reason"
+                                              class="form-control"
+                                              rows="2"
+                                              placeholder="Enter reason for transaction...">
+                                    </textarea>
+                                    <span asp-validation-for="Reason" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="RecurringSchedule" class="col-form-label"></label>
+                                    <select asp-for="RecurringSchedule"
+                                            asp-items="Html.GetEnumSelectList<RecurringScheduleType>()"
+                                            class="form-control"></select>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           asp-for="IsRecurring" />
+                                    <label class="form-check-label"
+                                           asp-for="IsRecurring">
+                                    </label>
+                                    <span asp-validation-for="IsRecurring" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-info">Create</button>
+                            </div>
+                        </form>
+                        <!-- /.form (start) -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

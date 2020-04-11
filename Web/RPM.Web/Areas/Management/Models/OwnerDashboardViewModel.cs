@@ -1,5 +1,6 @@
 ﻿namespace RPM.Web.Areas.Management.Models
 {
+    using System;
     using System.Collections.Generic;
 
     using RPM.Services.Management.Models;

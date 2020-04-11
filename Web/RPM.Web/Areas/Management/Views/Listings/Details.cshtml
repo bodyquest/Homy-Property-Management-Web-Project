@@ -162,7 +162,7 @@
                         <div class="row px-4 pb-4">
                             <img src="@Model.Image" class="img-fluid" alt="Responsive image">
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 px-4">
                             @if (Model.RentalInfo == null)
                             {
                                 <h4 class="text-danger text-center pb-4">
@@ -217,9 +217,9 @@
                                         </div>
                                         @if (string.IsNullOrWhiteSpace(Model.RentalInfo.ManagerFullName))
                                         {
-                                            <h4 class="text-danger">
+                                            <h6 class="text-danger">
                                                 You are managing the property
-                                            </h4>
+                                            </h6>
                                         }
                                         else
                                         {

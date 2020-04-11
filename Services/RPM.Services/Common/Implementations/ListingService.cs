@@ -10,6 +10,7 @@
     using RPM.Data.Models.Enums;
     using RPM.Services.Common.Models.Home;
     using RPM.Services.Common.Models.Listing;
+    using RPM.Services.Common.Models.Rental;
     using static RPM.Common.Extensions.StringExtensionMethod;
     using static RPM.Common.GlobalConstants;
 
@@ -45,6 +46,39 @@
                 .ToListAsync();
 
             return model;
+        }
+
+        public async Task<IEnumerable<ManagerDashboardPropertiesServiceModel>> GetManagedPropertiesAsync(string Id)
+        {
+            var rentals = await this.context.Rentals
+              .Where(r => r.Home.ManagerId == Id)
+              .Select(r => new ManagerDashboardRentalServiceModel
+              {
+                  Id = r.Id,
+                  HomeId = r.HomeId,
+                  TenantFullName = string.Format(TenantFullName, r.Tenant.FirstName, r.Tenant.LastName),
+              })
+              .ToListAsync();
+
+            var properties = await this.context.Homes
+                .Include(p => p.City)
+                .Include(p => p.Owner)
+                .Where(p => p.ManagerId == Id)
+                .Select(p => new ManagerDashboardPropertiesServiceModel
+                {
+                    Id = p.Id,
+                    OwnerName = string.Format(OwnerFullName, p.Owner.FirstName, p.Owner.LastName),
+                    TenantName = rentals
+                                .Where(r => r.HomeId == p.Id)
+                                .Select(h => h.TenantFullName).ToString(),
+                    City = p.City.Name,
+                    Address = p.Address,
+                    Status = p.Status,
+                    Category = p.Category,
+                })
+                .ToListAsync();
+
+            return properties;
         }
 
         public async Task<IEnumerable<PropertyListServiceModel>> GetAllByCategoryAsync(HomeCategory category)
@@ -221,5 +255,7 @@
 
             return model;
         }
+
+
     }
 }

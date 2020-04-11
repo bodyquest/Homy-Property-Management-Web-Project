@@ -49,5 +49,9 @@
         [ForeignKey(nameof(Rental))]
         public int RentalId { get; set; }
         public virtual Rental Rental { get; set; }
+
+        [ForeignKey(nameof(Home))]
+        public string HomeId { get; set; }
+        public virtual Home Home { get; set; }
     }
 }

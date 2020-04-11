@@ -4,18 +4,139 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using RPM.Data.Models;
     using RPM.Data.Models.Enums;
     using RPM.Services.Common;
+    using RPM.Services.Management;
+    using RPM.Services.Management.Models;
+    using RPM.Web.Areas.Management.Models.Listings;
+    using RPM.Web.Infrastructure.Extensions;
     using RPM.Web.Models.Listings;
+
+    using static RPM.Common.GlobalConstants;
 
     public class ListingsController : BaseController
     {
         private readonly IListingService listingService;
+        private readonly IOwnerListingService ownerListingService;
+        private readonly ICityService cityService;
+        private readonly ICountryService countryService;
+        private readonly ICloudImageService imageService;
+        private readonly IImageDbService imageDbService;
+        private readonly UserManager<User> userManager;
 
-        public ListingsController(IListingService listingService)
+        public ListingsController(
+            IListingService listingService,
+            IOwnerListingService ownerListingService,
+            ICityService cityService,
+            ICountryService countryService,
+            ICloudImageService imageService,
+            IImageDbService imageDbService,
+            UserManager<User> userManager)
         {
             this.listingService = listingService;
+            this.ownerListingService = ownerListingService;
+            this.cityService = cityService;
+            this.countryService = countryService;
+            this.imageService = imageService;
+            this.imageDbService = imageDbService;
+            this.userManager = userManager;
+        }
+
+        [ActionName("GetCity")]
+        public async Task<IActionResult> GetCityAsync(int id)
+        {
+            var model = await this.cityService.AllCitiesByCountryAsync(id);
+
+            return this.Json(new SelectList(model, "Id", "Name"));
+        }
+
+        [ActionName("Create")]
+        public async Task<IActionResult> Create()
+        {
+            var cities = await this.cityService.AllCitiesAsync();
+            var countries = await this.countryService.AllCountriesAsync();
+
+            var userId = this.userManager.GetUserId(this.User);
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            var userStripeAccount = user.StripeConnectedAccountId;
+            bool hasStripe = true;
+
+            if (string.IsNullOrWhiteSpace(userStripeAccount))
+            {
+                hasStripe = false;
+            }
+
+            var viewModel = new OwnerListingCreateInputModel
+            {
+                UserHasStripeAccount = hasStripe,
+                Cities = cities,
+                Countries = countries,
+            };
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        [ActionName("Create")]
+        public async Task<IActionResult> CreatePostAsync(OwnerListingCreateInputModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            // Upload the Image
+            var imgResult = await this.imageService
+                .UploadImageAsync(model.Image);
+
+            string imgUrl = imgResult.SecureUri.AbsoluteUri;
+            string imgPubId = imgResult.PublicId;
+
+            var imageToWrite = new CloudImage
+            {
+                PictureUrl = imgUrl,
+                PicturePublicId = imgPubId,
+            };
+
+            var homeCreateServiceModel = new OwnerCreateListingServiceModel
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Address = model.Address,
+                Price = model.Price,
+                CityId = model.CityId,
+                Category = model.Category,
+                Status = model.Status,
+                Owner = user,
+                Image = imageToWrite,
+            };
+
+            // Create Listing
+            bool isCreated = await this.ownerListingService.CreateListingAsync(homeCreateServiceModel);
+
+            if (!isCreated)
+            {
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                    .WithWarning(string.Empty, CouldNotCreateRecord);
+            }
+
+            // Add To Role
+            await this.userManager.AddToRoleAsync(user, OwnerRoleName);
+
+            // Write Image to DB
+            await this.imageDbService.WriteToDatabasebAsync(imgUrl, imgPubId);
+
+            return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                .WithSuccess(string.Empty, RecordCreatedSuccessfully);
         }
 
         [ActionName("Details")]

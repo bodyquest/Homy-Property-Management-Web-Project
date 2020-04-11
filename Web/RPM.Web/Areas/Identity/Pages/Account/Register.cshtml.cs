@@ -157,7 +157,7 @@
                         "darko@test.com",
                         "DotNetDari",
                         this.Input.Email,
-                        "Confirm your email, bah mu mamata i neveroqtnata tehnologiq",
+                        "Confirm your email, bah mu 4udoto i neveroqtnata tehnologiq",
                         messageBody
 
                         // $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."

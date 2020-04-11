@@ -7,7 +7,6 @@
     using static RPM.Common.GlobalConstants;
 
     [Area(ManagementArea)]
-    [Authorize(Roles = OwnerRoleName)]
     public class ManagementController : BaseController
     {
     }

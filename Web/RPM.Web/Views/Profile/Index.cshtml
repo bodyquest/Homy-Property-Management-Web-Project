@@ -128,27 +128,32 @@ else
 <!-- Main content -->
 <section class="content">
 
-    <div class="row d-flex justify-content-start">
+    <div class="row d-flex">
 
-        <div class="col-2 pl-4 pr-2">
-            <div class="row p-3 m-2" style="background-color: #CCCCCC">
-                <a asp-controller="Rentals" asp-action="Index" class="primary-btn pl-1" style="background-color: #CCCCCC">
-                    Rentals
+        <div class="col-md-2 px-4">
+
+            <div onclick="location.href='rentals/index'" class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC;cursor: pointer;">
+                <a asp-controller="Rentals"
+                   asp-action="Index"
+                   class="primary-btn px-1 bg-transparent">Test
                 </a>
             </div>
-            <div class="row p-3 m-2" style="background-color: #CCCCCC">
-                <a asp-controller="Payments" asp-action="Index" class="primary-btn pl-1" style="background-color: #CCCCCC">
+
+            <div class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC">
+                <p>
+                    <a asp-controller="Rentals" asp-action="Index" class="primary-btn px-1 bg-transparent">
+                        Rentals
+                    </a>
+                </p>
+            </div>
+            <div class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC">
+                <a asp-controller="Payments" asp-action="Index" class="primary-btn px-1 bg-transparent">
                     Payments
-                </a>
-            </div>
-            <div class="row p-3 m-2" style="background-color: #CCCCCC">
-                <a asp-controller="Messages" asp-action="Index" class="primary-btn pl-1" style="background-color: #CCCCCC">
-                    Messages
                 </a>
             </div>
         </div>
 
-            <div class="col-10 pt-1 px-4">
+            <div class="col-md-10 pt-4 px-4">
                 <!-- TABLE: PAYMENT REQUESTS -->
                 <div class="card">
                     <div class="card-header border-transparent">
@@ -258,7 +263,7 @@ else
                     <!-- /.card-body -->
                     <div class="card-footer row justify-content-between m-0 px-0">
                         <div class="col-12 pl-0 m-0" style="display: inline-block;">
-                            <p class="text-right p-0 m-0 pr-4">
+                            <p class="text-right p-0 m-0 pr-2">
                                 <a asp-controller="Payment" asp-action="All" class="btn btn-sm btn-secondary">View All</a>
                             </p>
                         </div>

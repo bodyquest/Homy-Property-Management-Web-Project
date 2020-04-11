@@ -30,7 +30,6 @@
     using RPM.Services.Management.Implementations;
     using RPM.Services.Mapping;
     using RPM.Services.Messaging;
-
     using RPM.Web.ViewModels;
     using Stripe;
 
@@ -63,8 +62,17 @@
 
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddSignalR();
 
             services.AddSingleton(this.configuration);
+
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(
+            //        "AllowAllOrigins",
+            //        builder => builder
+            //        .AllowAnyOrigin());
+            //});
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -102,6 +110,8 @@
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
+            // services.AddScoped<ISeeder, ApplicationDbContextSeeder>(); !!!!!!!!!!!!!!!!!!
+
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender("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"));
             //services.AddSingleton<IEmailSender, SendGridEmailSender>();
@@ -117,17 +127,19 @@
             services.AddTransient<IImageDbService, ImageDbService>();
             services.AddTransient<IListingService, ListingService>();
 
-            services.AddTransient<IOwnerListingService, OwnerListingService>();
-            services.AddTransient<IOwnerRequestService, OwnerRequestService>();
-            services.AddTransient<IOwnerRentalService, OwnerRentalService>();
-            services.AddTransient<IOwnerContractService, OwnerContractService>();
-            services.AddTransient<IOwnerTransactionRequestService, OwnerTransactionRequestService>();
+            services.AddTransient<IOwnerListingService, OwnerListingService>(); //
+            services.AddTransient<IOwnerRequestService, OwnerRequestService>(); //
+            services.AddTransient<IOwnerRentalService, OwnerRentalService>(); //
+            services.AddTransient<IPaymentService, OwnerPaymentService>(); //
+            services.AddTransient<IOwnerContractService, OwnerContractService>(); //
+            services.AddTransient<IOwnerTransactionRequestService,
+                OwnerTransactionRequestService>(); //
 
-            services.AddTransient<IPaymentService, PaymentService>();
-            services.AddTransient<IRentalService, RentalService>();
-            services.AddTransient<IRequestService, RequestService>();
-            services.AddTransient<ICityService, CityService>();
-            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<IPaymentCommonService, PaymentCommonService>(); //
+            services.AddTransient<IRentalService, RentalService>(); //
+            services.AddTransient<IRequestService, RequestService>(); //
+            services.AddTransient<ICityService, CityService>(); //
+            services.AddTransient<ICountryService, CountryService>(); //
 
             // External Authentications
             services.AddAuthentication().AddFacebook(facebookOptions =>
@@ -158,8 +170,7 @@
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(
-                typeof(ErrorViewModel).GetTypeInfo().Assembly
-                );
+                typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
@@ -190,6 +201,7 @@
             app.UseCookiePolicy();
 
             app.UseRouting();
+            //app.UseCors();
 
             StripeConfiguration.ApiKey = this.configuration.GetSection("Stripe")["SecretKey"];
 

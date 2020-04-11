@@ -1,0 +1,203 @@
+﻿@model OwnerAllPaymentsViewModel
+
+@{
+    this.ViewData["Title"] = "Payments Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!--Settings: this.Model.SettingsCount-->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row justify-content-center">
+
+            <div class="col-10 pt-4">
+
+                <div class="col-12 pt-2">
+                    <!-- TABLE: PAYMENT REQUESTS -->
+                    <div class="card">
+                        <div class="card-header border-transparent">
+                            <h3 class="card-title text-info"><strong>Payments</strong></h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <div id="payments">
+                                    <table class="table m-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="px-3">Date</th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Reason</th>
+                                                <th>Amount</th>
+                                                <th>Transaction</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var payment in Model.Payments)
+                                            {
+                                                @if (Model.Payments.Any())
+                                                {
+                                                    <tr>
+                                                        <td class="col-1 py-1 px-3"
+                                                            style='vertical-align:middle'>
+                                                            @payment.Date
+                                                        </td>
+                                                        @if (!string.IsNullOrWhiteSpace(payment.TenantName))
+                                                        {
+                                                            <td class="col-3 py-1 px-1"
+                                                                style='vertical-align:middle'>
+                                                                @payment.TenantName
+                                                            </td>
+                                                            <td class="col-3 py-1 px-1"
+                                                                style='vertical-align:middle'>
+                                                                @payment.RentalHomeOnwerName
+                                                            </td>
+                                                        }
+                                                        else if (!string.IsNullOrWhiteSpace(payment.ManagerName))
+                                                        {
+                                                            <td class="col-3 py-1 px-1"
+                                                                style='vertical-align:middle'>
+                                                                @payment.HomeOwnerName
+                                                            </td>
+                                                            <td class="col-3 py-1 px-1"
+                                                                style='vertical-align:middle'>
+                                                                @payment.ManagerName
+                                                            </td>
+                                                        }
+                                                        <td class="col-3 py-1 px-1"
+                                                            style='vertical-align:middle'>
+                                                            @payment.Reason
+                                                        </td>
+                                                        <td class="col-2 py-1 px-1"
+                                                            style='text-align:center;vertical-align:middle'>
+                                                            $@payment.Amount
+                                                        </td>
+                                                        @if (payment.Status == PaymentStatus.Complete)
+                                                        {
+                                                            <td class="col-1 py-1 px-3"
+                                                                style='text-align:center;vertical-align:middle'>
+                                                                @payment.TransactionDate
+                                                            </td>
+                                                            <td class="col-3 py-1"
+                                                                style='text-align:center;vertical-align:middle'>
+                                                                <span class="text-success"><i class="fas fa-check"></i></span>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="col-3 py-1"
+                                                                style='text-align:center;vertical-align:middle'>
+                                                                <p class="text-danger">
+                                                                    <strong>...</strong>
+                                                                </p>
+                                                            </td>
+                                                            <td class="col-3 py-1 text-danger"
+                                                                style='text-align:center;vertical-align:middle'>
+                                                                    pending
+                                                            </td>
+                                                        }
+
+                                                        @if (true)
+                                                        {
+                                                            <td class="col-1 py-1 pl-0 pr-3"
+                                                                style='vertical-align:middle'>
+                                                                <a asp-controller="Requests"
+                                                                   asp-action="Details"
+                                                                   asp-route-Id="id"
+                                                                   style="display:block; margin-bottom:-10px">
+                                                                    <ion-icon size="large" name="list-outline"></ion-icon>
+                                                                </a>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                                else
+                                                {
+                                                    <tr class="col-12 py-1 px-3 text-danger text-center"
+                                                        style='vertical-align:middle'>
+                                                        No payments
+                                                    </tr>
+                                                }
+                                            }
+                                            <tr>
+                                                <td class="col-1 py-1 px-3"
+                                                    style='vertical-align:middle'>
+                                                    12/03/2020
+                                                </td>
+                                                <td class="col-4 py-1 px-1"
+                                                    style='vertical-align:middle'>
+                                                    Schunko Svinski
+                                                </td>
+                                                <td class="col-4 py-1 px-1"
+                                                    style='vertical-align:middle'>
+                                                    Repair Works
+                                                </td>
+                                                <td class="col-2 py-1 px-1"
+                                                    style='text-align:center;vertical-align:middle'>
+                                                    $350
+                                                </td>
+                                                <td class="col-2 py-1"
+                                                    style='text-align:center;vertical-align:middle'>
+                                                    <span class="badge badge-info">
+                                                        NO
+                                                    </span>
+                                                </td>
+                                                <td class="col-2 py-1 text-danger"
+                                                    style='text-align:center;vertical-align:middle'>
+                                                    Pending
+                                                </td>
+                                                <td class="col-1 py-1 pl-0 pr-3"
+                                                    style='vertical-align:middle'>
+                                                    <a asp-controller="Requests"
+                                                       asp-action="Details"
+                                                       asp-route-Id="id"
+                                                       style="display:block; margin-bottom:-10px">
+                                                        <ion-icon size="large" name="list-outline"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section Scripts {
+
+    <script>
+        var box = paginator({
+            table: document.getElementById("payments").getElementsByTagName("table")[0],
+            box_mode: "list",
+        });
+
+        box.className = "box pl-3 pr-2 pt-2";
+
+        document
+            .getElementById("payments")
+            .appendChild(box);
+    </script>
+}

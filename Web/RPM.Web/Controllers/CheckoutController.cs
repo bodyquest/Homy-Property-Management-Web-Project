@@ -25,11 +25,11 @@
     public class CheckoutController : BaseController
     {
         private readonly UserManager<User> userManager;
-        private readonly IPaymentService paymentService;
+        private readonly IPaymentCommonService paymentService;
 
         public CheckoutController(
             UserManager<User> userManager,
-            IPaymentService paymentService)
+            IPaymentCommonService paymentService)
         {
             this.userManager = userManager;
             this.paymentService = paymentService;
@@ -55,7 +55,7 @@
             var userId = this.userManager.GetUserId(this.User);
             //var payment = await this.paymentService.GetPaymentDetailsAsync(paymentId, userId);
 
-            var status = PaymentStatus.Complete;
+            var paymentStatus = PaymentStatus.Complete;
             var transactionDate = DateTime.UtcNow;
             //var result = await this.paymentService.EditPaymentStatusAsync(paymentId, userId, status, transactionDate);
 

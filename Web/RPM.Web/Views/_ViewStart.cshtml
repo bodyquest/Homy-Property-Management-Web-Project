@@ -1,4 +1,4 @@
-﻿@if (User.Identity.IsAuthenticated && (User.IsInRole(OwnerRoleName) || User.IsInRole(ManagerRoleName)))
+﻿@if (User.Identity.IsAuthenticated && (User.IsInRole(OwnerRoleName)))
 {
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }

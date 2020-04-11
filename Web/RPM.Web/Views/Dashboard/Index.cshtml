@@ -1,0 +1,317 @@
+﻿@model ManagerDashboardViewModel
+
+@{
+    this.ViewData["Title"] = "Management Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content justify-content-center">
+        <div class="row">
+
+            <div class="col-11 pt-4">
+                <!-- TABLE: MANAGED PROPERTIES -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Managed Properties</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th class="pl-3 pr-1">Owner</th>
+                                        <th>Tenant</th>
+                                        <th>City</th>
+                                        <th>Address</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ManagedProperties.Any())
+                                    {
+                                        foreach (var property in Model.ManagedProperties)
+                                        {
+                                    <tr>
+                                        <td class="col-1 py-1 pl-3 pr-1"
+                                            style='vertical-align:middle'>
+                                            @property.OwnerName
+                                        </td>
+
+                                        @if (string.IsNullOrWhiteSpace(property.TenantName))
+                                        {
+                                            <td class="col-8 py-1 pl-2 pr-1 text-danger"
+                                                style='vertical-align:middle'>
+                                                no tenant
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="col-8 py-1 pl-2 pr-1"
+                                                style='vertical-align:middle'>
+                                                @property.TenantName
+                                            </td>
+                                        }
+
+                                        <td class="col-8 py-1 pl-2 pr-1"
+                                            style='vertical-align:middle'>
+                                            @property.City
+                                        </td>
+
+                                        <td class="col-8 py-1 pl-2 pr-1"
+                                            style='vertical-align:middle'>
+                                            @property.Address
+                                        </td>
+
+                                        <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                            <span class="badge badge-info">@property.Category</span>
+                                        </td>
+
+                                        @if (property.Status.ToString() == Managed)
+                                        {
+                                            <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                                <span class="badge badge-success">@property.Status</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="col-1 py-1 px-1" style='text-align:center; vertical-align:middle'>
+                                                <span class="badge badge-danger">@property.Status</span>
+                                            </td>
+                                        }
+
+                                        <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
+                                            <a asp-controller="Properties"
+                                               asp-action="Details"
+                                               asp-route-Id="@property.Id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                        }
+                                    }
+
+                                    <tr>
+                                        <td class="col-1 py-1 pl-3 pr-1"
+                                            style='vertical-align:middle'>
+                                            Berlin
+                                        </td>
+
+                                        <td class="col-8 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            17, Damerowstrasse, 13187
+                                        </td>
+
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
+                                            <span class="badge badge-info">Apartment</span>
+                                        </td>
+
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
+                                            <span class="badge badge-danger">To Rent</span>
+                                        </td>
+
+                                        <td class="col-1 py-1 pl-0 pr-2"
+                                            style='vertical-align:middle'>
+                                            <a asp-controller="Properties"
+                                               asp-action="Details"
+                                               asp-route-Id="id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-1 py-1 pl-3 pr-1"
+                                            style='vertical-align:middle'>
+                                            Berlin
+                                        </td>
+
+                                        <td class="col-8 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            17, Damerowstrasse, 13187
+                                        </td>
+
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
+                                            <span class="badge badge-info">Apartment</span>
+                                        </td>
+
+                                        <td class="col-1 py-1 px-1"
+                                            style='text-align:center; vertical-align:middle'>
+                                            <span class="badge badge-danger">To Rent</span>
+                                        </td>
+
+                                        <td class="col-1 py-1 pl-0 pr-2"
+                                            style='vertical-align:middle'>
+                                            <a asp-controller="Properties"
+                                               asp-action="Details"
+                                               asp-route-Id="id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer row justify-content-between m-0 px-0">
+                        <div class="col-6 pl-3 pr-0" style="display: inline-block;">
+                            <partial name="_ButtonCreatePartial" />
+                        </div>
+                        <div class="col-5 pl-0 m-0" style="display: inline-block;">
+                            <p class="text-right p-0 m-0">
+                                <a asp-controller="Listings" asp-action="Index" class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i> &nbsp; View More</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-10 pt-2">
+                <!-- TABLE: PAYMENT REQUESTS -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Payments</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th class="px-3">Date</th>
+                                        <th>From</th>
+                                        <th>Reason</th>
+                                        <th>Amount</th>
+                                        <th>Recurring</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="col-1 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            12/03/2020
+                                        </td>
+                                        <td class="col-4 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Kanalin Tsolov
+                                        </td>
+                                        <td class="col-3 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Rent Payment
+                                        </td>
+                                        <td class="col-2 py-1 px-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            $900
+                                        </td>
+                                        <td class="col-3 py-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            <span class="badge badge-success">
+                                                YES
+                                            </span>
+                                        </td>
+                                        <td class="col-3 py-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            <span class="text-success"><i class="fas fa-check"></i></span>
+                                        </td>
+
+                                        <td class="col-1 py-1 pl-0 pr-3"
+                                            style='vertical-align:middle'>
+                                            <a asp-controller="Requests"
+                                               asp-action="Details"
+                                               asp-route-Id="id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-1 py-1 px-3"
+                                            style='vertical-align:middle'>
+                                            12/03/2020
+                                        </td>
+                                        <td class="col-4 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Schunko Svinski
+                                        </td>
+                                        <td class="col-4 py-1 px-1"
+                                            style='vertical-align:middle'>
+                                            Repair Works
+                                        </td>
+                                        <td class="col-2 py-1 px-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            $350
+                                        </td>
+                                        <td class="col-2 py-1"
+                                            style='text-align:center;vertical-align:middle'>
+                                            <span class="badge badge-info">
+                                                NO
+                                            </span>
+                                        </td>
+                                        <td class="col-2 py-1 text-danger"
+                                            style='text-align:center;vertical-align:middle'>
+                                            Pending
+                                        </td>
+                                        <td class="col-1 py-1 pl-0 pr-3"
+                                            style='vertical-align:middle'>
+                                            <a asp-controller="Requests"
+                                               asp-action="Details"
+                                               asp-route-Id="id"
+                                               style="display:block; margin-bottom:-10px">
+                                                <ion-icon size="large" name="list-outline"></ion-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer row justify-content-end m-0 pr-3">
+                        <div class="col-12">
+                            <p class="text-right p-0 m-0">
+                                <a asp-controller="Requests" asp-action="Index" class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i> &nbsp; View All</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

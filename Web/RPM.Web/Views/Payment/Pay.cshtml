@@ -87,17 +87,21 @@
                 </div>
                 <!-- /.card-body -->
                 <!-- /.card-footer -->
-                <script src="https://js.stripe.com/v3"></script>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-6 py-4 text-center">
-                        <button id="checkout-button"
-                                value="Pay"
-                                class="btn btn-sm btn-labeled btn-primary">
-                            <span class="btn-label">
-                                <ion-icon name="card-outline"></ion-icon>
-                            </span>Pay &nbsp; $ @Model.Amount
-                        </button>
-                    </div>
+                <script src="https://js.stripe.com/v3/"></script>
+                <div id="checkout">
+                    <form id="payment-form">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-6 py-4 text-center">
+                                <button id="checkout-button"
+                                        value="Pay"
+                                        class="btn btn-sm btn-labeled btn-primary">
+                                    <span class="btn-label">
+                                        <ion-icon name="card-outline"></ion-icon>
+                                    </span>Pay &nbsp; $ @Model.Amount
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <script>
                 var stripe = Stripe('@HomyTestPublishableKey');
@@ -105,24 +109,41 @@
                 var payButton = document.getElementById('checkout-button');
 
                 payButton.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    stripe.redirectToCheckout({
-                      sessionId: sessionId
-                    });
+                  event.preventDefault();
+                  stripe.redirectToCheckout({
+                    sessionId: sessionId
+                  });
                 });
 
                 var sessionId;
+                var paymentId = '@Model.Id';
 
-                fetch('/Payment/CreateSession/', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                         id: '@Model.Id',
+                /*fetch("https://localhost:44319/management/listings/getcity", {
+                method: 'GET',
+                mode: 'same-origin',
+                credentials: 'include',
+                body: JSON.stringify({ id: paymentId }),
+                headers: {
+                  'Content-Type': 'application/json'
+                  }
                 })
-                .then(function (r) { return r.json();})
-                .then(function (response) { sessionId = response.id;});
+                .then(r =>  r.json().then(data => ({status: r.status, body: data})))
+                .then(obj => console.log(obj));*/
+                    fetch('/management/payments/session/' + paymentId, {
+                        method: 'GET',
+                        mode: 'same-origin',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(function (r) {
+                        return r.json();
+                    }).then(function (response) {
+                        sessionId = response.id;
+                    })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
                 </script>
             </div>
         </div>

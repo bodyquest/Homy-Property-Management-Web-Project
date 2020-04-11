@@ -1,25 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RPM.Data;
-using RPM.Data.Models;
-using RPM.Web.Api.Models;
-
-namespace RPM.Web.Api
+﻿namespace RPM.Web.Api
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using RPM.Data;
+    using RPM.Data.Models;
+    using RPM.Services.Common;
+    using RPM.Web.Api.Models;
+    using Stripe;
+    using Stripe.Checkout;
+
+    using static RPM.Common.GlobalConstants;
+
     [Route("api/[controller]")]
     [ApiController]
     public class CitiesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> userManager;
+        private readonly IPaymentCommonService paymentService;
 
-        public CitiesController(ApplicationDbContext context)
+        public CitiesController(
+            ApplicationDbContext context,
+            UserManager<User> userManager,
+            IPaymentCommonService paymentService)
         {
             _context = context;
+            this.userManager = userManager;
+            this.paymentService = paymentService;
         }
 
         // GET: api/Cities
@@ -36,6 +51,63 @@ namespace RPM.Web.Api
             .ToListAsync();
 
             return model;
+        }
+
+        [HttpPost]
+        [Route("createsession")]
+        public async Task<Session> CreateSession([FromBody]string id)
+        {
+            //using (var reader = new StreamReader(this.Request.Body, Encoding.UTF8))
+            //{
+            //    id = await reader.ReadToEndAsync();
+            //}
+
+            var userId = this.userManager.GetUserId(this.User);
+            var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
+
+            var successStringUrl = "https://localhost:44319/Checkout/success?session_id={CHECKOUT_SESSION_ID}";
+            var cancelStringUrl = "https://localhost:44319/Checkout/cancel?";
+
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string>
+                {
+                    "card",
+                },
+
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        Quantity = 1,
+                        Amount = (long)payment.Amount * 100,
+                        Currency = CurrencyUSD,
+
+                        Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+
+                        Name = $"Rent Payment for {DateTime.UtcNow.Month} | {DateTime.UtcNow.Year} for rental at {payment.RentalAddress}",
+                    },
+                },
+
+                PaymentIntentData = new SessionPaymentIntentDataOptions
+                {
+                    ApplicationFeeAmount = (long)((payment.Amount * 0.01m) * 100),
+                    CaptureMethod = "manual",
+
+                    TransferData = new SessionPaymentIntentTransferDataOptions
+                    {
+                        Destination = payment.ToStripeAccountId,
+                    },
+                },
+
+                SuccessUrl = successStringUrl,
+                CancelUrl = cancelStringUrl,
+            };
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            return session;
         }
 
         // GET: api/Cities/5

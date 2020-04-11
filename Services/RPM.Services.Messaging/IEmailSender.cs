@@ -1,5 +1,6 @@
 ﻿namespace RPM.Services.Messaging
 {
+    using SendGrid;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -16,6 +17,14 @@
             string to,
             string subject,
             string htmlContent,
+            IEnumerable<EmailAttachment> attachments = null);
+
+        Task SendPlainEmailAsync(
+            string from,
+            string fromName,
+            string to,
+            string subject,
+            string content,
             IEnumerable<EmailAttachment> attachments = null);
     }
 }

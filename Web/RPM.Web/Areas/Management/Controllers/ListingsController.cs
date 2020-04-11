@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -42,6 +43,7 @@
             this.userManager = userManager;
         }
 
+        [Authorize(Roles = OwnerRoleName)]
         public async Task<IActionResult> Index()
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -55,12 +57,14 @@
             return this.View(viewModel);
         }
 
+        [Authorize(Roles = OwnerRoleName)]
         [ActionName("All")]
         public async Task<IActionResult> AllAsync(string id)
         {
             return this.View();
         }
 
+        [Authorize(Roles = OwnerRoleName)]
         [ActionName("Create")]
         public async Task<IActionResult> Create()
         {
@@ -86,6 +90,7 @@
             return this.View(viewModel);
         }
 
+        [Authorize(Roles = OwnerRoleName)]
         [HttpPost]
         [ActionName("Create")]
         public async Task<IActionResult> CreatePostAsync(OwnerListingCreateInputModel model)
@@ -137,29 +142,104 @@
                 .WithSuccess(string.Empty, RecordCreatedSuccessfully);
         }
 
+        [Authorize(Roles = OwnerRoleName)]
         [ActionName("Edit")]
         public async Task<IActionResult> Edit(string id)
         {
-            // TO DO: Make View Model and Service Model Similar like Create Method
-            // but without lists of cities and countries
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var home = await this.listingService.GetDetailsAsync(user.Id, id);
+            var model = await this.listingService.GetEditModelAsync(user.Id, id);
 
-            var viewModel = new OwnerListingCreateInputModel
+            var viewModel = new OwnerListingEditInputModel
             {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Address = model.Address,
+                City = model.City,
+                Country = model.Country,
+                Price = model.Price,
+                Status = model.Status,
+                Category = model.Category,
+                ImageFromDb = model.Image,
+                RentalInfo = model.RentalInfo,
             };
 
             return this.View(viewModel);
         }
 
+        [Authorize(Roles = OwnerRoleName)]
         [HttpPost]
         [ActionName("Edit")]
-        public async Task<IActionResult> EditPostAsync()
+        public async Task<IActionResult> EditPostAsync(OwnerListingEditInputModel model)
         {
-            throw new NotImplementedException();
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            var homeEditModel = new OwnerEditListingServiceModel();
+            string imgUrl = string.Empty;
+            string imgPubId = string.Empty;
+
+            var files = this.HttpContext.Request.Form.Files;
+            if (model.Image != null)
+            {
+                var imgResult = await this.imageService
+                .UploadImageAsync(model.Image);
+
+                imgUrl = imgResult.SecureUri.AbsoluteUri;
+                imgPubId = imgResult.PublicId;
+
+                var imageToWrite = new CloudImage
+                {
+                    PictureUrl = imgUrl,
+                    PicturePublicId = imgPubId,
+                };
+
+                homeEditModel = new OwnerEditListingServiceModel
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Description = model.Description,
+                    Price = model.Price,
+                    Category = model.Category,
+                    Status = model.Status,
+                    Image = imageToWrite,
+                };
+            }
+            else
+            {
+                homeEditModel = new OwnerEditListingServiceModel
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Description = model.Description,
+                    Price = model.Price,
+                    Category = model.Category,
+                    Status = model.Status,
+                };
+            }
+
+            bool isEdited = await this.listingService.EditListingAsync(homeEditModel);
+
+            if (!isEdited)
+            {
+                return this.RedirectToAction("Details", "Listings", new { id = model.Id, Area = ManagementArea })
+                    .WithWarning(string.Empty, CouldNotUpdateRecord);
+            }
+
+            await this.imageDbService.WriteToDatabasebAsync(imgUrl, imgPubId);
+
+            return this.RedirectToAction("Details", "Listings", new { id = model.Id, area = ManagementArea })
+                .WithSuccess(string.Empty, RecordUpdatedSuccessfully);
         }
 
+        [Authorize(Roles = OwnerRoleName)]
         [ActionName("Details")]
         public async Task<IActionResult> DetailsAsync(string id)
         {
@@ -169,6 +249,7 @@
             return this.View(model);
         }
 
+        [Authorize(Roles = TenantRole)]
         [ActionName("GetCity")]
         public async Task<IActionResult> GetCityAsync(int id)
         {
@@ -176,5 +257,7 @@
 
             return this.Json(new SelectList(model, "Id", "Name"));
         }
+
+
     }
 }

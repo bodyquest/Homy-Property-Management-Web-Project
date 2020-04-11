@@ -10,6 +10,8 @@
     {
         Task<IEnumerable<PropertyListServiceModel>> GetPropertiesAsync();
 
+        Task<IEnumerable<ManagerDashboardPropertiesServiceModel>> GetManagedPropertiesAsync(string Id);
+
         Task<IEnumerable<PropertyListServiceModel>> GetAllByCategoryAsync(HomeCategory category);
 
         Task<PropertyDetailsServiceModel> GetDetailsAsync(string id);

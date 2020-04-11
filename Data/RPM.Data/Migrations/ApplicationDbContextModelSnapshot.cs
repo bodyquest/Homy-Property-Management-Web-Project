@@ -220,7 +220,7 @@ namespace RPM.Data.Migrations
                     b.Property<string>("ManagerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("RentalId")
+                    b.Property<int?>("RentalId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -233,7 +233,8 @@ namespace RPM.Data.Migrations
                     b.HasIndex("ManagerId");
 
                     b.HasIndex("RentalId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[RentalId] IS NOT NULL");
 
                     b.ToTable("Contracts");
                 });
@@ -320,6 +321,9 @@ namespace RPM.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("HomeId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("nvarchar(30)")
@@ -343,6 +347,8 @@ namespace RPM.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HomeId");
 
                     b.HasIndex("RecipientId");
 
@@ -698,9 +704,7 @@ namespace RPM.Data.Migrations
 
                     b.HasOne("RPM.Data.Models.Rental", "Rental")
                         .WithOne()
-                        .HasForeignKey("RPM.Data.Models.Contract", "RentalId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("RPM.Data.Models.Contract", "RentalId");
                 });
 
             modelBuilder.Entity("RPM.Data.Models.Home", b =>
@@ -725,6 +729,10 @@ namespace RPM.Data.Migrations
 
             modelBuilder.Entity("RPM.Data.Models.Payment", b =>
                 {
+                    b.HasOne("RPM.Data.Models.Home", "Home")
+                        .WithMany()
+                        .HasForeignKey("HomeId");
+
                     b.HasOne("RPM.Data.Models.User", "Recipient")
                         .WithMany()
                         .HasForeignKey("RecipientId")

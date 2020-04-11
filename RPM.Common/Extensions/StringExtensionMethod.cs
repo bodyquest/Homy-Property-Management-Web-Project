@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Text.RegularExpressions;
 
     public static class StringExtensionMethod
     {
@@ -26,6 +27,21 @@
             }
 
             return input.Length > length ? $"{input.Substring(0, length)}..." : input;
+        }
+
+        public static string SeparateStringByCapitals(this string str)
+        {
+            string pattern = @"[A-Z][a-z]+";
+            Regex rgx = new Regex(pattern);
+
+            string result = string.Empty;
+            MatchCollection matches = rgx.Matches(str);
+            foreach (Match match in matches)
+            {
+                result += match.Value + " ";
+            }
+
+            return result.TrimEnd();
         }
     }
 }

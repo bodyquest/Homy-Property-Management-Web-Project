@@ -12,11 +12,11 @@
     <section class="content">
         <div class="row d-flex justify-content-center">
 
-            <div class="col-8 pt-4">
+            <div class="col-6 pt-4">
                 <!-- TABLE: Add New Listing -->
                 <div class="card">
                     <div class="card-header border-transparent">
-                        <h3 class="card-title text-info"><strong>Add New Transaction Request</strong></h3>
+                        <h3 class="card-title text-info"><strong>Add New Transaction Request for Tenant</strong></h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -41,9 +41,9 @@
 
                                 <div class="form-group">
                                     <label asp-for="Reason" class="col-form-label"></label>
-                                    <textarea asp-for="Reason" 
-                                              class="form-control" 
-                                              rows="2" 
+                                    <textarea asp-for="Reason"
+                                              class="form-control"
+                                              rows="2"
                                               placeholder="Enter reason for transaction...">
                                     </textarea>
                                     <span asp-validation-for="Reason" class="text-danger"></span>
@@ -76,6 +76,7 @@
                 </div>
                 <!-- /.card -->
             </div>
+
         </div>
     </section>
     <!-- /.content -->

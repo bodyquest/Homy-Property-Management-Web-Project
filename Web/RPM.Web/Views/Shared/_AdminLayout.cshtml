@@ -27,8 +27,16 @@
     </environment>
 
     <environment names="Staging,Production">
-        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
-        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- Font Awesome -->
+        <link href="~/themes/admin/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="~/themes/admin/dist/css/adminlte.min.css">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+        <!-- Bootstrap -->
+        <link href="~/themes/admin/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 
 </head>
@@ -311,6 +319,14 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a asp-area="Management" asp-controller="Payments" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-credit-card"></i>
+                                    <p>
+                                        Payments
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a asp-area="Management" asp-controller="TransactionRequests" asp-action="Index" class="nav-link">
                                     <i class="nav-icon fas fa-money-check-alt"></i>
                                     <p>
@@ -319,7 +335,9 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a asp-area="Management" asp-controller="Messages" asp-action="Index" class="nav-link">
+                                <a asp-area=""
+                                   asp-controller="MessageHub"
+                                   asp-action="Index" class="nav-link">
                                     <i class="nav-icon far fa-envelope"></i>
                                     <p>
                                         Messages
@@ -327,10 +345,41 @@
                                 </a>
                             </li>
                         }
-
-
-
-
+                        else if (User.IsInRole(GlobalConstants.ManagerRoleName))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Dashboard
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Listings" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>
+                                        Managed Properties
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Payments" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-money-check-alt"></i>
+                                    <p>
+                                        Payments
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Messages" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon far fa-envelope"></i>
+                                    <p>
+                                        Messages
+                                    </p>
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -774,92 +823,6 @@
                             </a>
                         </li>
 
-                        <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-circle nav-icon"></i>
-                                <p>Level 1</p>
-                            </a>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-circle"></i>
-                                <p>
-                                    Level 1
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Level 2</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>
-                                            Level 2
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Level 2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-circle nav-icon"></i>
-                                <p>Level 1</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-header">LABELS</li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-circle text-danger"></i>
-                                <p class="text">Important</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-circle text-warning"></i>
-                                <p>Warning</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-circle text-info"></i>
-                                <p>Informational</p>
-                            </a>
-                        </li>
-
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -904,14 +867,26 @@
         <!-- AdminLTE for demo purposes -->
         <script src="~/themes/admin/dist/js/demo.js"></script>
 
-        <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+        <script src="~/lib/ionicons/dist/ionicons.js"></script>
+
+        <script src="~/js/paginator.js"></script>
     </environment>
 
     <environment names="Staging,Production">
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
         <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+
+        <!-- Bootstrap 4 -->
+        <script src="~/themes/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/themes/admin/dist/js/adminlte.min.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="~/themes/admin/dist/js/demo.js"></script>
+        <script src="~/lib/ionicons/dist/ionicons.js"></script>
+        <script src="~/js/paginator.js"></script>
+
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 

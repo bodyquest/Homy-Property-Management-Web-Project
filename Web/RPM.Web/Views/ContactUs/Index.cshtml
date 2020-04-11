@@ -1,0 +1,110 @@
+﻿@using RPM.Common
+@using System.Text
+@using Microsoft.Extensions.Options
+
+@model ContactUsInputModel
+
+<link rel="stylesheet" href="~/css/sitecustom.css">
+
+@{
+    this.ViewData["Title"] = "Contact Us";
+    var maxLength = MessageMaxLength;
+}
+
+<br>
+
+<!-- Main content -->
+<body class="contact-bg">
+    <div class="row">
+        <div class="container justify-content-center">
+            <div class="col-md-6" style="padding-top:120px;margin-left:auto;margin-right:auto;">
+                <div class="form-area">
+                    <form role="form" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <br style="clear:both">
+                        <h6 class="text-purple text-sm-center">GOT A QUESTION?</h6>
+                        <h2 style="margin-bottom: 25px; text-align: center;font-weight:700;">Contact Homy</h2>
+                        <div class="form-group">
+                            <input asp-for="Name"
+                                   type="text"
+                                   class="form-control"
+                                   id="name"
+                                   name="name"
+                                   placeholder="Name"
+                                   required>
+                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Email"
+                                   class="form-control"
+                                   placeholder="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Subject"
+                                   type="text"
+                                   class="form-control"
+                                   id="subject"
+                                   name="subject"
+                                   placeholder="Subject"
+                                   required>
+                            <span asp-validation-for="@Model.Subject" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <textarea asp-for="Message"
+                                      class="form-control"
+                                      type="textarea"
+                                      id="message"
+                                      placeholder="Message"
+                                      rows="7">
+                            </textarea>
+                            <span asp-validation-for="@Model.Message" class="text-danger"></span>
+                            <span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>
+                        </div>
+
+                        <button type="submit"
+                                id="submit"
+                                name="submit"
+                                class="btn btn-primary pull-right">
+                            <i class="fas fa-paper-plane pr-1"></i>Submit
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- /.content -->
+
+<br />
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <hr class="hr-2" />
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+    $(document).ready(function(){ 
+        $('#characterLeft').text('@maxLength characters left');
+        $('#message').keydown(function () {
+            var max = @maxLength;
+            var len = $(this).val().length;
+            if (len >= max) {
+                $('#characterLeft').text('You have reached the limit');
+                $('#characterLeft').addClass('red');
+                $('#btnSubmit').addClass('disabled');            
+            } 
+            else {
+                var ch = max - len;
+                $('#characterLeft').text(ch + ' characters left');
+                $('#btnSubmit').removeClass('disabled');
+                $('#characterLeft').removeClass('red');            
+            }
+        });    
+    });
+</script>
+}

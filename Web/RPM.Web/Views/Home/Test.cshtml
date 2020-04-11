@@ -95,62 +95,47 @@ else
 <br>
 
 <!-- TEST SECTION Begin -->
-<style>
-    /* layout.css Style */
-    .upload-drop-zone {
-        height: 100px;
-        border-width: 2px;
-        margin-bottom: 20px;
-    }
-
-    /* skin.css Style*/
-    .upload-drop-zone {
-        color: #ccc;
-        border-style: dashed;
-        border-color: #ccc;
-        line-height: 100px;
-        text-align: center
-    }
-
-        .upload-drop-zone.drop {
-            color: #222;
-            border-color: #222;
-        }
-</style>
-
-
-
-
-
 <div class="container">
-    <div class="row">
-        <div class="col-6">
-            <div class="panel panel-default">
-                <div class="panel-heading"><strong>Upload File</strong></div>
-                <div class="panel-body">
-
-                    <!-- Standard Form -->
-                    <h5>Select file from your computer</h5>
-                    <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <input type="file" name="files[]" id="js-upload-files" multiple>
-                            </div>
-                            <button type="submit" class="btn btn-sm btn-primary" id="js-upload-submit">Upload file</button>
-                        </div>
-                    </form>
-
-                    <!-- Drop Zone -->
-                    <h5>Or drag and drop file below</h5>
-                    <div class="upload-drop-zone" id="drop-zone">
-                        Just drag and drop file here
-                    </div>
-                    
-                </div>
-            </div>
+    <div class="col-10">
+        <div id="example">
+            <table class="display table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Age</th>
+                        <th>Start date</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < 33; i++)
+                    {
+                        <tr>
+                            <td>Tiger Nixon</td>
+                            <td>System Architect</td>
+                            <td>Edinburgh</td>
+                            <td>61</td>
+                            <td>2011/04/25</td>
+                            <td>$320,800</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Age</th>
+                        <th>Start date</th>
+                        <th>Salary</th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
-</div> <!-- /container -->
+</div>
 <!-- TEST SECTION End -->
 
 <br />
@@ -163,44 +148,18 @@ else
 </div>
 
 @section Scripts{
+    <!--TEST Table Paging-->
+    <script src="~/js/paginator.js"></script>
     <script>
-        function($) {
-    'use strict';
+        var box = paginator({
+            table: document.getElementById("example").getElementsByTagName("table")[0],
+            box_mode: "list",
+        });
 
-    // UPLOAD CLASS DEFINITION
-    // ======================
+        box.className = "box";
 
-    var dropZone = document.getElementById('drop-zone');
-    var uploadForm = document.getElementById('js-upload-form');
-
-    var startUpload = function(files) {
-    console.log(files)
-    }
-
-    uploadForm.addEventListener('submit', function(e) {
-    var uploadFiles = document.getElementById('js-upload-files').files;
-    e.preventDefault()
-
-    startUpload(uploadFiles)
-    })
-
-    dropZone.ondrop = function(e) {
-    e.preventDefault();
-    this.className = 'upload-drop-zone';
-
-    startUpload(e.dataTransfer.files)
-    }
-
-    dropZone.ondragover = function() {
-    this.className = 'upload-drop-zone drop';
-    return false;
-    }
-
-    dropZone.ondragleave = function() {
-    this.className = 'upload-drop-zone';
-    return false;
-    }
-
-    }(jQuery);
+        document
+            .getElementById("example")
+            .appendChild(box);
     </script>
 }

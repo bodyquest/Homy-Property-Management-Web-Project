@@ -1,6 +1,5 @@
 ﻿namespace RPM.Common.Extensions
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -16,6 +15,17 @@
                        Text = item.GetPropertyValue("Name"),
                        Value = item.GetPropertyValue("Id"),
                        Selected = item.GetPropertyValue("Id").Equals(selectedValue.ToString()),
+                   };
+        }
+
+        public static IEnumerable<SelectListItem> ToSelectStringListItem<T>(this IEnumerable<T> items, string selectedValue)
+        {
+            return from item in items
+                   select new SelectListItem
+                   {
+                       Text = item.GetPropertyValue("Name"),
+                       Value = item.GetPropertyValue("Id"),
+                       Selected = item.GetPropertyValue("Id").Equals(selectedValue),
                    };
         }
     }

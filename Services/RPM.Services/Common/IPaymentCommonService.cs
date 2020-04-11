@@ -8,7 +8,7 @@
     using RPM.Services.Common.Models.Payment;
     using RPM.Services.Common.Models.Profile;
 
-    public interface IPaymentService
+    public interface IPaymentCommonService
     {
         Task<IEnumerable<UserPaymentListServiceModel>> GetUserPaymentsListAsync(string userId);
 

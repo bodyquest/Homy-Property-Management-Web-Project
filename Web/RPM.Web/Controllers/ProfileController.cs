@@ -24,11 +24,11 @@
     public class ProfileController : BaseController
     {
         private readonly UserManager<User> userManager;
-        private readonly IPaymentService paymentService;
+        private readonly IPaymentCommonService paymentService;
 
         public ProfileController(
             UserManager<User> userManager,
-            IPaymentService paymentService)
+            IPaymentCommonService paymentService)
         {
             this.userManager = userManager;
             this.paymentService = paymentService;
