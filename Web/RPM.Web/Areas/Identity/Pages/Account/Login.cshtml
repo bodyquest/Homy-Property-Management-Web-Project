@@ -12,8 +12,16 @@
             <div class="col-md-4">
                 <section>
                     @{
+                        Uri baseUri;
                         string referer = this.HttpContext.Request.Headers["Referer"].ToString();
-                        Uri baseUri = new Uri(referer);
+                        if (!string.IsNullOrWhiteSpace(referer))
+                        {
+                            baseUri = new Uri(referer);
+                        }
+                        else
+                        {
+                            baseUri = new Uri("about:blank");
+                        }
                     }
 
                     <div class="backgroundWhite p-4">
