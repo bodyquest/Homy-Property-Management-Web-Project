@@ -23,13 +23,14 @@
             GoogleReCapthaData data = new GoogleReCapthaData
             {
                 ResponseToken = token,
-                SecretKey = this.settings.ReCAPTCHA_Sectret_Key,
+                SecretKey = this.settings.ReCAPTCHA_Secret_Key,
             };
 
             HttpClient httpClient = new HttpClient();
+
             var response = await httpClient
                 .GetStringAsync(
-                ReCaptchaVerifyLink + $"?secret={data.SecretKey}&response={data.ResponseToken}");
+                $"https://www.google.com/recaptcha/api/siteverify?secret={data.SecretKey}&response={data.ResponseToken}");
 
             var capturedResponse = JsonConvert.DeserializeObject<GoogleResponse>(response);
 

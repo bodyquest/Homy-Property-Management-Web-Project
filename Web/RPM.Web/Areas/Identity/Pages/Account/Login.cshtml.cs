@@ -71,7 +71,6 @@
             // Response.Redirect(uri);
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
-            // Google ReCaptcha
             var recaptcha = this.recaptchaService.ValidateResponse(this.Input.Token);
             if (!recaptcha.Result.Success && recaptcha.Result.Score <= 0.5)
             {
@@ -124,11 +123,15 @@
                 else
                 {
                     this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
                     return this.Page();
                 }
             }
 
             // If we got this far, something failed, redisplay form
+            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             return this.Page();
         }
 
