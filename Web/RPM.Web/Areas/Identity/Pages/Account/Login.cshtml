@@ -26,13 +26,15 @@
                             <hr class="my-1" />
                             <div asp-validation-summary="All" class="text-danger"></div>
                             <div class="form-group">
-                                <input asp-for="Input.Username" class="form-control" placeholder="Username..."/>
+                                <input asp-for="Input.Username" class="form-control" placeholder="Username..." />
                                 <span asp-validation-for="Input.Username" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <input asp-for="Input.Password" class="form-control" placeholder="Password..."/>
+                                <input asp-for="Input.Password" class="form-control" placeholder="Password..." />
                                 <span asp-validation-for="Input.Password" class="text-danger"></span>
                             </div>
+
+                            <input type="hidden" asp-for="Input.Token" />
 
                             <div class="row">
                                 <div class="col-6 form-group mb-0">
@@ -68,7 +70,7 @@
                                 </div>
                             </div>
                             <p class="my-0 py-1 col-12 text-center text-dark">
-                                 <strong>Or continue with</strong>
+                                <strong>Or continue with</strong>
                             </p>
                         </form>
 
@@ -153,5 +155,17 @@
 </section>
 
 @section Scripts {
+
+    <script src="https://www.google.com/recaptcha/api.js?render=@GoogleReCAPTCHA.Value.ReCAPTCHA_Site_Key"></script>
+    <script>
+            grecaptcha.ready(function() {
+                grecaptcha.execute('@GoogleReCAPTCHA.Value.ReCAPTCHA_Site_Key',
+                    { action: 'homepage' })
+                    .then(function (token) {
+                        $('#Input_Token').val(token);
+                });
+            });
+    </script>
+
     <partial name="_ValidationScriptsPartial" />
 }

@@ -1,5 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using RPM.Web.Areas.Identity
 @using RPM.Web.Areas.Identity.Pages
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using RPM.Data.Models
+
+@using Microsoft.Extensions.Options
+@using RPM.Services.Common.Models.ReCAPTHASettings
+
+@using static RPM.Common.GlobalConstants
+@inject IOptions<ReCaptchaSettings> GoogleReCAPTCHA
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

@@ -1,33 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using RPM.Data.Models;
-
-namespace RPM.Web.Areas.Identity.Pages.Account
+﻿namespace RPM.Web.Areas.Identity.Pages.Account
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
+    using RPM.Data.Models;
+    using RPM.Services.Common.Implementations;
+
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly UserManager<User> userManager;
+        private readonly ReCaptchaService recaptchaService;
         private readonly SignInManager<User> signInManager;
         private readonly ILogger<LoginModel> logger;
 
         public LoginModel(
             SignInManager<User> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            ReCaptchaService recaptchaService)
         {
             this.userManager = userManager;
+            this.recaptchaService = recaptchaService;
             this.signInManager = signInManager;
             this.logger = logger;
         }
@@ -52,6 +56,7 @@ namespace RPM.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
+
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -64,8 +69,18 @@ namespace RPM.Web.Areas.Identity.Pages.Account
             // var url = Request.HttpContext.Request.Query["ReturnUrl"];
             // var uri = String.Format("http://example.com?page={0}", url);
             // Response.Redirect(uri);
-
             returnUrl = returnUrl ?? this.Url.Content("~/");
+
+            // Google ReCaptcha
+            var recaptcha = this.recaptchaService.ValidateResponse(this.Input.Token);
+            if (!recaptcha.Result.Success && recaptcha.Result.Score <= 0.5)
+            {
+                this.ModelState.AddModelError(string.Empty, "You are possibly using fake account!");
+
+                this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+                return this.Page();
+            }
 
             if (this.ModelState.IsValid)
             {
@@ -128,6 +143,9 @@ namespace RPM.Web.Areas.Identity.Pages.Account
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+
+            [Required]
+            public string Token { get; set; }
         }
     }
 }

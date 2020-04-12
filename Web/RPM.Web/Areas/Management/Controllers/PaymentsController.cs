@@ -80,7 +80,7 @@
                         Quantity = 1,
                         Amount = (long)payment.Amount * 100,
                         Currency = CurrencyUSD,
-                        Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+                        Description = payment.Id,
 
                         Name = $"Rent Payment for {DateTime.UtcNow.ToString("MMMM")}/ {DateTime.UtcNow.Year} at {payment.RentalAddress}",
                     },

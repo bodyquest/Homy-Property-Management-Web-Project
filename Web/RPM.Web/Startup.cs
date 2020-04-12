@@ -25,6 +25,7 @@
     using RPM.Services.Admin.Implementations;
     using RPM.Services.Common;
     using RPM.Services.Common.Implementations;
+    using RPM.Services.Common.Models.ReCAPTHASettings;
     using RPM.Services.Data;
     using RPM.Services.Management;
     using RPM.Services.Management.Implementations;
@@ -105,6 +106,8 @@
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
 
+            services.Configure<ReCaptchaSettings>(this.configuration.GetSection("GooglereCAPTCHA"));
+
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -127,19 +130,21 @@
             services.AddTransient<IImageDbService, ImageDbService>();
             services.AddTransient<IListingService, ListingService>();
 
-            services.AddTransient<IOwnerListingService, OwnerListingService>(); //
-            services.AddTransient<IOwnerRequestService, OwnerRequestService>(); //
-            services.AddTransient<IOwnerRentalService, OwnerRentalService>(); //
+            services.AddTransient<IOwnerListingService, OwnerListingService>(); // 
+            services.AddTransient<IOwnerRequestService, OwnerRequestService>(); // 
+            services.AddTransient<IOwnerRentalService, OwnerRentalService>(); // 
             services.AddTransient<IPaymentService, OwnerPaymentService>(); //
-            services.AddTransient<IOwnerContractService, OwnerContractService>(); //
+            services.AddTransient<IOwnerContractService, OwnerContractService>(); // 
             services.AddTransient<IOwnerTransactionRequestService,
-                OwnerTransactionRequestService>(); //
+                OwnerTransactionRequestService>(); // 
 
-            services.AddTransient<IPaymentCommonService, PaymentCommonService>(); //
-            services.AddTransient<IRentalService, RentalService>(); //
-            services.AddTransient<IRequestService, RequestService>(); //
-            services.AddTransient<ICityService, CityService>(); //
-            services.AddTransient<ICountryService, CountryService>(); //
+            services.AddTransient<IPaymentCommonService, PaymentCommonService>(); // 
+            services.AddTransient<IRentalService, RentalService>(); // 
+            services.AddTransient<IRequestService, RequestService>(); // 
+            services.AddTransient<ICityService, CityService>(); // 
+            services.AddTransient<ICountryService, CountryService>(); // 
+
+            services.AddTransient<ReCaptchaService>(); // 
 
             // External Authentications
             services.AddAuthentication().AddFacebook(facebookOptions =>

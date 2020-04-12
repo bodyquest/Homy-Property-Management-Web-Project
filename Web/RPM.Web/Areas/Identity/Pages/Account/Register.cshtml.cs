@@ -18,6 +18,7 @@
     using Microsoft.Extensions.Logging;
     using MimeKit;
     using RPM.Data.Models;
+    using RPM.Services.Common.Implementations;
     using RPM.Services.Messaging;
 
     using static RPM.Common.GlobalConstants;
@@ -30,19 +31,22 @@
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private IWebHostEnvironment _env;
+        private readonly ReCaptchaService recaptchaService;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IWebHostEnvironment env)
+            IWebHostEnvironment env,
+            ReCaptchaService recaptchaService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _env = env;
+            this.recaptchaService = recaptchaService;
         }
 
         [BindProperty]
@@ -87,6 +91,9 @@
 
             [DataType(DataType.Date)]
             public DateTime Birthdate { get; set; }
+
+            [Required]
+            public string Token { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -98,6 +105,15 @@
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? this.Url.Content("~/");
+
+            // Google ReCaptcha
+            var recaptcha = this.recaptchaService.ValidateResponse(this.Input.Token);
+            if (!recaptcha.Result.Success && recaptcha.Result.Score <= 0.5)
+            {
+                this.ModelState.AddModelError(string.Empty, "You are possibly using fake account!");
+                return this.Page();
+            }
+
             this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (this.ModelState.IsValid)

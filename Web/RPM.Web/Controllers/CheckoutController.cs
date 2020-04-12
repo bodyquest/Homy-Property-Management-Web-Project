@@ -51,13 +51,26 @@
 
         public async Task<IActionResult> Success(string sessionId)
         {
-            var session = sessionId;
             var userId = this.userManager.GetUserId(this.User);
-            //var payment = await this.paymentService.GetPaymentDetailsAsync(paymentId, userId);
 
+            StripeConfiguration.ApiKey = HomyTestSecretKey;
+            var service = new SessionService();
+            Session checkoutSession = service.Get(sessionId);
+
+            var paymentId = checkoutSession
+                .PaymentIntent
+                .TransferData
+                .Destination.ToString();
+
+            var intentId = checkoutSession.SetupIntentId;
+            var intentService = new SetupIntentService();
+            var intent = intentService.Get(intentId);
+            var result = intent.PaymentMethod.StripeResponse.IdempotencyKey;
+
+            var payment = await this.paymentService.GetPaymentDetailsAsync(paymentId, userId);
             var paymentStatus = PaymentStatus.Complete;
             var transactionDate = DateTime.UtcNow;
-            //var result = await this.paymentService.EditPaymentStatusAsync(paymentId, userId, status, transactionDate);
+            // var result = await this.paymentService.EditPaymentStatusAsync(paymentId, userId, status, transactionDate);
 
             return this.View();
         }

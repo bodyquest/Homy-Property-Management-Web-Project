@@ -11,8 +11,8 @@
                 <form class="my-5" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div class="backgroundWhite p-4">
                         <h2 class="text-center text-primary py-1">@ViewData["Title"]</h2>
-                        <h4>Create a new account.</h4>
-                        <hr />
+                        <h4 class="text-center mb-0">Create a new account.</h4>
+                        <hr class="my-1" />
                         <div asp-validation-summary="All" class="text-danger"></div>
 
                         <div class="row">
@@ -71,6 +71,9 @@
                                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                                 </div>
                             </div>
+
+                            <input type="hidden" asp-for="Input.Token" />
+
                         </div>
 
                         <button type="submit" class="btn btn-primary">Register</button>
@@ -113,5 +116,17 @@
 
 
 @section Scripts {
+
+    <script src="https://www.google.com/recaptcha/api.js?render=@GoogleReCAPTCHA.Value.ReCAPTCHA_Site_Key"></script>
+    <script>
+            grecaptcha.ready(function() {
+                grecaptcha.execute('@GoogleReCAPTCHA.Value.ReCAPTCHA_Site_Key',
+                    { action: 'homepage' })
+                    .then(function (token) {
+                        $('#Input_Token').val(token);
+                });
+            });
+    </script>
+
     <partial name="_ValidationScriptsPartial" />
 }
