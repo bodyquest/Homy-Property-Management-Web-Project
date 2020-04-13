@@ -1,14 +1,9 @@
 ﻿namespace RPM.Web.Areas.Management.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using RPM.Data.Models;
-    using RPM.Web.Areas.Management.Controllers;
     using RPM.Web.Infrastructure.Extensions;
     using Stripe;
 
@@ -40,14 +35,12 @@
             user.StripeConnectedAccountId = response.StripeUserId;
             user.StripePublishableKey = response.StripePublishableKey;
             user.StripeRefreshToken = response.RefreshToken;
-            //user.StripeAccessToken = response.AccessToken;
+            // user.StripeAccessToken = response.AccessToken;
 
             await this.userManager.UpdateAsync(user);
 
             return this.RedirectToAction("Create", "Listings", new { area = ManagementArea })
                 .WithSuccess(string.Empty, SuccessfullyRegistered);
         }
-
-        
     }
 }

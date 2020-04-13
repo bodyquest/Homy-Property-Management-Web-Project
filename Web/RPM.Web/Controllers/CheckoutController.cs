@@ -25,28 +25,14 @@
     public class CheckoutController : BaseController
     {
         private readonly UserManager<User> userManager;
-        private readonly IPaymentCommonService paymentService;
+        private readonly IPaymentCommonService paymentCommonService;
 
         public CheckoutController(
             UserManager<User> userManager,
-            IPaymentCommonService paymentService)
+            IPaymentCommonService paymentCommonService)
         {
             this.userManager = userManager;
-            this.paymentService = paymentService;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var userId = this.userManager.GetUserId(this.User);
-
-            var userPayments = await this.paymentService.GetUserPaymentsListAsync(userId);
-
-            var viewModel = new ProfileIndexViewModel
-            {
-                Payments = userPayments,
-            };
-
-            return this.View(viewModel);
+            this.paymentCommonService = paymentCommonService;
         }
 
         public async Task<IActionResult> Success(string sessionId)
@@ -57,22 +43,19 @@
             var service = new SessionService();
             Session checkoutSession = service.Get(sessionId);
 
-            var paymentId = checkoutSession
-                .PaymentIntent
-                .TransferData
-                .Destination.ToString();
-
             var intentId = checkoutSession.SetupIntentId;
             var intentService = new SetupIntentService();
             var intent = intentService.Get(intentId);
             var result = intent.PaymentMethod.StripeResponse.IdempotencyKey;
 
-            var payment = await this.paymentService.GetPaymentDetailsAsync(paymentId, userId);
-            var paymentStatus = PaymentStatus.Complete;
-            var transactionDate = DateTime.UtcNow;
-            // var result = await this.paymentService.EditPaymentStatusAsync(paymentId, userId, status, transactionDate);
+            bool compare = await this.paymentCommonService.CompareData(sessionId);
+            if (compare == true)
+            {
+                return this.View();
+            }
 
-            return this.View();
+            return this.RedirectToAction("Cancel", "Checkout", new { area = string.Empty })
+                    .WithDanger(string.Empty, CheckoutIdDoesNotExist);
         }
     }
 }

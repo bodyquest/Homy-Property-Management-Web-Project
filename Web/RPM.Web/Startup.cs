@@ -220,20 +220,32 @@
 
             app.UseHangfireDashboard();
 
+            //app.Map("/webhook", WebHook);
+
             app.UseEndpoints(
                 endpoints =>
                 {
                     endpoints.MapControllerRoute(
-                    "areaRoute",
-                    "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                     endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller:slugify}/{action:slugify}/{id:slugify?}",
                     defaults: new { controller = "Home", action = "Index" });
 
+                    endpoints.MapControllerRoute(
+                    name: "api",
+                    pattern: "{controller}/{action}/{id?}");
+
                     endpoints.MapRazorPages();
                 });
         }
+
+        //private static void WebHook(IApplicationBuilder app)
+        //{
+        //    app.Run( async context =>
+        //    await context.Response.WriteAsync("OK"));
+        //}
     }
 }

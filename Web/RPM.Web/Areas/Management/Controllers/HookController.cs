@@ -41,6 +41,7 @@
 
         // https://dashboard.stripe.com/test/webhooks
         public const string Secret = "whsec_kkeaMYEHNkXTJyAW48syt8tWSPymAKLn";
+        public const string SecretConnect = "whsec_AZBLAbu7yiGC1urpKV5oatojyPPHs9CQ";
 
         [HttpPost]
         [ActionName("handle")]
@@ -53,15 +54,13 @@
                 var stripeEvent = EventUtility.ConstructEvent(
                     json,
                     this.Request.Headers["Stripe-Signature"],
-                    Secret);
+                    SecretConnect);
 
                 // Handle the checkout.session.completed event
                 if (stripeEvent.Type == Events.CheckoutSessionCompleted)
                 {
                     var session = stripeEvent.Data.Object as Stripe.Checkout.Session;
 
-                    // Fulfill the purchase...
-                    this.HandleCheckoutSession(session);
                     return this.Ok();
                 }
                 else
@@ -73,13 +72,6 @@
             {
                 return this.BadRequest();
             }
-        }
-
-        private void HandleCheckoutSession(Session session)
-        {
-            // mark payment as completed in the DB
-
-            throw new NotImplementedException();
         }
     }
 }

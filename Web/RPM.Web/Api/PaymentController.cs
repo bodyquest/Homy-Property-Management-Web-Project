@@ -33,62 +33,57 @@
             this.paymentService = paymentService;
         }
 
-        public class ParamsModel
-        {
-            public string Id { get; set; }
-        }
+       //// Create PaymentSession
+       // [HttpPost]
+       // [Route("session")]
+       // public async Task<Session> CreateSessionAsync(string id)
+       // {
+       //     var userId = this.userManager.GetUserId(this.User);
+       //     var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
 
-        // Create PaymentSession
-        //[HttpPost]
-        //[Route("session")]
-        //public async Task<Session> CreateSession(string id)
-        //{
-        //    var userId = this.userManager.GetUserId(this.User);
-        //    var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
+       //     var successStringUrl = "https://localhost:44319/Checkout/success?session_id={CHECKOUT_SESSION_ID}";
+       //     var cancelStringUrl = "https://localhost:44319/Checkout/cancel";
 
-        //    var successStringUrl = "https://localhost:44319/Checkout/success?session_id={CHECKOUT_SESSION_ID}";
-        //    var cancelStringUrl = "https://localhost:44319/Checkout/cancel";
+       //     var options = new SessionCreateOptions
+       //     {
+       //         PaymentMethodTypes = new List<string>
+       //         {
+       //             "card",
+       //         },
 
-        //    var options = new SessionCreateOptions
-        //    {
-        //        PaymentMethodTypes = new List<string>
-        //        {
-        //            "card",
-        //        },
+       //         LineItems = new List<SessionLineItemOptions>
+       //         {
+       //             new SessionLineItemOptions
+       //             {
+       //                 Quantity = 1,
+       //                 Amount = (long)payment.Amount * 100,
+       //                 Currency = CurrencyUSD,
 
-        //        LineItems = new List<SessionLineItemOptions>
-        //        {
-        //            new SessionLineItemOptions
-        //            {
-        //                Quantity = 1,
-        //                Amount = (long)payment.Amount * 100,
-        //                Currency = CurrencyUSD,
+       //                 Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
 
-        //                Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+       //                 Name = $"Rent Payment for {DateTime.UtcNow.Month} | {DateTime.UtcNow.Year} for rental at {payment.RentalAddress}",
+       //             },
+       //         },
 
-        //                Name = $"Rent Payment for {DateTime.UtcNow.Month} | {DateTime.UtcNow.Year} for rental at {payment.RentalAddress}",
-        //            },
-        //        },
+       //         PaymentIntentData = new SessionPaymentIntentDataOptions
+       //         {
+       //             ApplicationFeeAmount = (long)((payment.Amount * 0.01m) * 100),
+       //             CaptureMethod = "manual",
 
-        //        PaymentIntentData = new SessionPaymentIntentDataOptions
-        //        {
-        //            ApplicationFeeAmount = (long)((payment.Amount * 0.01m) * 100),
-        //            CaptureMethod = "manual",
+       //             TransferData = new SessionPaymentIntentTransferDataOptions
+       //             {
+       //                 Destination = payment.ToStripeAccountId,
+       //             },
+       //         },
 
-        //            TransferData = new SessionPaymentIntentTransferDataOptions
-        //            {
-        //                Destination = payment.ToStripeAccountId,
-        //            },
-        //        },
+       //         SuccessUrl = successStringUrl,
+       //         CancelUrl = cancelStringUrl,
+       //     };
 
-        //        SuccessUrl = successStringUrl,
-        //        CancelUrl = cancelStringUrl,
-        //    };
+       //     var service = new SessionService();
+       //     Session session = service.Create(options);
 
-        //    var service = new SessionService();
-        //    Session session = service.Create(options);
-
-        //    return session;
-        //}
+       //     return session;
+       // }
     }
 }

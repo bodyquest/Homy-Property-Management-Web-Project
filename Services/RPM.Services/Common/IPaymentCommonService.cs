@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
     using System.Threading.Tasks;
     using RPM.Data.Models.Enums;
     using RPM.Services.Common.Models.Payment;
@@ -17,5 +16,11 @@
         Task<bool> EditPaymentStatusAsync(string paymentId, string userId, PaymentStatus status, DateTime? date);
 
         Task<bool> AddPaymentRequestToUserAsync(string requestId);
+
+        Task CreateCheckoutSessionAsync(string sessionId, string paymentId, string toStripeAccountId);
+
+        Task<bool> MarkPaymentAsCompletedAsync(string sessionId);
+
+        Task<bool> CompareData(string sessionId);
     }
 }

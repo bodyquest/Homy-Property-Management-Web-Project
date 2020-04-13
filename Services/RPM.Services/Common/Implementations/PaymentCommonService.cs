@@ -148,5 +148,49 @@
 
             return true;
         }
+
+        public async Task CreateCheckoutSessionAsync(string sessionId, string paymentId, string toStripeAccountId)
+        {
+            var session = new StripeCheckoutSession
+            {
+                Id = sessionId,
+                PaymentId = paymentId,
+                ToStripeAccountId = toStripeAccountId,
+            };
+
+            await this.context.StripeCheckoutSessions.AddAsync(session);
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task<bool> MarkPaymentAsCompletedAsync(string sessionId)
+        {
+            if (string.IsNullOrWhiteSpace(sessionId))
+            {
+                return false;
+            }
+
+            var session = await this.context.StripeCheckoutSessions.FindAsync(sessionId);
+
+            if (session == null)
+            {
+                return false;
+            }
+
+            var payment = await this.context.Payments.FindAsync(session.PaymentId);
+
+            payment.Status = PaymentStatus.Complete;
+            payment.TransactionDate = DateTime.UtcNow;
+
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> CompareData(string sessionId)
+        {
+            bool exists = await this.context.StripeCheckoutSessions.AnyAsync(x => x.Id == sessionId);
+
+            return exists;
+        }
     }
 }

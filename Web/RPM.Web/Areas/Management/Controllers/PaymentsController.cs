@@ -12,6 +12,7 @@
     using RPM.Data;
     using RPM.Data.Models;
     using RPM.Data.Models.Enums;
+    using RPM.Services.Common;
     using RPM.Services.Management;
     using RPM.Services.Management.Implementations;
     using RPM.Web.Areas.Management.Models.Payments;
@@ -27,15 +28,18 @@
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
         private readonly IPaymentService paymentService;
+        private readonly IPaymentCommonService paymentCommonService;
 
         public PaymentsController(
             ApplicationDbContext context,
             UserManager<User> userManager,
-            IPaymentService paymentService)
+            IPaymentService paymentService,
+            IPaymentCommonService paymentCommonService)
         {
             this.context = context;
             this.userManager = userManager;
             this.paymentService = paymentService;
+            this.paymentCommonService = paymentCommonService;
         }
 
         [Authorize(Roles = OwnerRoleName)]
@@ -58,8 +62,6 @@
         [ActionName("session")]
         public async Task<IActionResult> CreateSession(string id)
         {
-            //var id = model.Id;
-            //var id = "68f51bff-5709-4337-a74b-d0ecb53f33ec";
             var userId = this.userManager.GetUserId(this.User);
             var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
 
@@ -80,7 +82,6 @@
                         Quantity = 1,
                         Amount = (long)payment.Amount * 100,
                         Currency = CurrencyUSD,
-                        Description = payment.Id,
 
                         Name = $"Rent Payment for {DateTime.UtcNow.ToString("MMMM")}/ {DateTime.UtcNow.Year} at {payment.RentalAddress}",
                     },
@@ -90,6 +91,7 @@
                 {
                     ApplicationFeeAmount = (long)((payment.Amount * 0.01m) * 100),
                     CaptureMethod = "manual",
+                    Description = payment.Id,
 
                     TransferData = new SessionPaymentIntentTransferDataOptions
                     {
@@ -103,6 +105,13 @@
 
             var service = new SessionService();
             Session session = service.Create(options);
+
+            var sessionId = session.Id;
+            var paymentId = session.PaymentIntent.Description;
+            var toStripeAccountId = payment.ToStripeAccountId;
+
+            // Create Checkout Session in Database to validate it the Webhook handler and in SuccessPage
+            await this.paymentCommonService.CreateCheckoutSessionAsync(sessionId, paymentId, toStripeAccountId);
 
             return this.Json(session);
         }
