@@ -32,7 +32,15 @@
                     <strong class="text-secondary">The home is hosted by @Model.OwnerName</strong>
                 </h3>
                 <div class="text-left pl-lg-5">
-                    <div class="text-muted pt-2">@Model.Address<span class="float-right"><strong>Price: $@Model.Price/ Month</strong></span></div>
+                    <div class="text-muted pt-2">
+                        @Model.Address
+                        @if (Model.Status == "ToRent")
+                        {
+                            <span class="float-right">
+                                <strong>Price: $@Model.Price/ Month</strong>
+                            </span>
+                        }
+                    </div>
                     <hr />
                     <strong><i class="far fa-file-alt mr-1"></i>Listing Details</strong>
                     <div class="row">

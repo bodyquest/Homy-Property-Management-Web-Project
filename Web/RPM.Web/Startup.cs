@@ -116,7 +116,7 @@
             // services.AddScoped<ISeeder, ApplicationDbContextSeeder>(); !!!!!!!!!!!!!!!!!!
 
             // Application services
-            services.AddTransient<IEmailSender>(x => new SendGridEmailSender("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"));
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(SendGridKey));
             //services.AddSingleton<IEmailSender, SendGridEmailSender>();
             //services.Configure<EmailOptions>(this.configuration);
 
@@ -171,7 +171,6 @@
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(
@@ -190,6 +189,14 @@
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
+            /*
+             app.UseCors(options =>
+                options
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+             */
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -204,14 +211,12 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseRouting();
-            //app.UseCors();
+            app.UseAuthorization();
 
             StripeConfiguration.ApiKey = this.configuration.GetSection("Stripe")["SecretKey"];
-
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseHangfireDashboard();
 
