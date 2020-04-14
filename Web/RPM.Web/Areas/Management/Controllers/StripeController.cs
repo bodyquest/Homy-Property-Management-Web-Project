@@ -1,6 +1,7 @@
 ﻿namespace RPM.Web.Areas.Management.Controllers
 {
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using RPM.Data.Models;
@@ -9,6 +10,7 @@
 
     using static RPM.Common.GlobalConstants;
 
+    [Authorize(ManagerRoleName)]
     public class StripeController : ManagementController
     {
         private readonly UserManager<User> userManager;

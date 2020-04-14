@@ -1,8 +1,5 @@
 ﻿namespace RPM.Web.Areas.Management.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -12,6 +9,7 @@
     using RPM.Web.Areas.Management.Models;
     using static RPM.Common.GlobalConstants;
 
+    [Authorize(ManagerRoleName)]
     public class DashboardController : ManagementController
     {
         private readonly IOwnerListingService listingService;

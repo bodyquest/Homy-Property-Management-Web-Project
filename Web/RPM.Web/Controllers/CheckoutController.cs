@@ -38,6 +38,17 @@
         public async Task<IActionResult> Success(string sessionId)
         {
             var userId = this.userManager.GetUserId(this.User);
+            bool compare = await this.paymentCommonService.CompareData(sessionId);
+
+            if (string.IsNullOrWhiteSpace(sessionId) || compare == false)
+            {
+                //Uri baseUri;
+                //var referer = this.HttpContext.Request.Headers["Referer"].ToString();
+
+                // var returnUrl = string.IsNullOrWhiteSpace(referer) ? baseUri = new Uri("~/") : baseUri = new Uri(referer);
+                return this.RedirectToAction(nameof(ProfileController.Index), "Home", new { area = string.Empty })
+                    .WithWarning(string.Empty, NiceTry);
+            }
 
             StripeConfiguration.ApiKey = HomyTestSecretKey;
             var service = new SessionService();
@@ -48,7 +59,6 @@
             var intent = intentService.Get(intentId);
             var result = intent.PaymentMethod.StripeResponse.IdempotencyKey;
 
-            bool compare = await this.paymentCommonService.CompareData(sessionId);
             if (compare == true)
             {
                 return this.View();

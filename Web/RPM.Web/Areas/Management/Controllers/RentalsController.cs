@@ -4,12 +4,16 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using RPM.Data.Models;
     using RPM.Services.Management;
     using RPM.Web.Areas.Management.Models.Rentals;
 
+    using static RPM.Common.GlobalConstants;
+
+    [Authorize(ManagerRoleName)]
     public class RentalsController : ManagementController
     {
         private readonly UserManager<User> userManager;

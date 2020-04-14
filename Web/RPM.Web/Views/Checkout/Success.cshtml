@@ -5,8 +5,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+        body {
+  min-height: 100vh;
+}
+</style>
+
+<section class="jumbotron jumbotron-fluid jumboHeroImage">
+</section>
+
 <section class="content">
-    <div class="row d-flex justify-content-start">
+    <div class="row d-flex justify-content-center">
+
+        <div class="row p-3 mx-auto mt-4 bg-success">
+            <p>
+                <a asp-controller="Profile" asp-action="Index" class="primary-btn px-1 bg-transparent">
+                    Rentals
+                </a>
+            </p>
+        </div>
         <div class="col-md-6 pl-4">
             <div class="card">
                 <!-- /.card-header -->
@@ -18,9 +35,10 @@
                 <div class="card-footer row justify-content-between m-0 px-0">
                     <div class="col-5 pl-0 m-0" style="display: inline-block;">
                         <p class="text-right p-0 m-0">
-                            <a asp-controller="Profile" 
-                               asp-action="Index" 
-                               class="btn btn-sm btn-secondary">Back to Profile
+                            <a asp-controller="Profile"
+                               asp-action="Index"
+                               class="btn btn-sm btn-secondary">
+                                Back to Profile
                             </a>
                         </p>
                     </div>

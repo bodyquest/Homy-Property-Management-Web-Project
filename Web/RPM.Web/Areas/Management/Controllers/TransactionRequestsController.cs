@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
 
     using Hangfire;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using RPM.Data;
@@ -19,6 +19,7 @@
     using RPM.Web.Infrastructure.Extensions;
     using static RPM.Common.GlobalConstants;
 
+    [Authorize(AdministratorRoleName)]
     public class TransactionRequestsController : ManagementController
     {
         private readonly ApplicationDbContext context;
@@ -159,7 +160,6 @@
         }
 
         [HttpPost]
-        [ActionName("Edit")]
         public async Task<IActionResult> EditAsync(OwnerTransactionRequestsCreateInputModel modelForEdit)
         {
             var userId = this.userManager.GetUserId(this.User);

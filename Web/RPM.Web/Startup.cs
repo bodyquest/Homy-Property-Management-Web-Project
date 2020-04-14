@@ -57,24 +57,22 @@
             services.Configure<CookiePolicyOptions>(
                 options =>
                     {
-                        options.CheckConsentNeeded = context => true;
+                        options.CheckConsentNeeded = context => false;
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
-            services.AddSignalR();
 
             services.AddSingleton(this.configuration);
 
-            //services.AddCors(options =>
-            //{
+            // services.AddCors(options =>
+            // {
             //    options.AddPolicy(
             //        "AllowAllOrigins",
             //        builder => builder
             //        .AllowAnyOrigin());
-            //});
-
+            // });
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password = new PasswordOptions()
@@ -211,16 +209,15 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             StripeConfiguration.ApiKey = this.configuration.GetSection("Stripe")["SecretKey"];
 
             app.UseHangfireDashboard();
-
-            //app.Map("/webhook", WebHook);
 
             app.UseEndpoints(
                 endpoints =>
@@ -241,11 +238,5 @@
                     endpoints.MapRazorPages();
                 });
         }
-
-        //private static void WebHook(IApplicationBuilder app)
-        //{
-        //    app.Run( async context =>
-        //    await context.Response.WriteAsync("OK"));
-        //}
     }
 }

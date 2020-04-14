@@ -12,7 +12,7 @@ namespace RPM.Data.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     PaymentId = table.Column<string>(nullable: true),
-                    ToStripeAccountId = table.Column<string>(nullable: true)
+                    ToStripeAccountId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {

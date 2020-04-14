@@ -15,7 +15,7 @@
 }
 <!-- Hero Section Begin -->
 @if (this.User.Identity.IsAuthenticated &&
-(this.User.IsInRole(GlobalConstants.ViewerRoleName)
+(this.User.IsInRole(GlobalConstants.TenantRole)
 || this.User.IsInRole(GlobalConstants.ManagerRoleName)))
 {
     <section class="jumbotron jumbotron-fluid jumboHeroImage">
@@ -83,8 +83,6 @@ else
                         </div>
 
                     </form>-->
-                    <!--TO TEST -->
-                    <!--TO TEST -->
                     <!--TO TEST FURTHER-->
                     <!--<div class="col-6 searchbar">
                         <input asp-for="SearchText"

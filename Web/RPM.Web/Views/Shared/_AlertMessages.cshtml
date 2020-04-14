@@ -5,11 +5,28 @@
 }
 @if (!string.IsNullOrEmpty(type))
 {
-    <div 
-         class="alert alert-@type alert-dismissible text-center col-md-7 mx-auto"
-         role="alert"
-         style="z-index: 100;">
-        <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <strong>@title</strong> @body
+    <div class="row justify-content-center">
+        <div class="d-flex alert alert-@type alert-dismissible text-center text-white col-md-4 align-center"
+             role="alert"
+             style="z-index:1000;
+                height:200px;
+                position:fixed;
+                top:100px;
+                bottom:auto;
+                margin-left:auto;
+                margin-right:auto;
+                border-radius:0;
+                border:none;
+                text-align:center;
+                font-size:25px;
+                font-weight:700">
+            <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>@title</strong>
+            <div class="pl-4"
+                 style="margin-top:auto;margin-bottom:auto">@body
+            </div>
+        </div>
     </div>
 }
