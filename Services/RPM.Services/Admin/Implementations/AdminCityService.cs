@@ -127,7 +127,17 @@
 
         public async Task<bool> DeleteAsync(int? id)
         {
-            throw new NotImplementedException();
+            var city = await this.context.Cities.FindAsync(id);
+
+            if (city.Homes.Any())
+            {
+                return false;
+            }
+
+            this.context.Cities.Remove(city);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
         }
 
         public async Task<AdminCityDetailsServiceModel> GetByIdAsync(int? id)

@@ -47,7 +47,16 @@
                                                 <td class="col-md-1">@city.Id</td>
                                                 <td>@city.Name</td>
                                                 <td>@city.Country</td>
-                                                <partial name="_ButtonCRUDPartial" model="city.Id" />
+                                                <td style="width:100px">
+                                                    <div class="btn btn-group" role="group">
+                                                        <a class="btn btn-primary text-white" asp-action="Edit" asp-route-Id="@city.Id">
+                                                            <i class="far fa-edit"></i>
+                                                        </a>
+                                                        <a class="btn btn-danger text-white" asp-action="Delete" asp-route-Id="@city.Id">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>

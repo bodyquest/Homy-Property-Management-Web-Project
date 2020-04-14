@@ -67,12 +67,6 @@
             return this.View(modelVM);
         }
 
-        // GET: Cities/Details/5
-        public async Task<ActionResult> Details(int id)
-        {
-            return this.View();
-        }
-
         // GET: Cities/Edit/5
         public async Task<ActionResult> EditAsync(int? id)
         {
@@ -141,7 +135,7 @@
 
                 if (!isDeleted)
                 {
-                    this.StatusMessage = CouldNotUpdateRecord;
+                    this.StatusMessage = DeltionDenied;
                     var modelVM = await this.adminCityService.GetByIdAsync(id);
                     modelVM.StatusMessage = this.StatusMessage;
 
