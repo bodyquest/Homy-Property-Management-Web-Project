@@ -130,7 +130,7 @@ else
 
         <div class="col-md-2 px-4">
 
-            <div onclick="location.href='rentals/index'" class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC;cursor: pointer;">
+            <div onclick="location.href='rentals/index'" class="shadow row p-3 mx-auto mt-4" style="background-color: #CCCCCC;cursor: pointer;">
                 <a asp-controller="Payments"
                    asp-action="Index"
                    class="primary-btn px-1 bg-transparent">
@@ -138,7 +138,7 @@ else
                 </a>
             </div>
 
-            <div onclick="location.href='rentals/index'" class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC;cursor: pointer;">
+            <div onclick="location.href='rentals/index'" class="shadow row p-3 mx-auto mt-4" style="background-color: #CCCCCC;cursor: pointer;">
                 <a asp-controller="Rentals"
                    asp-action="Index"
                    class="primary-btn px-1 bg-transparent">
@@ -150,7 +150,7 @@ else
 
             <div class="col-md-10 pt-4 px-4">
                 <!-- TABLE: PAYMENT REQUESTS -->
-                <div class="card">
+                <div class="shadow card">
                     <div class="card-header border-transparent">
                         <h3 class="card-title text-info"><strong>Payments</strong></h3>
                         <div class="card-tools">
@@ -235,7 +235,7 @@ else
                                                                asp-route-Id="@payment.Id"
                                                                class="btn btn-sm btn-labeled btn-secondary disabled btn-block">
                                                                 <span class="btn-label">
-                                                                    <ion-icon name="card-outline"></ion-icon>
+                                                                    <ion-icon class="pt-1" name="card-outline"></ion-icon>
                                                                 </span>Paid
                                                             </a>
                                                         }
@@ -247,7 +247,7 @@ else
                                                                asp-route-Id="@payment.Id"
                                                                class="btn btn-sm btn-labeled btn-success btn-block">
                                                                 <span class="btn-label">
-                                                                    <ion-icon name="card-outline"></ion-icon>
+                                                                    <ion-icon class="pt-1" name="card-outline"></ion-icon>
                                                                 </span>Pay
                                                             </a>
                                                         }
@@ -272,8 +272,8 @@ else
                     <!-- /.card-body -->
                     <div class="card-footer row justify-content-between m-0 px-0">
                         <div class="col-12 pl-0 m-0" style="display: inline-block;">
-                            <p class="text-right p-0 m-0 pr-2">
-                                <a asp-controller="Payment" asp-action="All" class="btn btn-sm btn-secondary">View All</a>
+                            <p class="text-right p-0 m-0 pr-3">
+                                <a asp-controller="Payment" asp-action="All" class="btn btn-secondary">View All</a>
                             </p>
                         </div>
                     </div>
@@ -286,7 +286,7 @@ else
     <div class="row">
         <div class="col-8 offset-2 pt-1 px-4">
             <!-- TABLE: RENTALS -->
-            <div class="card">
+            <div class="shadow card">
                 <div class="card-header border-transparent">
                     <h3 class="card-title text-info"><strong>Rentals</strong></h3>
                     <div class="card-tools">

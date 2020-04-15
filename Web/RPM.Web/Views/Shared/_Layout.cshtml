@@ -117,11 +117,14 @@
                         }
 
                     </div>
-                    <a asp-area=""
-                       asp-controller="Listings"
-                       asp-action="Create"
-                       title="Create Listing"
-                       class="primary-btn ml-0 px-4">Add Listing</a>
+                    @if (!this.User.IsInRole(TenantRole))
+                    {
+                        <a asp-area=""
+                           asp-controller="Listings"
+                           asp-action="Create"
+                           title="Create Listing"
+                           class="primary-btn ml-0 px-4">Add Listing</a>
+                    }
                     <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))" class="primary-btn px-3 ml-2 mr-4" style="background-color: #01BFE1">Logout</a>
                 </div>
                 <div id="mobile-menu-wrap"></div>

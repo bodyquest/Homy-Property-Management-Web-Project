@@ -219,7 +219,7 @@ textAreaFixed {
 /***********************  Icon Buttons **********************/
 .btn-label {
     position: relative;
-    left: -8px;
+    left: -20px;
     display: inline-block;
     padding: 4px 6px;
     background: rgba(0,0,0,0.15);
