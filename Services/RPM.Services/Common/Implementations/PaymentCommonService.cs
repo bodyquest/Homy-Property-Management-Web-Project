@@ -13,7 +13,7 @@
     using RPM.Services.Common.Models.Payment;
     using RPM.Services.Common.Models.Profile;
     using RPM.Services.Management;
-
+    using Stripe.Checkout;
     using static RPM.Common.GlobalConstants;
 
     public class PaymentCommonService : Common.IPaymentCommonService
@@ -162,25 +162,23 @@
             await this.context.SaveChangesAsync();
         }
 
-        public async Task<bool> MarkPaymentAsCompletedAsync(string sessionId)
+        public async Task<bool> MarkPaymentAsCompletedAsync(Session session)
         {
-            if (string.IsNullOrWhiteSpace(sessionId))
+            var sessionId = session.Id;
+
+            var sessionFromDb = await this.context.StripeCheckoutSessions.FindAsync(sessionId);
+
+            if (sessionFromDb == null)
             {
                 return false;
             }
 
-            var session = await this.context.StripeCheckoutSessions.FindAsync(sessionId);
-
-            if (session == null)
-            {
-                return false;
-            }
-
-            var payment = await this.context.Payments.FindAsync(session.PaymentId);
+            var payment = await this.context.Payments.FindAsync(sessionFromDb.PaymentId);
 
             payment.Status = PaymentStatus.Complete;
             payment.TransactionDate = DateTime.UtcNow;
 
+            this.context.Payments.Update(payment);
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
@@ -191,6 +189,16 @@
             bool exists = await this.context.StripeCheckoutSessions.AnyAsync(x => x.Id == sessionId);
 
             return exists;
+        }
+
+        public async Task<string> GetPaymentId(string sessionId)
+        {
+            var paymentId = await this.context.StripeCheckoutSessions
+                .Where(s => s.Id == sessionId)
+                .Select(s => s.PaymentId)
+                .FirstOrDefaultAsync();
+
+            return paymentId;
         }
     }
 }

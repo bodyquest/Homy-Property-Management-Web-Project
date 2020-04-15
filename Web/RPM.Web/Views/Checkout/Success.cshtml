@@ -5,48 +5,41 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-        body {
-  min-height: 100vh;
-}
-</style>
+<body class="handshake-bg">
+    <section class="content pb-4"
+             style="padding-top: 120px; margin-left: auto; margin-right: auto;">
+        <div class="row d-flex justify-content-center">
 
-<section class="jumbotron jumbotron-fluid jumboHeroImage">
-</section>
-
-<section class="content">
-    <div class="row d-flex justify-content-center">
-
-        <div class="row p-3 mx-auto mt-4 bg-success">
-            <p>
-                <a asp-controller="Profile" asp-action="Index" class="primary-btn px-1 bg-transparent">
-                    Rentals
-                </a>
-            </p>
-        </div>
-        <div class="col-md-6 pl-4">
-            <div class="card">
-                <!-- /.card-header -->
-                <div class="card-body p-0">
-
-                </div>
-                <!-- /.card-body -->
-
-                <div class="card-footer row justify-content-between m-0 px-0">
-                    <div class="col-5 pl-0 m-0" style="display: inline-block;">
-                        <p class="text-right p-0 m-0">
-                            <a asp-controller="Profile"
-                               asp-action="Index"
-                               class="btn btn-sm btn-secondary">
-                                Back to Profile
+            <div class="row p-3 mx-auto mt-4">
+                <div class="form-area">
+                    <div class="col-md-12 pb-4">
+                        <p>
+                            <a class="primary-btn px-1 bg-transparent text-primary">
+                                Thank you! Your payment was successful!
                             </a>
                         </p>
+                        <ul class="pb-4 mb-4">
+                            @*<li><strong>Payment reason:</strong> Model.Reason</li>
+        <li><strong>Amount paid:</strong> Model.Amount</li>
+        <li><strong>Recipient:</strong> Model.To</li>*@
+                            <li><strong>Payment reason:</strong> @Model.Reason</li>
+                            <li><strong>Amount paid:</strong> $ @Model.Amount</li>
+                            <li><strong>Recipient:</strong> @Model.To</li>
+                            <li><strong>Property Address:</strong> @Model.RentalAddress</li>
+                            @*<li><strong>Transaction Date:</strong> @Model.TransactionDate</li>*@
+                        </ul>
+                    </div>
+                    <div class="col-md-6 pt-4 mt-4 mx-auto">
+                        <a asp-controller="Profile"
+                           asp-action="Index"
+                           class="shadow btn btn-block btn-primary text-white">
+                            Back to Profile
+                        </a>
                     </div>
                 </div>
-                <!-- /.card-footer -->
-
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</body>
+
 

@@ -14,6 +14,7 @@
     using RPM.Services.Common.Models.Home;
     using RPM.Web.Infrastructure.Extensions;
     using RPM.Web.Models.Home;
+    using RPM.Web.Models.Payment;
     using RPM.Web.Models.Profile;
     using RPM.Web.ViewModels;
     using Stripe;
@@ -42,30 +43,24 @@
 
             if (string.IsNullOrWhiteSpace(sessionId) || compare == false)
             {
-                //Uri baseUri;
-                //var referer = this.HttpContext.Request.Headers["Referer"].ToString();
-
-                // var returnUrl = string.IsNullOrWhiteSpace(referer) ? baseUri = new Uri("~/") : baseUri = new Uri(referer);
                 return this.RedirectToAction(nameof(ProfileController.Index), "Home", new { area = string.Empty })
                     .WithWarning(string.Empty, NiceTry);
             }
 
-            StripeConfiguration.ApiKey = HomyTestSecretKey;
-            var service = new SessionService();
-            Session checkoutSession = service.Get(sessionId);
+            var paymentId = await this.paymentCommonService.GetPaymentId(sessionId);
 
-            var intentId = checkoutSession.SetupIntentId;
-            var intentService = new SetupIntentService();
-            var intent = intentService.Get(intentId);
-            var result = intent.PaymentMethod.StripeResponse.IdempotencyKey;
+            var model = await this.paymentCommonService.GetPaymentDetailsAsync(paymentId, userId);
 
-            if (compare == true)
+            var viewModel = new CheckoutPaymentViewModel
             {
-                return this.View();
-            }
+                Reason = model.Reason,
+                Amount = model.Amount,
+                To = model.To,
+                RentalAddress = model.RentalAddress,
+                TransactionDate = model.TransactionDate?.ToString(DateFormatWithTime),
+            };
 
-            return this.RedirectToAction("Cancel", "Checkout", new { area = string.Empty })
-                    .WithDanger(string.Empty, CheckoutIdDoesNotExist);
+            return this.View(viewModel);
         }
     }
 }

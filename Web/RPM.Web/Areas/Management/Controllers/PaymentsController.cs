@@ -65,8 +65,13 @@
             var userId = this.userManager.GetUserId(this.User);
             var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
 
-            var successStringUrl = "https://localhost:44319/Checkout/success?session_id={CHECKOUT_SESSION_ID}";
-            var cancelStringUrl = "https://localhost:44319/Checkout/cancel";
+            // LOCALHOST LINKS
+            // var successStringUrl = "https://localhost:44319/Checkout/success?sessionId={CHECKOUT_SESSION_ID}";
+            // var cancelStringUrl = "https://localhost:44319/Checkout/cancel";
+
+            // CONVEYOR LINKS
+            var successStringUrl = "https://rpm-web.conveyor.cloud/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
+            var cancelStringUrl = "https://rpm-web.conveyor.cloud/checkout/cancel";
 
             var options = new SessionCreateOptions
             {
@@ -90,7 +95,7 @@
                 PaymentIntentData = new SessionPaymentIntentDataOptions
                 {
                     ApplicationFeeAmount = (long)((payment.Amount * 0.01m) * 100),
-                    CaptureMethod = "manual",
+                    CaptureMethod = "automatic",
                     Description = payment.Id,
 
                     TransferData = new SessionPaymentIntentTransferDataOptions
@@ -106,12 +111,8 @@
             var service = new SessionService();
             Session session = service.Create(options);
 
-            var sessionId = session.Id;
-            var paymentId = session.PaymentIntent.Description;
-            var toStripeAccountId = payment.ToStripeAccountId;
-
             // Create Checkout Session in Database to validate it the Webhook handler and in SuccessPage
-            await this.paymentCommonService.CreateCheckoutSessionAsync(sessionId, paymentId, toStripeAccountId);
+            await this.paymentCommonService.CreateCheckoutSessionAsync(session.Id, payment.Id, payment.ToStripeAccountId);
 
             return this.Json(session);
         }

@@ -12,6 +12,8 @@
 
         public DateTime Date { get; set; }
 
+        public string TransactionDate { get; set; }
+
         public string To { get; set; }
 
         public string ToStripeAccountId { get; set; }

@@ -131,24 +131,21 @@ else
         <div class="col-md-2 px-4">
 
             <div onclick="location.href='rentals/index'" class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC;cursor: pointer;">
-                <a asp-controller="Rentals"
+                <a asp-controller="Payments"
                    asp-action="Index"
-                   class="primary-btn px-1 bg-transparent">Test
-                </a>
-            </div>
-
-            <div class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC">
-                <p>
-                    <a asp-controller="Rentals" asp-action="Index" class="primary-btn px-1 bg-transparent">
-                        Rentals
-                    </a>
-                </p>
-            </div>
-            <div class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC">
-                <a asp-controller="Payments" asp-action="Index" class="primary-btn px-1 bg-transparent">
+                   class="primary-btn px-1 bg-transparent">
                     Payments
                 </a>
             </div>
+
+            <div onclick="location.href='rentals/index'" class="row p-3 mx-auto mt-4" style="background-color: #CCCCCC;cursor: pointer;">
+                <a asp-controller="Rentals"
+                   asp-action="Index"
+                   class="primary-btn px-1 bg-transparent">
+                    Rentals
+                </a>
+            </div>
+
         </div>
 
             <div class="col-md-10 pt-4 px-4">
@@ -230,16 +227,30 @@ else
                                                         @{
                                                             var id = payment.Id;
                                                         }
-                                                            <a
-                                                                    value="Pay"
-                                                                    asp-controller="Payment"
-                                                                    asp-action="Pay"
-                                                                    asp-route-Id="@payment.Id"
-                                                                    class="btn btn-sm btn-labeled btn-success">
+                                                        @if (payment.Status == PaymentStatus.Complete)
+                                                        {
+                                                            <a value="Paid"
+                                                               asp-controller="Payment"
+                                                               asp-action="Pay"
+                                                               asp-route-Id="@payment.Id"
+                                                               class="btn btn-sm btn-labeled btn-secondary disabled btn-block">
+                                                                <span class="btn-label">
+                                                                    <ion-icon name="card-outline"></ion-icon>
+                                                                </span>Paid
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a value="Pay"
+                                                               asp-controller="Payment"
+                                                               asp-action="Pay"
+                                                               asp-route-Id="@payment.Id"
+                                                               class="btn btn-sm btn-labeled btn-success btn-block">
                                                                 <span class="btn-label">
                                                                     <ion-icon name="card-outline"></ion-icon>
                                                                 </span>Pay
                                                             </a>
+                                                        }
                                                     </div>
                                                 </td>
                                             </tr>

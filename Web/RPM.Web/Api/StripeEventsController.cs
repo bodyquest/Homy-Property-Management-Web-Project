@@ -17,7 +17,7 @@
     {
         // https://dashboard.stripe.com/test/webhooks
         public const string SecretAccount = "whsec_kkeaMYEHNkXTJyAW48syt8tWSPymAKLn";
-        public const string SecretConnect = "whsec_AZBLAbu7yiGC1urpKV5oatojyPPHs9CQ";
+        //public const string SecretConnect = "whsec_AZBLAbu7yiGC1urpKV5oatojyPPHs9CQ";
         private readonly IPaymentCommonService paymentCommonService;
 
         public StripeEventsController(IPaymentCommonService paymentCommonService)
@@ -36,14 +36,14 @@
                 var stripeEvent = EventUtility.ConstructEvent(
                     json,
                     this.Request.Headers["Stripe-Signature"],
-                    SecretConnect);
+                    SecretAccount);
 
                 if (stripeEvent.Type == Events.CheckoutSessionCompleted)
                 {
                     var session = stripeEvent.Data.Object as Stripe.Checkout.Session;
 
                     // Fulfill the purchase...
-                    this.HandleCheckoutSession(session);
+                    var result = await this.paymentCommonService.MarkPaymentAsCompletedAsync(session);
 
                     return this.Ok();
                 }
@@ -64,14 +64,6 @@
                     new { area = string.Empty })
                     .WithWarning(string.Empty, NoLuckMan);
             }
-        }
-
-        private async void HandleCheckoutSession(Session session)
-        {
-            // mark payment as completed in the DB
-            var sessionId = session.Id;
-
-            var result = await this.paymentCommonService.MarkPaymentAsCompletedAsync(sessionId);
         }
     }
 }

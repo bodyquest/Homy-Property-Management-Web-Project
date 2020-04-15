@@ -6,6 +6,7 @@
     using RPM.Data.Models.Enums;
     using RPM.Services.Common.Models.Payment;
     using RPM.Services.Common.Models.Profile;
+    using Stripe.Checkout;
 
     public interface IPaymentCommonService
     {
@@ -19,8 +20,10 @@
 
         Task CreateCheckoutSessionAsync(string sessionId, string paymentId, string toStripeAccountId);
 
-        Task<bool> MarkPaymentAsCompletedAsync(string sessionId);
+        Task<bool> MarkPaymentAsCompletedAsync(Session session);
 
         Task<bool> CompareData(string sessionId);
+
+        Task<string> GetPaymentId(string sessionId);
     }
 }

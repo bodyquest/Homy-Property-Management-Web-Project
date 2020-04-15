@@ -304,12 +304,51 @@ textAreaFixed {
     min-height: 100vh;
     padding: 0;
     background-image: url('../img/hd_binary.jpg');
-    /*background-image: url('../img/hd_binary.jpg')*/
+}
+
+.handshake-bg {
+    min-height: 100vh;
+    padding: 0;
+    background-image: url('../img/handshake.jpg');
+    background-size: cover;
 }
 
 .add-listing-bg {
     min-height: 100vh;
     padding: 0;
     background-image: linear-gradient(#ffffff50, #ffffff50), url('../img/add-listing-background.jpg');
-    /*background-image: url('../img/hd_binary.jpg')*/
 }
+
+
+/*.footer-section-spad{
+    margin-bottom: -120px;
+}*/
+
+
+/*html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#container {
+    min-height: 100%;
+    position: relative;
+}
+
+#header {
+    padding: 10px;
+}
+
+#body {
+    padding: 10px;
+    padding-bottom: 124px;  Height of the footer
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 124px;  Height of the footer
+}*/

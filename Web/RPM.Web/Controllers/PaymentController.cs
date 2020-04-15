@@ -33,22 +33,6 @@
             this.paymentService = paymentService;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            //var userId = this.userManager.GetUserId(this.User);
-
-            //var userPayments = await this.paymentService.GetUserPaymentsListAsync(userId);
-
-            //var viewModel = new ProfileIndexViewModel
-            //{
-            //    Payments = userPayments,
-            //};
-
-            //return this.View(viewModel);
-
-            throw new NotImplementedException();
-        }
-
         public async Task<IActionResult> Pay(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -69,11 +53,7 @@
             return this.View(viewModel);
         }
 
-        public class ParamsModel
-        {
-            public string Id { get; set; }
-        }
-
+        // REMOVE WHEN ALL IS OVER - WORKING METHOD IS IN MANAGEMENT AREA
         [HttpPost]
         [Route("createsession")]
         public async Task<IActionResult> CreateSession()
