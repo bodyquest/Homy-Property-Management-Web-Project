@@ -13,7 +13,7 @@
 
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(ManagerRoleName)]
+    [Authorize(Roles = OwnerRoleName)]
     public class RentalsController : ManagementController
     {
         private readonly UserManager<User> userManager;

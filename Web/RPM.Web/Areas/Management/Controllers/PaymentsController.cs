@@ -21,6 +21,7 @@
     using RPM.Web.Infrastructure.Extensions;
     using Stripe;
     using Stripe.Checkout;
+
     using static RPM.Common.GlobalConstants;
 
     public class PaymentsController : ManagementController

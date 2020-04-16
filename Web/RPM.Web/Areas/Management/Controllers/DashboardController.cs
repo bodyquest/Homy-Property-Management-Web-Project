@@ -7,9 +7,10 @@
     using RPM.Data.Models;
     using RPM.Services.Management;
     using RPM.Web.Areas.Management.Models;
+
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(ManagerRoleName)]
+    [Authorize(Roles = OwnerRoleName)]
     public class DashboardController : ManagementController
     {
         private readonly IOwnerListingService listingService;

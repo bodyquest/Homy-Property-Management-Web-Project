@@ -14,7 +14,7 @@
     using RPM.Web.Infrastructure.Extensions;
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(ManagerRoleName)]
+    [Authorize(Roles = OwnerRoleName)]
     public class RequestsController : ManagementController
     {
         private readonly UserManager<User> userManager;

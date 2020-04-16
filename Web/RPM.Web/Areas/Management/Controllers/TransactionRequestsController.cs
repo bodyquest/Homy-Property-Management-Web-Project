@@ -19,7 +19,7 @@
     using RPM.Web.Infrastructure.Extensions;
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(AdministratorRoleName)]
+    [Authorize(Roles = OwnerRoleName)]
     public class TransactionRequestsController : ManagementController
     {
         private readonly ApplicationDbContext context;
