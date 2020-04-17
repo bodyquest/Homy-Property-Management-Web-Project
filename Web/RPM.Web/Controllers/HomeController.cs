@@ -83,7 +83,11 @@
             // Redundant Check ???
             if (model == null)
             {
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty }).WithWarning(string.Empty, CouldNotFind);
+                return this.RedirectToAction(
+                    nameof(HomeController.Index),
+                    "Home",
+                    new { area = string.Empty })
+                    .WithWarning(string.Empty, CouldNotFind);
             }
 
             return this.View(model);

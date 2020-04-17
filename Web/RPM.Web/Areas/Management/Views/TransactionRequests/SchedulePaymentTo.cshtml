@@ -1,7 +1,7 @@
-﻿@model OwnerTransactionRequestsCreateInputModel
+﻿@model OwnerTransactionPaymentsCreateInputModel
 
 @{
-    this.ViewData["Title"] = "Transaction Requests Management";
+    this.ViewData["Title"] = "Transactions Schedule Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -16,7 +16,7 @@
                 <!-- TABLE: Add New Listing -->
                 <div class="card">
                     <div class="card-header border-transparent">
-                        <h3 class="card-title text-info"><strong>Add New Transaction Request for Tenant</strong></h3>
+                        <h3 class="card-title text-info"><strong>Add New Payment Schedule To Manager</strong></h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -26,16 +26,16 @@
                     <!-- /.card-header -->
                     <div class="card-body p-0">
                         <!-- form start -->
-                        <form asp-action="Create" method="post" role="form">
+                        <form asp-action="SchedulePaymentTo" method="post" role="form">
                             <div asp-validation-summary="ModelOnly"></div>
 
                             <div class="card-body">
 
                                 <div class="form-group">
-                                    <label asp-for="RentalId" class="col-form-label"></label>
-                                    <select asp-for="RentalId"
-                                            asp-items="@Model.RentalsList
-                                                .ToSelectListItem(Model.RentalId)"
+                                    <label asp-for="HomeId" class="col-form-label"></label>
+                                    <select asp-for="HomeId"
+                                            asp-items="@Model.ManagedHomesList
+                                                .ToSelectStringListItem(Model.HomeId)"
                                             class="form-control"></select>
                                 </div>
 
@@ -47,6 +47,17 @@
                                               placeholder="Enter reason for transaction...">
                                     </textarea>
                                     <span asp-validation-for="Reason" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Amount">Fee Amount</label>
+                                    <input type="number"
+                                           step="0.01"
+                                           class="form-control"
+                                           id="amount"
+                                           placeholder="Amount..."
+                                           asp-for="Amount">
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group">
@@ -76,7 +87,6 @@
                 </div>
                 <!-- /.card -->
             </div>
-
         </div>
     </section>
     <!-- /.content -->

@@ -16,5 +16,9 @@
         public string Category { get; set; }
 
         public string Status { get; set; }
+
+        public string Manager { get; set; }
+
+        public string Tenant { get; set; }
     }
 }

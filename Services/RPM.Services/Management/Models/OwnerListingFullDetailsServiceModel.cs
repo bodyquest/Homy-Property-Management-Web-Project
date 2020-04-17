@@ -16,6 +16,8 @@
 
         public string Description { get; set; }
 
+        public string ManagerFullName { get; set; }
+
         public decimal Price { get; set; }
 
         public HomeStatus Status { get; set; }

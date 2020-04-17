@@ -1,9 +1,7 @@
 ﻿namespace RPM.Services.Management.Implementations
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -18,24 +16,22 @@
     public class OwnerTransactionRequestService : IOwnerTransactionRequestService
     {
         private readonly ApplicationDbContext context;
-        private readonly UserManager<User> userManager;
 
         public OwnerTransactionRequestService(
-            ApplicationDbContext context,
-            UserManager<User> userManager)
+            ApplicationDbContext context)
         {
             this.context = context;
-            this.userManager = userManager;
         }
 
         public async Task<IEnumerable<OwnerAllTransactionRequestsServiceModel>>
             GetAllTransactionRequestsAsync(string userId)
         {
 
-            var transactionRequests = await this.context.TransactionRequests
+            var transactionRentalRequests = await this.context.TransactionRequests
                 .Include(t => t.Rental)
+                .Include(t => t.Home)
                 .Include(t => t.Sender)
-                .Where(t => t.RecipientId == userId)
+                .Where(t => t.RentalId != 0 && t.Rental.Home.OwnerId == userId)
                 .Select(t => new OwnerAllTransactionRequestsServiceModel
                 {
                     Id = t.Id,
@@ -47,6 +43,26 @@
                     Status = t.Status.ToString(),
                 })
                 .ToListAsync();
+
+            var transactionManageRequests = await this.context.TransactionRequests
+                .Include(t => t.Rental)
+                .Include(t => t.Home)
+                .Include(t => t.Sender)
+                .Where(t => t.Home.OwnerId != null && t.Home.OwnerId == userId)
+                .Select(t => new OwnerAllTransactionRequestsServiceModel
+                {
+                    Id = t.Id,
+                    Date = t.Date.ToString(StandartDateFormat),
+                    OwnerName = string.Format(OwnerFullName, t.Sender.FirstName, t.Sender.LastName),
+                    Reason = t.Reason,
+                    Amount = t.Amount,
+                    IsRecurring = t.IsRecurring,
+                    Status = t.Status.ToString(),
+                })
+                .ToListAsync();
+
+            IEnumerable<OwnerAllTransactionRequestsServiceModel> transactionRequests =
+                transactionRentalRequests.Concat(transactionManageRequests);
 
             return transactionRequests;
         }
@@ -63,6 +79,7 @@
             var senderId = rental.TenantId;
             var amount = rental.Home.Price;
 
+            // at this stage of the app development, there is only one recurring payment- for the tenant of the home
             var transactionRequestFromDb = rental.TransactionRequests.FirstOrDefault(t => t.IsRecurring == true);
 
             if (transactionRequestFromDb != null)
@@ -78,6 +95,49 @@
                 Status = TransactionRequestStatus.Scheduled,
                 IsRecurring = model.IsRecurring,
                 RentalId = model.RentalId,
+                SenderId = senderId,
+                RecipientId = recipientId,
+            };
+
+            await this.context.TransactionRequests.AddAsync(transactionRequest);
+            var result = await this.context.SaveChangesAsync();
+
+            if (result == 0)
+            {
+                return null;
+            }
+
+            var id = transactionRequest.Id;
+
+            return id;
+        }
+
+        public async Task<string> CreateToAsync(string senderId, OwnerTransactionToRequestsCreateInputServiceModel model)
+        {
+            var home = await this.context.Homes
+               .Include(h => h.Manager)
+               .Where(h => h.Id == model.HomeId)
+               .FirstOrDefaultAsync();
+
+            var recipientId = home.ManagerId;
+            var amount = model.Amount;
+
+            // at this stage of the app development, there is only one recurring payment- for the manager of the home
+            var transactionRequestFromDb = home.TransactionRequests.FirstOrDefault(t => t.IsRecurring == true);
+
+            if (transactionRequestFromDb != null)
+            {
+                return null;
+            }
+
+            var transactionRequest = new TransactionRequest
+            {
+                Reason = model.Reason,
+                Amount = amount,
+                RecurringSchedule = model.RecurringSchedule,
+                Status = TransactionRequestStatus.Scheduled,
+                IsRecurring = model.IsRecurring,
+                HomeId = home.Id,
                 SenderId = senderId,
                 RecipientId = recipientId,
             };

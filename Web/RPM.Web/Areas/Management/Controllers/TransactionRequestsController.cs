@@ -60,7 +60,8 @@
             return this.View(viewModel);
         }
 
-        public async Task<IActionResult> Create()
+        [ActionName("SchedulePaymentFrom")]
+        public async Task<IActionResult> CreateAsync()
         {
             var userId = this.userManager.GetUserId(this.User);
 
@@ -76,20 +77,21 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(OwnerTransactionRequestsCreateInputModel model)
+        [ActionName("CreateFrom")]
+        public async Task<IActionResult> CreateFromAsync(OwnerTransactionRequestsCreateInputModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
 
-            var modelForDb = new OwnerTransactionRequestsCreateInputServiceModel
-            {
-                Reason = model.Reason,
-                RecurringSchedule = model.RecurringSchedule,
-                IsRecurring = model.IsRecurring,
-                RentalId = model.RentalId,
-            };
-
             if (this.ModelState.IsValid)
             {
+                var modelForDb = new OwnerTransactionRequestsCreateInputServiceModel
+                {
+                    Reason = model.Reason,
+                    RecurringSchedule = model.RecurringSchedule,
+                    IsRecurring = model.IsRecurring,
+                    RentalId = model.RentalId,
+                };
+
                 var isCreatedId = await this.transactionRequestService.CreateAsync(userId, modelForDb);
 
                 if (isCreatedId == null)
@@ -111,15 +113,17 @@
                 RecurringJob.AddOrUpdate(
                     isCreatedId,
                     () => this.paymentService.AddPaymentRequestToUserAsync(
+                        userId,
                         isCreatedId), cronType);
 
-                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea }).WithSuccess(string.Empty, RecordCreatedSuccessfully);
+                return this.RedirectToAction("Index", "TransactionRequests", new { area = ManagementArea }).WithSuccess(string.Empty, RecordCreatedSuccessfully);
             }
 
             return this.View(model);
         }
 
-        public async Task<IActionResult> CreateTransactionPayment()
+        [ActionName("SchedulePaymentTo")]
+        public async Task<IActionResult> CreateToAsync()
         {
             var userId = this.userManager.GetUserId(this.User);
 
@@ -129,6 +133,60 @@
             {
                 ManagedHomesList = managedHomes,
             };
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [ActionName("SchedulePaymentTo")]
+        public async Task<IActionResult> CreateToAsync(OwnerTransactionPaymentsCreateInputModel model)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+
+            if (this.ModelState.IsValid)
+            {
+                var modelForDb = new OwnerTransactionToRequestsCreateInputServiceModel
+                {
+                    Reason = model.Reason,
+                    Amount = model.Amount,
+                    RecurringSchedule = model.RecurringSchedule,
+                    IsRecurring = model.IsRecurring,
+                    HomeId = model.HomeId,
+                };
+
+                var isCreatedId = await this.transactionRequestService.CreateToAsync(userId, modelForDb);
+
+                if (isCreatedId == null)
+                {
+                    var managedHomes = await this.listingService.GetManagedHomesAsync(userId);
+
+                    var viewModel = new OwnerTransactionPaymentsCreateInputModel
+                    {
+                        ManagedHomesList = managedHomes,
+                    };
+
+                    return this.View(viewModel);
+                }
+
+                // TEST the service. Put Breakpoint on Line 172 and when hit, press F11
+                // await this.paymentService.AddPaymentRequestToUserAsync(
+                //        userId,
+                //        isCreatedId);
+
+                var schedule = model.RecurringSchedule;
+
+                var cronType = this.GetCronFromRecurringType(schedule);
+
+                // pending payment will appear in the payments dashboard of the user
+                RecurringJob.AddOrUpdate(
+                    isCreatedId,
+                    () => this.paymentService.AddPaymentRequestToUserAsync(
+                        userId,
+                        isCreatedId), cronType);
+
+                return this.RedirectToAction("Index", "TransactionRequests", new { area = ManagementArea })
+                    .WithSuccess(string.Empty, RecordCreatedSuccessfully);
+            }
 
             return this.View(model);
         }
@@ -175,6 +233,7 @@
                 RecurringJob.AddOrUpdate(
                     modelForEdit.Id,
                     () => this.paymentService.AddPaymentRequestToUserAsync(
+                        userId,
                         modelForEdit.Id), cronType);
 
                 return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
@@ -189,7 +248,7 @@
         {
             if (recurringSchedule.ToString() == "Monthly")
             {
-                return Cron.Monthly;
+                return CustomCron.Monthly;
             }
             else if (recurringSchedule.ToString() == "Yearly")
             {
@@ -205,12 +264,28 @@
             }
             else if (recurringSchedule.ToString() == "Minutely")
             {
-                return Cron.Minutely;
+                return CustomCron.TenMinutely;
             }
             else
             {
                 return Cron.Monthly;
             }
+        }
+    }
+
+    internal static class CustomCron
+    {
+        public static string TenMinutely()
+        {
+            return TenMinute;
+        }
+
+        public static string Monthly()
+        {
+            var secondLastDayOfMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, DateTime.UtcNow.Month) - 1;
+            var expression = string.Format(MonthlyOneDayBeforeEoM, secondLastDayOfMonth);
+
+            return expression;
         }
     }
 }

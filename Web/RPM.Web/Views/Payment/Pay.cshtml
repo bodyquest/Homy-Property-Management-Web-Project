@@ -5,10 +5,15 @@
 
 @{
     ViewData["Title"] = "Pay";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (this.User.IsInRole(OwnerRoleName))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 }
-
-
 
 <section class="jumbotron jumbotron-fluid jumboHeroImage">
     <div class="container">
@@ -29,7 +34,7 @@
                            asp-controller="Rentals"
                            asp-action="Details"
                            asp-route-id="@Model.Id">
-                            <strong>@Model.RentalAddress</strong>
+                            <strong>@Model.Address</strong>
                         </a>
                     </h3>
                 </div>

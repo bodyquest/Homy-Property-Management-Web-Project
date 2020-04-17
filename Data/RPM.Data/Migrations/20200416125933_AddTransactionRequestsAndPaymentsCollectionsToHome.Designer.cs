@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RPM.Data;
 
 namespace RPM.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200416125933_AddTransactionRequestsAndPaymentsCollectionsToHome")]
+    partial class AddTransactionRequestsAndPaymentsCollectionsToHome
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -333,7 +335,7 @@ namespace RPM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("RentalId")
+                    b.Property<int>("RentalId")
                         .HasColumnType("int");
 
                     b.Property<string>("SenderId")
@@ -514,7 +516,7 @@ namespace RPM.Data.Migrations
                     b.Property<int>("RecurringSchedule")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RentalId")
+                    b.Property<int>("RentalId")
                         .HasColumnType("int");
 
                     b.Property<string>("SenderId")
@@ -762,7 +764,9 @@ namespace RPM.Data.Migrations
 
                     b.HasOne("RPM.Data.Models.Rental", "Rental")
                         .WithMany("Payments")
-                        .HasForeignKey("RentalId");
+                        .HasForeignKey("RentalId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("RPM.Data.Models.User", "Sender")
                         .WithMany()
@@ -816,7 +820,9 @@ namespace RPM.Data.Migrations
 
                     b.HasOne("RPM.Data.Models.Rental", "Rental")
                         .WithMany("TransactionRequests")
-                        .HasForeignKey("RentalId");
+                        .HasForeignKey("RentalId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("RPM.Data.Models.User", "Sender")
                         .WithMany()

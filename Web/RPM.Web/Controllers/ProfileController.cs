@@ -40,9 +40,13 @@
 
             var userPayments = await this.paymentService.GetUserPaymentsListAsync(userId);
 
+            // TODO:
+            // var userRentals = await this.rentalService.GetUserRentalsListAsync(userId);
             var viewModel = new ProfileIndexViewModel
             {
                 Payments = userPayments,
+
+                // Rentals = userRentals,
             };
 
             return this.View(viewModel);
@@ -64,7 +68,7 @@
                 PaymentIntentData = new SessionPaymentIntentDataOptions
                 {
                     ApplicationFeeAmount = (long)((payment.Amount * 0.01m) * 100),
-                    Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+                    Description = $"Payment Id: {payment.Id} for rental at {payment.Address}",
                     CaptureMethod = "manual",
 
                     TransferData = new SessionPaymentIntentTransferDataOptions
@@ -79,7 +83,7 @@
                     new SessionLineItemOptions
                     {
                         Name = "Monthly Rent",
-                        Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+                        Description = $"Payment Id: {payment.Id} for rental at {payment.Address}",
                         Amount = (long)payment.Amount * 100,
                         Currency = CurrencyUSD,
                     },

@@ -239,6 +239,40 @@
                 .WithSuccess(string.Empty, RecordUpdatedSuccessfully);
         }
 
+        /*[Authorize(Roles = OwnerRoleName)]
+        [ActionName("Delete")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteAsync(string id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            var isDeletable = await this.listingService.IsHomeDeletable(id);
+            if(!isDeletable)
+            {
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                    .WithWarning(string.Empty, NotAllowedToRemove);
+            }
+
+            var result = await this.listingService.DeleteAsync(user.Id, id);
+
+            var viewModel = new OwnerListingDeleteInputModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Address = model.Address,
+                City = model.City,
+                Country = model.Country,
+                Price = model.Price,
+                Status = model.Status,
+                Category = model.Category,
+                ImageFromDb = model.Image,
+                RentalInfo = model.RentalInfo,
+            };
+
+            return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                    .WithSuccess(string.Empty, RemovedSuccessfully);
+        }*/
+
         [Authorize(Roles = OwnerRoleName)]
         [ActionName("Details")]
         public async Task<IActionResult> DetailsAsync(string id)
@@ -257,7 +291,5 @@
 
             return this.Json(new SelectList(model, "Id", "Name"));
         }
-
-
     }
 }

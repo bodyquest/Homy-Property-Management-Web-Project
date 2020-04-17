@@ -28,13 +28,13 @@
     {
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
-        private readonly IPaymentService paymentService;
+        private readonly IOwnerPaymentService paymentService;
         private readonly IPaymentCommonService paymentCommonService;
 
         public PaymentsController(
             ApplicationDbContext context,
             UserManager<User> userManager,
-            IPaymentService paymentService,
+            IOwnerPaymentService paymentService,
             IPaymentCommonService paymentCommonService)
         {
             this.context = context;
@@ -89,7 +89,7 @@
                         Amount = (long)payment.Amount * 100,
                         Currency = CurrencyUSD,
 
-                        Name = $"Rent Payment for {DateTime.UtcNow.ToString("MMMM")}/ {DateTime.UtcNow.Year} at {payment.RentalAddress}",
+                        Name = $"Rent Payment for {DateTime.UtcNow.ToString("MMMM")}/ {DateTime.UtcNow.Year} at {payment.Address}",
                     },
                 },
 

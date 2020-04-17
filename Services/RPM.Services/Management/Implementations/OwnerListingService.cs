@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -36,6 +35,7 @@
         public async Task<IEnumerable<OwnerIndexListingsServiceModel>> GetMyPropertiesAsync(string id)
         {
             var homes = await this.context.Homes
+                .Include(h => h.Manager)
                 .Where(homes => homes.OwnerId == id)
                 .Select(h => new OwnerIndexListingsServiceModel
                 {
@@ -44,6 +44,13 @@
                     Address = h.Address,
                     Category = h.Category.ToString(),
                     Status = h.Status.ToString(),
+                    Manager = string.Format(
+                        ManagerFullName, h.Manager.FirstName, h.Manager.LastName),
+                    Tenant = this.context.Rentals
+                    .Where(r => r.HomeId == h.Id)
+                    .Select(r => string.Format(
+                        TenantFullName, r.Tenant.FirstName, r.Tenant.LastName))
+                    .FirstOrDefault(),
                 })
                 .ToListAsync();
 
@@ -108,14 +115,17 @@
                 {
                     RentalDate = r.RentDate.ToString(StandartDateFormat),
                     Duration = r.Duration,
-                    TenantFullName = r.Tenant.FirstName + " " + r.Tenant.LastName,
-                    ManagerFullName = r.Home.Manager.FirstName + " " + r.Home.Manager.LastName,
+                    TenantFullName = string.Format(
+                        TenantFullName, r.Tenant.FirstName, r.Tenant.LastName),
+                    ManagerFullName = string.Format(
+                        ManagerFullName, r.Home.Manager.FirstName, r.Home.Manager.LastName),
                 })
                 .FirstOrDefaultAsync();
 
             var model = await this.context.Homes
                .Where(h => h.OwnerId == userId && h.Id == id)
                .Include(x => x.City)
+               .Include(x => x.Manager)
                .Include(x => x.City.Country)
                .Include(h => h.Images)
                .Select(x => new OwnerListingFullDetailsServiceModel
@@ -126,6 +136,8 @@
                    Country = x.City.Country.Name,
                    Address = x.Address,
                    Description = x.Description,
+                   ManagerFullName = string.Format(
+                       ManagerFullName, x.Manager.FirstName, x.Manager.LastName),
                    Price = x.Price,
                    Status = x.Status,
                    Category = x.Category,
@@ -212,7 +224,23 @@
                 return EntityNotFound;
             }
 
-            home.Status = (HomeStatus)Enum.Parse(typeof(HomeStatus), Managed);
+            if (request.Type == RequestType.ToRent)
+            {
+                home.Status = (HomeStatus)Enum.Parse(typeof(HomeStatus), Rented);
+            }
+            else if (request.Type == RequestType.ToManage)
+            {
+                home.Status = (HomeStatus)Enum.Parse(typeof(HomeStatus), Managed);
+            }
+            else if (request.Type == RequestType.CancelRent)
+            {
+                home.Status = (HomeStatus)Enum.Parse(typeof(HomeStatus), ToRent);
+            }
+            else
+            {
+                home.Status = (HomeStatus)Enum.Parse(typeof(HomeStatus), ToManage);
+            }
+
             await this.context.SaveChangesAsync();
 
             return homeId;
@@ -257,6 +285,9 @@
 
             home.ManagerId = user.Id;
 
+            // Add Home to ManagedHomesCollection of Manager
+            user.ManagedHomes.Add(home);
+
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
@@ -276,6 +307,28 @@
                 .ToListAsync();
 
             return homes;
+        }
+
+        public async Task<bool> IsHomeDeletable(string id)
+        {
+            var home = await this.context.Homes
+                .FindAsync(id);
+
+            var rental = await this.context.Rentals
+                .Where(r => r.HomeId == id)
+                .FirstOrDefaultAsync();
+
+            if (home.Manager != null || rental != null)
+            {
+                return false;
+            }
+            else
+            {
+                this.context.Homes.Remove(home);
+                var result = await this.context.SaveChangesAsync();
+
+                return result > 0;
+            }
         }
     }
 }

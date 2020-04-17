@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -61,10 +60,39 @@
 
         public async Task<UserPaymentDetailsServiceModel> GetPaymentDetailsAsync(string paymentId, string userId)
         {
-            var payment = await this.context.Rentals
+            var payment = new UserPaymentDetailsServiceModel();
+
+            // FIND if this is the owner who pays
+            var paymentFromDb = await this.context.Payments
+                .Where(p => p.Id == paymentId)
+                .FirstOrDefaultAsync();
+
+            if (paymentFromDb.SenderId == userId)
+            {
+                payment = await this.context.Payments
+                .Where(p => p.Id == paymentId && p.Home.OwnerId == userId)
+                .Select(p => new UserPaymentDetailsServiceModel
+                {
+                    Id = p.Id,
+                    Date = p.Date,
+                    TransactionDate = p.TransactionDate,
+                    To = string.Format(RecipientFullName, p.Recipient.FirstName, p.Recipient.LastName),
+                    RecipientHasStripeAccount = !string.IsNullOrWhiteSpace(p.Recipient.StripeConnectedAccountId),
+                    ToStripeAccountId = p.Recipient.StripeConnectedAccountId,
+                    Reason = p.Reason,
+                    Amount = p.Amount,
+                    Status = p.Status,
+                    Address = string.Format(
+                        PaymentRentalLocation, p.Rental.Home.City.Name, p.Rental.Home.Address),
+                })
+                .FirstOrDefaultAsync();
+            }
+            else
+            {
+                payment = await this.context.Rentals
                 .Where(r => r.TenantId == userId)
                 .SelectMany(r => r.Payments)
-                .Where(r => r.Id == paymentId)
+                .Where(p => p.Id == paymentId)
                 .Select(p => new UserPaymentDetailsServiceModel
                 {
                     Id = p.Id,
@@ -75,10 +103,11 @@
                     Reason = p.Reason,
                     Amount = p.Amount,
                     Status = p.Status,
-                    RentalAddress = string.Format(
+                    Address = string.Format(
                         PaymentRentalLocation, p.Rental.Home.City.Name, p.Rental.Home.Address),
                 })
                 .FirstOrDefaultAsync();
+            }
 
             return payment;
         }
@@ -107,46 +136,84 @@
             return false;
         }
 
-        public async Task<bool> AddPaymentRequestToUserAsync(string requestId)
+        public async Task<bool> AddPaymentRequestToUserAsync(string userId, string requestId)
         {
             var transactionRequest = await this.ownerTransactionRequestService
                 .FindByIdAsync(requestId);
 
-            var userId = transactionRequest.SenderId;
+            var senderId = transactionRequest.SenderId;
             var user = await this.userManager.FindByIdAsync(userId);
 
-            var rentalId = transactionRequest.RentalId;
+            Payment payment = new Payment();
+            int result = 0;
 
-            var payment = new Payment
+            if (senderId == userId)
             {
-                RecipientId = transactionRequest.RecipientId,
-                SenderId = transactionRequest.SenderId,
-                Reason = transactionRequest.Reason,
-                Amount = transactionRequest.Amount,
-                Status = PaymentStatus.Waiting,
-                RentalId = transactionRequest.RentalId,
-            };
+                payment = new Payment
+                {
+                    RecipientId = transactionRequest.RecipientId,
+                    SenderId = userId,
+                    Reason = transactionRequest.Reason,
+                    Amount = transactionRequest.Amount,
+                    Status = PaymentStatus.Waiting,
+                    HomeId = transactionRequest.HomeId,
+                };
 
-            await this.context.Payments.AddAsync(payment);
+                await this.context.Payments.AddAsync(payment);
+                result = await this.context.SaveChangesAsync();
 
-            var result = await this.context.SaveChangesAsync();
+                // var manager = transactionRequest.Recipient;
 
-            if (result == 0)
-            {
-                return false;
+                // var userManagedHome = await this.context.Homes
+                //    .Where(r => r.Id == transactionRequest.HomeId)
+                //    .FirstOrDefaultAsync();
+
+                //// TO REMOVE
+                // userManagedHome.Payments.Remove(payment);
+                // await this.context.SaveChangesAsync();
+                //// ...........................................
+
+                // userManagedHome.Payments.Add(payment);
+                // result = await this.context.SaveChangesAsync();
+
+                if (result == 0)
+                {
+                    return false;
+                }
+
+                return true;
             }
-
-            var userRental = user.Rentals.Where(r => r.Id == rentalId).FirstOrDefault();
-            userRental.Payments.Add(payment);
-
-            result = await this.context.SaveChangesAsync();
-
-            if (result == 0)
+            else
             {
-                return false;
-            }
+                payment = new Payment
+                {
+                    RecipientId = transactionRequest.RecipientId,
+                    SenderId = transactionRequest.SenderId,
+                    Reason = transactionRequest.Reason,
+                    Amount = transactionRequest.Amount,
+                    Status = PaymentStatus.Waiting,
+                    RentalId = transactionRequest.RentalId,
+                };
 
-            return true;
+                await this.context.Payments.AddAsync(payment);
+                await this.context.SaveChangesAsync();
+
+                var rentalId = transactionRequest.RentalId;
+                var userRental = user.Rentals
+                    .Where(r => r.Id == rentalId)
+                    .FirstOrDefault();
+
+                userRental.Payments.Add(payment);
+
+                result = await this.context.SaveChangesAsync();
+
+                if (result == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         public async Task CreateCheckoutSessionAsync(string sessionId, string paymentId, string toStripeAccountId)

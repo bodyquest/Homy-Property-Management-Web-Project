@@ -12,8 +12,12 @@
     {
         public string Id { get; set; }
 
+        [Required]
         [MaxLength(ReasonMaxLength)]
         public string Reason { get; set; }
+
+        [Range(typeof(decimal), ManagerFeeMin, ManagerFeeMax)]
+        public decimal Amount { get; set; }
 
         [Display(Name = "Recurring Schedule")]
         public RecurringScheduleType RecurringSchedule { get; set; }
@@ -22,7 +26,7 @@
         [Display(Name = "Is Recurring")]
         public bool IsRecurring { get; set; }
 
-        [Display(Name = "Managed home Location")]
+        [Display(Name = "Managed Home Location")]
         public string HomeId { get; set; }
 
         public IEnumerable<OwnerTransactionListOfManagedHomesServiceModel> ManagedHomesList { get; set; }

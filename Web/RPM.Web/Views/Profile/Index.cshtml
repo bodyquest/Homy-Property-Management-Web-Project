@@ -216,7 +216,7 @@ else
                                                     style='text-align:center;vertical-align:middle'>
                                                     <a asp-controller="Payments"
                                                        asp-action="Details"
-                                                       asp-route-Id="id"
+                                                       asp-route-Id="@payment.Id"
                                                        style="display:block; margin-bottom:-10px">
                                                         <ion-icon size="large" name="list-outline"></ion-icon>
                                                     </a>
@@ -224,9 +224,6 @@ else
                                                 <td class="col-1 py-1 pl-0 pr-2"
                                                     style='text-align:center;vertical-align:middle'>
                                                     <div>
-                                                        @{
-                                                            var id = payment.Id;
-                                                        }
                                                         @if (payment.Status == PaymentStatus.Complete)
                                                         {
                                                             <a value="Paid"

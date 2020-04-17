@@ -1,9 +1,7 @@
 ﻿namespace RPM.Services.Common.Models.Payment
 {
-    using RPM.Data.Models.Enums;
     using System;
-    using System.Collections.Generic;
-    using System.Text;
+    using RPM.Data.Models.Enums;
 
     public class UserPaymentDetailsServiceModel
     {
@@ -15,6 +13,8 @@
 
         public string To { get; set; }
 
+        public bool RecipientHasStripeAccount { get; set; }
+
         public string ToStripeAccountId { get; set; }
 
         public string Reason { get; set; }
@@ -23,6 +23,6 @@
 
         public PaymentStatus Status { get; set; }
 
-        public string RentalAddress { get; set; }
+        public string Address { get; set; }
     }
 }

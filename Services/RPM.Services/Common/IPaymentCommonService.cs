@@ -16,7 +16,7 @@
 
         Task<bool> EditPaymentStatusAsync(string paymentId, string userId, PaymentStatus status, DateTime? date);
 
-        Task<bool> AddPaymentRequestToUserAsync(string requestId);
+        Task<bool> AddPaymentRequestToUserAsync(string userId, string requestId);
 
         Task CreateCheckoutSessionAsync(string sessionId, string paymentId, string toStripeAccountId);
 

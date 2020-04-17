@@ -20,22 +20,36 @@
                         </p>
                         <ul class="pb-4 mb-4">
                             @*<li><strong>Payment reason:</strong> Model.Reason</li>
-        <li><strong>Amount paid:</strong> Model.Amount</li>
-        <li><strong>Recipient:</strong> Model.To</li>*@
+                <li><strong>Amount paid:</strong> Model.Amount</li>
+                <li><strong>Recipient:</strong> Model.To</li>*@
                             <li><strong>Payment reason:</strong> @Model.Reason</li>
                             <li><strong>Amount paid:</strong> $ @Model.Amount</li>
                             <li><strong>Recipient:</strong> @Model.To</li>
-                            <li><strong>Property Address:</strong> @Model.RentalAddress</li>
+                            <li><strong>Property Address:</strong> @Model.Address</li>
                             @*<li><strong>Transaction Date:</strong> @Model.TransactionDate</li>*@
                         </ul>
                     </div>
-                    <div class="col-md-6 pt-4 mt-4 mx-auto">
-                        <a asp-controller="Profile"
-                           asp-action="Index"
-                           class="shadow btn btn-block btn-primary text-white">
-                            Back to Profile
-                        </a>
-                    </div>
+                    @if (this.User.IsInRole(OwnerRoleName))
+                    {
+                        <div class="col-md-6 pt-4 mt-4 mx-auto">
+                            <a asp-area="Management"
+                               asp-controller="Dashboard"
+                               asp-action="Index"
+                               class="shadow btn btn-block btn-primary text-white">
+                                Back to Dashboard
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-6 pt-4 mt-4 mx-auto">
+                            <a asp-controller="Profile"
+                               asp-action="Index"
+                               class="shadow btn btn-block btn-primary text-white">
+                                Back to Profile
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

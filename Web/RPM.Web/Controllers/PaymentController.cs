@@ -13,13 +13,14 @@
     using RPM.Web.Infrastructure.Extensions;
     using RPM.Web.Models.Home;
     using RPM.Web.Models.Payment;
-    using RPM.Web.Models.Profile;
     using RPM.Web.ViewModels;
+
     using Stripe;
     using Stripe.Checkout;
+
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(Roles = TenantRole)]
+    [Authorize(Roles = "Owner, Tenant")]
     public class PaymentController : BaseController
     {
         private readonly UserManager<User> userManager;
@@ -38,6 +39,12 @@
             var userId = this.userManager.GetUserId(this.User);
             var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
 
+            if (payment.RecipientHasStripeAccount == false)
+            {
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                    .WithWarning(string.Empty, string.Format(ManagerHasNotStripeAccount, payment.To));
+            }
+
             var viewModel = new CheckoutPaymentViewModel
             {
                 Id = payment.Id,
@@ -47,7 +54,7 @@
                 Reason = payment.Reason,
                 Amount = payment.Amount,
                 Status = payment.Status,
-                RentalAddress = payment.RentalAddress,
+                Address = payment.Address,
             };
 
             return this.View(viewModel);
@@ -80,9 +87,9 @@
                         Amount = (long)payment.Amount * 100,
                         Currency = CurrencyUSD,
 
-                        Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+                        Description = $"Payment Id: {payment.Id} for rental at {payment.Address}",
 
-                        Name = $"Rent Payment for {DateTime.UtcNow.Month} | {DateTime.UtcNow.Year} for rental at {payment.RentalAddress}",
+                        Name = $"Rent Payment for {DateTime.UtcNow.Month} | {DateTime.UtcNow.Year} for rental at {payment.Address}",
                     },
                 },
 

@@ -27,5 +27,7 @@
 
         Task<IEnumerable<OwnerTransactionListOfManagedHomesServiceModel>>
            GetManagedHomesAsync(string userId);
+
+        Task<bool> IsHomeDeletable(string id);
     }
 }

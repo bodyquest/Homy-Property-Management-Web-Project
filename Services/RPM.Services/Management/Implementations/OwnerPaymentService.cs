@@ -11,7 +11,7 @@
     using RPM.Services.Management.Models;
     using static RPM.Common.GlobalConstants;
 
-    public class OwnerPaymentService : IPaymentService
+    public class OwnerPaymentService : IOwnerPaymentService
     {
         private readonly ApplicationDbContext context;
 
@@ -22,26 +22,41 @@
 
         public async Task<IEnumerable<OwnerAllPaymentsServiceModel>> AllPayments(string userId)
         {
-            var model = await this.context.Payments
-                .Include(p => p.Recipient)
-                .Include(p => p.Sender)
-                .Include(p => p.Home)
-                .Where(p => p.Rental.Home.OwnerId == userId || p.Home.OwnerId == userId
-                )
+            var homePayments = await this.context.Payments
+                .Where(p => p.Home.OwnerId == userId && p.Home.Manager != null)
                 .Select(p => new OwnerAllPaymentsServiceModel
                 {
                     Id = p.Id,
                     Date = p.Date.ToString(StandartDateFormat),
                     TransactionDate = p.TransactionDate != null ? p.TransactionDate.Value.ToString(DateFormatWithTime) : "n/a",
                     HomeOwnerName = p.Home.Owner.FirstName,
-                    RentalHomeOnwerName = p.Rental.Home.Owner.FirstName,
-                    TenantName = string.Format(TenantFullName, p.Sender.FirstName, p.Sender.LastName),
                     ManagerName = string.Format(ManagerFullName, p.Home.Manager.FirstName, p.Home.Manager.LastName),
                     Reason = p.Reason,
                     Amount = p.Amount,
                     Status = p.Status,
                 })
                 .ToListAsync();
+
+            var rentalPayments = await this.context.Payments
+                .Include(p => p.Recipient)
+                .Include(p => p.Sender)
+                .Include(p => p.Home)
+                .Where(p => p.Rental.Home.OwnerId == userId)
+                .Select(p => new OwnerAllPaymentsServiceModel
+                {
+                    Id = p.Id,
+                    Date = p.Date.ToString(StandartDateFormat),
+                    TransactionDate = p.TransactionDate != null ? p.TransactionDate.Value.ToString(DateFormatWithTime) : "n/a",
+                    RentalHomeOnwerName = p.Rental.Home.Owner.FirstName,
+                    TenantName = string.Format(TenantFullName, p.Sender.FirstName, p.Sender.LastName),
+                    Reason = p.Reason,
+                    Amount = p.Amount,
+                    Status = p.Status,
+                })
+                .ToListAsync();
+
+            IEnumerable<OwnerAllPaymentsServiceModel> model =
+                homePayments.Concat(rentalPayments);
 
             return model;
         }
@@ -62,7 +77,7 @@
                     Reason = p.Reason,
                     Amount = p.Amount,
                     Status = p.Status,
-                    RentalAddress = string.Format(
+                    Address = string.Format(
                         PaymentRentalLocation, p.Rental.Home.City.Name, p.Rental.Home.Address),
                 })
                 .FirstOrDefaultAsync();

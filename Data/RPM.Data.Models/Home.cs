@@ -16,6 +16,8 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.Images = new HashSet<CloudImage>();
+            this.Payments = new HashSet<Payment>();
+            this.TransactionRequests = new HashSet<TransactionRequest>();
         }
 
         public string Id { get; set; }
@@ -65,5 +67,9 @@
         public virtual City City { get; set; }
 
         public ICollection<CloudImage> Images { get; set; }
+
+        public ICollection<TransactionRequest> TransactionRequests { get; set; }
+
+        public ICollection<Payment> Payments { get; set; }
     }
 }

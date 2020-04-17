@@ -56,7 +56,7 @@
                 Reason = model.Reason,
                 Amount = model.Amount,
                 To = model.To,
-                RentalAddress = model.RentalAddress,
+                Address = model.Address,
                 TransactionDate = model.TransactionDate?.ToString(DateFormatWithTime),
             };
 

@@ -12,6 +12,8 @@
 
         public string TenantName { get; set; }
 
+        public string OwnerName { get; set; }
+
         public string Reason { get; set; }
 
         public decimal Amount { get; set; }

@@ -7,7 +7,7 @@
     using RPM.Services.Common.Models.Payment;
     using RPM.Services.Management.Models;
 
-    public interface IPaymentService
+    public interface IOwnerPaymentService
     {
         Task<IEnumerable<OwnerAllPaymentsServiceModel>> AllPayments(string userId);
 

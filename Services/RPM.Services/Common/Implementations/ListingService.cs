@@ -125,21 +125,6 @@
             return model;
         }
 
-        public async Task<IEnumerable<PropertyListServiceModel>> GetAllByStatusAsync(string status)
-        {
-            var toRent = (HomeStatus)Enum.Parse(typeof(HomeStatus), ToRent, true);
-            var toManage = (HomeStatus)Enum.Parse(typeof(HomeStatus), ToManage, true);
-
-            if (status == ToRent)
-            {
-                return await this.GetByStatusAsync(toRent);
-            }
-            else
-            {
-                return await this.GetByStatusAsync(toManage);
-            }
-        }
-
         public async Task<PropertyCountServiceModel> GetPropertyCountByCategoryAsync(string category)
         {
             var managed = (HomeStatus)Enum.Parse(typeof(HomeStatus), Managed, true);
@@ -186,6 +171,21 @@
             return model;
         }
 
+        public async Task<IEnumerable<PropertyListServiceModel>> GetAllByStatusAsync(string status)
+        {
+            var toRent = (HomeStatus)Enum.Parse(typeof(HomeStatus), ToRent, true);
+            var toManage = (HomeStatus)Enum.Parse(typeof(HomeStatus), ToManage, true);
+
+            if (status == ToRent)
+            {
+                return await this.GetByStatusAsync(toRent);
+            }
+            else
+            {
+                return await this.GetByStatusAsync(toManage);
+            }
+        }
+
         private async Task<IEnumerable<PropertyListServiceModel>> GetAllByCategoryAsync(HomeCategory category, HomeStatus managedStatus)
         {
             var model = await this.context.Homes
@@ -205,30 +205,6 @@
                                 Image = x.Images.Select(i => i.PictureUrl).FirstOrDefault(),
                             })
                             .ToListAsync();
-
-            return model;
-        }
-
-        private async Task<PropertyCountServiceModel> GetByCategoryAsync(HomeStatus managed, HomeCategory category)
-        {
-            var count = await this.context.Homes
-                .Where(h => h.Status != managed && h.Category == category)
-               .CountAsync();
-
-            var exampleImage = await this.context.Homes
-                .Include(h => h.Images)
-                .Where(h => h.Status != managed && h.Category == category)
-                .Select(x => x.Images.Select(i => i.PictureUrl).FirstOrDefault())
-                .FirstOrDefaultAsync();
-
-            var categoryUpper = category.ToString().FirstCharToUpper();
-
-            var model = new PropertyCountServiceModel
-            {
-                CategoryName = category.ToString().FirstCharToUpper() + "s",
-                Count = count,
-                ExampleImage = exampleImage,
-            };
 
             return model;
         }
@@ -256,6 +232,28 @@
             return model;
         }
 
+        private async Task<PropertyCountServiceModel> GetByCategoryAsync(HomeStatus managed, HomeCategory category)
+        {
+            var count = await this.context.Homes
+                .Where(h => h.Status != managed && h.Category == category)
+               .CountAsync();
 
+            var exampleImage = await this.context.Homes
+                .Include(h => h.Images)
+                .Where(h => h.Status != managed && h.Category == category)
+                .Select(x => x.Images.Select(i => i.PictureUrl).FirstOrDefault())
+                .FirstOrDefaultAsync();
+
+            var categoryUpper = category.ToString().FirstCharToUpper();
+
+            var model = new PropertyCountServiceModel
+            {
+                CategoryName = category.ToString().FirstCharToUpper() + "s",
+                Count = count,
+                ExampleImage = exampleImage,
+            };
+
+            return model;
+        }
     }
 }

@@ -24,6 +24,6 @@
 
         public PaymentStatus Status { get; set; }
 
-        public string RentalAddress { get; set; }
+        public string Address { get; set; }
     }
 }

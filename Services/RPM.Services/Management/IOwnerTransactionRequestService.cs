@@ -17,6 +17,10 @@
             string senderId,
             OwnerTransactionRequestsCreateInputServiceModel model);
 
+        Task<string> CreateToAsync(
+            string senderId,
+            OwnerTransactionToRequestsCreateInputServiceModel model);
+
         Task<bool> UpdateAsync(TransactionRequest transactionRequest);
 
         Task<TransactionRequest> FindByIdAsync(string id);

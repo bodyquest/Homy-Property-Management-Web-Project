@@ -1,42 +1,30 @@
 ﻿namespace RPM.Web.Areas.Management.Controllers
 {
-    using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Hangfire;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using RPM.Data;
     using RPM.Data.Models;
-    using RPM.Data.Models.Enums;
-    using RPM.Services.Management;
-    using RPM.Services.Management.Implementations;
-    using RPM.Web.Areas.Management.Models.Payments;
-    using RPM.Web.Areas.Management.Models.Requests;
-    using RPM.Web.Areas.Management.Models.TransactionRequests;
-    using RPM.Web.Infrastructure.Extensions;
     using Stripe;
     using Stripe.Checkout;
     using static RPM.Common.GlobalConstants;
 
+    // TO REMOVE CONTROLLER
     public class HookController : ManagementController
     {
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
-        private readonly IPaymentService paymentService;
 
         public HookController(
             ApplicationDbContext context,
-            UserManager<User> userManager,
-            IPaymentService paymentService)
+            UserManager<User> userManager)
         {
             this.context = context;
             this.userManager = userManager;
-            this.paymentService = paymentService;
         }
 
         // https://dashboard.stripe.com/test/webhooks

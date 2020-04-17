@@ -104,7 +104,7 @@
 
             if (user == null)
             {
-                return this.RedirectToAction("Index", "Dashboard", new { area = "Management" })
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
                     .WithDanger(string.Empty, UserNotFound);
             }
 
@@ -124,7 +124,7 @@
                     return this.BadRequest();
                 }
 
-                return this.RedirectToAction("Index", "Dashboard", new { area = "Management" })
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
                     .WithSuccess(string.Empty, RentCreatedSuccessfully);
             }
             else if (requestType == ToManage)
@@ -136,16 +136,16 @@
                     return this.BadRequest();
                 }
 
-                return this.RedirectToAction("Index", "Dashboard", new { area = "Management" })
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
                     .WithSuccess(string.Empty, string.Format(ManagerAddedSuccessfully, userFullName));
             }
             else if (requestType == CancelRent)
             {
-
+                // TODO: implement cancellation
             }
             else if (requestType == CancelManage)
             {
-
+                // TODO: implement cancellation
             }
 
             return this.BadRequest();

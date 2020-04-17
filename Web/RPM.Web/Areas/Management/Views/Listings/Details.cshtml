@@ -140,7 +140,32 @@
                             
                             <!-- /.card-body -->
                             <div class="card-footer pl-0 bg-white">
-                                <a asp-controller="Listings" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info shadow"><span class="text-white">Edit Listing</span></a>
+                                <div class="row justify-content-between">
+                                    <div class="col-md-2">
+                                        <a asp-controller="Listings"
+                                           asp-action="Edit"
+                                           asp-route-id="@Model.Id"
+                                           class="btn btn-info shadow">
+                                            <span class="text-white">
+                                                Edit Listing
+                                            </span>
+                                        </a>
+                                    </div>
+                                    @*@if (string.IsNullOrWhiteSpace(Model.ManagerFullName) == true && Model.RentalInfo == null)
+	                                {*@
+                                        <div class="col-md-2">
+                                            <a asp-controller="Listings"
+                                               asp-action="Delete"
+                                               asp-route-id="@Model.Id"
+                                               class="btn btn-info shadow">
+                                                <span class="text-white">
+                                                    Remove Listing
+                                                </span>
+                                            </a>
+                                        </div>
+                                  @*}*@
+                                </div>
+                                
                             </div>
                         <!-- /.form (start) -->
                     </div>
@@ -163,10 +188,10 @@
                             <img src="@Model.Image" class="img-fluid" alt="Responsive image">
                         </div>
                         <div class="col-12 px-4">
-                            @if (Model.RentalInfo == null)
+                            @if (string.IsNullOrWhiteSpace(Model.ManagerFullName) == true && Model.RentalInfo == null)
                             {
                                 <h4 class="text-danger text-center pb-4">
-                                    You are managing the property
+                                    You are managing the property and it is not rented yet
                                 </h4>
                             }
                             else
@@ -179,9 +204,12 @@
                                                 <hr class="hr-2 mt-1" />
                                             </div>
                                         </div>
-                                        <p class="text-muted">
-                                            @Model.RentalInfo.RentalDate
-                                        </p>
+                                        @if (Model.RentalInfo != null)
+                                        {
+                                            <p class="text-muted">
+                                                @Model.RentalInfo.RentalDate
+                                            </p>
+                                        }
                                     </div>
                                     <div class="col-6">
                                         <strong><i class="far fa-clock mr-1"></i>Duration</strong>
@@ -190,9 +218,19 @@
                                                 <hr class="hr-2 mt-1" />
                                             </div>
                                         </div>
-                                        <p class="text-muted">
-                                            @Model.RentalInfo.Duration Months
-                                        </p>
+                                        @if (Model.RentalInfo != null)
+                                        {
+                                            @if (Model.RentalInfo.Duration == null)
+                                            {
+                                                <ion-icon name="infinite-outline"></ion-icon>
+                                            }
+                                            else
+                                            {
+                                                <p class="text-muted">
+                                                    @Model.RentalInfo.Duration Months
+                                                </p>
+                                            }
+                                        }
                                     </div>
                                 </div>
 
@@ -204,9 +242,12 @@
                                                 <hr class="hr-2 mt-1" />
                                             </div>
                                         </div>
-                                        <p class="text-muted">
-                                            @Model.RentalInfo.TenantFullName
-                                        </p>
+                                        @if (Model.RentalInfo != null)
+                                        {
+                                            <p class="text-muted">
+                                                @Model.RentalInfo.TenantFullName
+                                            </p>
+                                        }
                                     </div>
                                     <div class="col-6">
                                         <strong><i class="fas fa-user-tie mr-1"></i>Manager Name</strong>
@@ -215,7 +256,7 @@
                                                 <hr class="hr-2 mt-1" />
                                             </div>
                                         </div>
-                                        @if (string.IsNullOrWhiteSpace(Model.RentalInfo.ManagerFullName))
+                                        @if (string.IsNullOrWhiteSpace(Model.ManagerFullName))
                                         {
                                             <h6 class="text-danger">
                                                 You are managing the property
@@ -224,28 +265,12 @@
                                         else
                                         {
                                             <p class="text-muted">
-                                                @Model.RentalInfo.ManagerFullName
+                                                @Model.ManagerFullName
                                             </p>
                                         }
                                     </div>
                                 </div>
                             }
-                            <!--
-      else
-      {
-          <div class="col-6">
-              <strong><i class="far fa-file-alt mr-1"></i>Status</strong>
-              <div class="row">
-                  <div class="col-3">
-                      <hr class="hr-2 mt-1" />
-                  </div>
-              </div>
-              <h4 class="text-success">
-                  The listing is not rented yet
-              </h4>
-          </div>
-      }
-    -->
                         </div>
                     </div>
                    

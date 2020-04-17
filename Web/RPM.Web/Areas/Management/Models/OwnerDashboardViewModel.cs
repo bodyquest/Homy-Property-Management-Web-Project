@@ -12,5 +12,7 @@
         public IEnumerable<OwnerIndexRequestsServiceModel> Requests { get; set; }
 
         public IEnumerable<OwnerIndexRentalServiceModel> Rentals { get; set; }
+
+        public IEnumerable<OwnerAllPaymentsServiceModel> Payments { get; set; }
     }
 }

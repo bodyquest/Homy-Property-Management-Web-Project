@@ -1,7 +1,7 @@
-﻿@model OwnerTransactionPaymentsCreateInputModel
+﻿@model OwnerTransactionRequestsCreateInputModel
 
 @{
-    this.ViewData["Title"] = "Transaction Requests Management";
+    this.ViewData["Title"] = "Transactions Schedule Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -16,7 +16,7 @@
                 <!-- TABLE: Add New Listing -->
                 <div class="card">
                     <div class="card-header border-transparent">
-                        <h3 class="card-title text-info"><strong>Add New Transaction Payment For Manager</strong></h3>
+                        <h3 class="card-title text-info"><strong>Add New Payment Schedule For Tenant</strong></h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -26,16 +26,16 @@
                     <!-- /.card-header -->
                     <div class="card-body p-0">
                         <!-- form start -->
-                        <form asp-action="Create" method="post" role="form">
+                        <form asp-action="SchedulePaymentFrom" method="post" role="form">
                             <div asp-validation-summary="ModelOnly"></div>
 
                             <div class="card-body">
 
                                 <div class="form-group">
-                                    <label asp-for="HomeId" class="col-form-label"></label>
-                                    <select asp-for="HomeId"
-                                            asp-items="@Model.ManagedHomesList
-                                                .ToSelectStringListItem(Model.HomeId)"
+                                    <label asp-for="RentalId" class="col-form-label"></label>
+                                    <select asp-for="RentalId"
+                                            asp-items="@Model.RentalsList
+                                                .ToSelectListItem(Model.RentalId)"
                                             class="form-control"></select>
                                 </div>
 
@@ -76,6 +76,7 @@
                 </div>
                 <!-- /.card -->
             </div>
+
         </div>
     </section>
     <!-- /.content -->

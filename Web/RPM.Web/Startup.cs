@@ -131,7 +131,7 @@
             services.AddTransient<IOwnerListingService, OwnerListingService>(); // 
             services.AddTransient<IOwnerRequestService, OwnerRequestService>(); // 
             services.AddTransient<IOwnerRentalService, OwnerRentalService>(); // 
-            services.AddTransient<IPaymentService, OwnerPaymentService>(); //
+            services.AddTransient<IOwnerPaymentService, OwnerPaymentService>(); //
             services.AddTransient<IOwnerContractService, OwnerContractService>(); // 
             services.AddTransient<IOwnerTransactionRequestService,
                 OwnerTransactionRequestService>(); // 

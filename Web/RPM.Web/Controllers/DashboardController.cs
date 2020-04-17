@@ -37,13 +37,14 @@
         {
             var userId = this.userManager.GetUserId(this.User);
 
-            //var userPayments = await this.paymentService.GetUserPaymentsListAsync(userId);
+            // TODO:
+            // var userPayments = await this.paymentService.GetUserPaymentsListAsync(userId);
             var managedProperties = await this.listingService.GetManagedPropertiesAsync(userId);
 
             var viewModel = new ManagerDashboardViewModel
             {
                 ManagedProperties = managedProperties,
-                //Payments = userPayments,
+                // Payments = userPayments,
             };
 
             return this.View(viewModel);
@@ -65,7 +66,7 @@
                 PaymentIntentData = new SessionPaymentIntentDataOptions
                 {
                     ApplicationFeeAmount = (long)((payment.Amount * 0.01m) * 100),
-                    Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+                    Description = $"Payment Id: {payment.Id} for rental at {payment.Address}",
                     CaptureMethod = "manual",
 
                     TransferData = new SessionPaymentIntentTransferDataOptions
@@ -80,7 +81,7 @@
                     new SessionLineItemOptions
                     {
                         Name = "Monthly Rent",
-                        Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+                        Description = $"Payment Id: {payment.Id} for rental at {payment.Address}",
                         Amount = (long)payment.Amount * 100,
                         Currency = CurrencyUSD,
                     },

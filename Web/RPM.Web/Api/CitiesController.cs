@@ -83,9 +83,9 @@
                         Amount = (long)payment.Amount * 100,
                         Currency = CurrencyUSD,
 
-                        Description = $"Payment Id: {payment.Id} for rental at {payment.RentalAddress}",
+                        Description = $"Payment Id: {payment.Id} for rental at {payment.Address}",
 
-                        Name = $"Rent Payment for {DateTime.UtcNow.Month} | {DateTime.UtcNow.Year} for rental at {payment.RentalAddress}",
+                        Name = $"Rent Payment for {DateTime.UtcNow.Month} | {DateTime.UtcNow.Year} for rental at {payment.Address}",
                     },
                 },
 
