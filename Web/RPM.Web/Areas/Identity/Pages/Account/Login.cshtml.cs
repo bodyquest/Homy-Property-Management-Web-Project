@@ -16,6 +16,8 @@
     using RPM.Data.Models;
     using RPM.Services.Common.Implementations;
 
+    using static RPM.Common.GlobalConstants;
+
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
@@ -93,15 +95,20 @@
                     var user = this.userManager.FindByNameAsync(this.Input.Username).GetAwaiter().GetResult();
                     var roles = this.userManager.GetRolesAsync(user).GetAwaiter().GetResult();
 
-                    if (roles.Contains("Admin"))
+                    if (roles.Contains(AdministratorRoleName))
                     {
                         this.logger.LogInformation("Admin logged in.");
                         return this.LocalRedirect("~/Administration/Dashboard/Index");
                     }
-                    else if (roles.Contains("Owner"))
+                    else if (roles.Contains(OwnerRoleName))
                     {
                         this.logger.LogInformation("Owner logged in.");
                         return this.LocalRedirect("~/Management/Dashboard/Index");
+                    }
+                    else if (roles.Contains(ManagerRoleName))
+                    {
+                        this.logger.LogInformation("Owner logged in.");
+                        return this.LocalRedirect("~/Dashboard/Index");
                     }
                     else
                     {

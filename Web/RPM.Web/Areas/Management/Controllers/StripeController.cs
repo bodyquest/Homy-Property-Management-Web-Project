@@ -10,7 +10,7 @@
 
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(ManagerRoleName)]
+    [Authorize(Roles = "Owner, Manager")]
     public class StripeController : ManagementController
     {
         private readonly UserManager<User> userManager;
@@ -40,6 +40,12 @@
             // user.StripeAccessToken = response.AccessToken;
 
             await this.userManager.UpdateAsync(user);
+
+            if (this.User.IsInRole(ManagerRoleName))
+            {
+                return this.RedirectToAction("index", "Dashboard", new { area = string.Empty })
+                .WithSuccess(string.Empty, SuccessfullyRegistered);
+            }
 
             return this.RedirectToAction("Create", "Listings", new { area = ManagementArea })
                 .WithSuccess(string.Empty, SuccessfullyRegistered);

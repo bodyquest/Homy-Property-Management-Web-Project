@@ -9,10 +9,13 @@
     using RPM.Data;
     using RPM.Data.Models;
     using RPM.Data.Models.Enums;
+    using RPM.Services.Common.Models.Dashboard;
     using RPM.Services.Common.Models.Payment;
     using RPM.Services.Common.Models.Profile;
     using RPM.Services.Management;
+
     using Stripe.Checkout;
+
     using static RPM.Common.GlobalConstants;
 
     public class PaymentCommonService : Common.IPaymentCommonService
@@ -52,6 +55,29 @@
                     Status = p.Status,
                     RentalAddress = string.Format(
                         PaymentRentalLocation, p.Rental.Home.City.Name, p.Rental.Home.Address),
+                })
+                .ToListAsync();
+
+            return payments;
+        }
+
+        public async Task<IEnumerable<ManagerPaymentListServiceModel>> GetManagerPaymentsListAsync(string userId)
+        {
+            var payments = await this.context.Homes
+                .Include(h => h.City)
+                .Where(h => h.ManagerId == userId)
+                .SelectMany(h => h.Payments)
+                .Select(p => new ManagerPaymentListServiceModel
+                {
+                    Id = p.Id,
+                    Date = p.Date,
+                    From = string.Format(RecipientFullName, p.Sender.FirstName, p.Sender.LastName),
+                    Reason = p.Reason,
+                    Amount = p.Amount,
+                    TransactionDate = p.TransactionDate,
+                    Status = p.Status,
+                    Address = string.Format(
+                        HomeLocation, p.Home.City.Name, p.Home.Address),
                 })
                 .ToListAsync();
 

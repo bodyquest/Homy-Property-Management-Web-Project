@@ -267,7 +267,11 @@
             // Add User to Role
             var userId = request.UserId;
             var user = await this.userManager.FindByIdAsync(userId);
-            await this.userManager.AddToRoleAsync(user, ManagerRoleName);
+
+            var rolesBefore = await this.userManager.GetRolesAsync(user);
+            var isAdded = await this.userManager.AddToRoleAsync(user, ManagerRoleName);
+
+            var rolesAfter = await this.userManager.GetRolesAsync(user);
 
             // Add Contract
             var isSuccessful = await this.contractService

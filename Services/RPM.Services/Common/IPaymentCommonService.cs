@@ -4,13 +4,17 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using RPM.Data.Models.Enums;
+    using RPM.Services.Common.Models.Dashboard;
     using RPM.Services.Common.Models.Payment;
     using RPM.Services.Common.Models.Profile;
+
     using Stripe.Checkout;
 
     public interface IPaymentCommonService
     {
         Task<IEnumerable<UserPaymentListServiceModel>> GetUserPaymentsListAsync(string userId);
+
+        Task<IEnumerable<ManagerPaymentListServiceModel>> GetManagerPaymentsListAsync(string userId);
 
         Task<UserPaymentDetailsServiceModel> GetPaymentDetailsAsync(string paymentId, string userId);
 

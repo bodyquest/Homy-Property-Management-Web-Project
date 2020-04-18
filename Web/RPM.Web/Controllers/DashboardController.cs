@@ -36,15 +36,17 @@
         public async Task<IActionResult> Index()
         {
             var userId = this.userManager.GetUserId(this.User);
+            var user = await this.userManager.FindByIdAsync(userId);
+            var hasStripe = !string.IsNullOrWhiteSpace(user.StripeConnectedAccountId);
 
-            // TODO:
-            // var userPayments = await this.paymentService.GetUserPaymentsListAsync(userId);
+            var userPayments = await this.paymentService.GetManagerPaymentsListAsync(userId);
             var managedProperties = await this.listingService.GetManagedPropertiesAsync(userId);
 
             var viewModel = new ManagerDashboardViewModel
             {
+                HasStripeAccount = hasStripe,
                 ManagedProperties = managedProperties,
-                // Payments = userPayments,
+                Payments = userPayments,
             };
 
             return this.View(viewModel);

@@ -235,16 +235,6 @@
                                     </p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a asp-area=""
-                                   asp-controller="MessageHub"
-                                   asp-action="Index" class="nav-link">
-                                    <i class="nav-icon far fa-envelope"></i>
-                                    <p>
-                                        Messages
-                                    </p>
-                                </a>
-                            </li>
                         }
                         else if (User.IsInRole(GlobalConstants.ManagerRoleName))
                         {
@@ -269,14 +259,6 @@
                                     <i class="nav-icon fas fa-money-check-alt"></i>
                                     <p>
                                         Payments
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-controller="Messages" asp-action="Index" class="nav-link">
-                                    <i class="nav-icon far fa-envelope"></i>
-                                    <p>
-                                        Messages
                                     </p>
                                 </a>
                             </li>

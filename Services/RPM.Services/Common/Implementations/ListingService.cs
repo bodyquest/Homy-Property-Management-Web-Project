@@ -11,6 +11,7 @@
     using RPM.Services.Common.Models.Home;
     using RPM.Services.Common.Models.Listing;
     using RPM.Services.Common.Models.Rental;
+
     using static RPM.Common.Extensions.StringExtensionMethod;
     using static RPM.Common.GlobalConstants;
 
@@ -68,15 +69,24 @@
                 {
                     Id = p.Id,
                     OwnerName = string.Format(OwnerFullName, p.Owner.FirstName, p.Owner.LastName),
-                    TenantName = rentals
-                                .Where(r => r.HomeId == p.Id)
-                                .Select(h => h.TenantFullName).ToString(),
                     City = p.City.Name,
                     Address = p.Address,
                     Status = p.Status,
                     Category = p.Category,
                 })
                 .ToListAsync();
+
+            foreach (var house in properties)
+            {
+                foreach (var rent in rentals)
+                {
+                    if (rent.HomeId == house.Id)
+                    {
+                        house.TenantName =
+                            rent.TenantFullName;
+                    }
+                }
+            }
 
             return properties;
         }
@@ -234,15 +244,24 @@
 
         private async Task<PropertyCountServiceModel> GetByCategoryAsync(HomeStatus managed, HomeCategory category)
         {
+            var exampleImage = string.Empty;
+
             var count = await this.context.Homes
                 .Where(h => h.Status != managed && h.Category == category)
                .CountAsync();
 
-            var exampleImage = await this.context.Homes
-                .Include(h => h.Images)
-                .Where(h => h.Status != managed && h.Category == category)
-                .Select(x => x.Images.Select(i => i.PictureUrl).FirstOrDefault())
-                .FirstOrDefaultAsync();
+            if (category == HomeCategory.Apartment)
+            {
+                exampleImage = ApartmentImage;
+            }
+            else if (category == HomeCategory.House)
+            {
+                exampleImage = HouseImage;
+            }
+            else if (category == HomeCategory.Room)
+            {
+                exampleImage = RoomImage;
+            }
 
             var categoryUpper = category.ToString().FirstCharToUpper();
 

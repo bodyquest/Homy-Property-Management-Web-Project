@@ -15,8 +15,7 @@
 }
 <!-- Hero Section Begin -->
 @if (this.User.Identity.IsAuthenticated &&
-(this.User.IsInRole(GlobalConstants.TenantRole)
-|| this.User.IsInRole(GlobalConstants.ManagerRoleName)))
+(this.User.IsInRole(GlobalConstants.TenantRole)))
 {
     <section class="jumbotron jumbotron-fluid jumboHeroImage">
         <div class="container">
@@ -196,7 +195,7 @@ else
                                                     style='text-align:center;vertical-align:middle'>
                                                     @payment.Amount
                                                 </td>
-                                                @if (payment.Status.ToString() == "Complete")
+                                                @if (payment.Status == PaymentStatus.Complete)
                                                 {
                                                     <td class="col-1 py-1"
                                                         style='text-align:center;vertical-align:middle'>
