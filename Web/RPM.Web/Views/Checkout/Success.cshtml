@@ -1,59 +1,74 @@
 ﻿@model CheckoutPaymentViewModel
 
 @{
-    ViewData["Title"] = "Pay";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Success";
+    if (this.User.IsInRole(OwnerRoleName))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 }
 
-<body class="handshake-bg">
-    <section class="content pb-4"
-             style="padding-top: 120px; margin-left: auto; margin-right: auto;">
-        <div class="row d-flex justify-content-center">
+@if (this.User.IsInRole(OwnerRoleName))
+{
+    @await Html.PartialAsync("_OwnerSuccessPartial", Model)
+}
+else
+{
+    <body class="handshake-bg">
+        <section class="content pb-4"
+                 style="padding-top: 120px; margin-left: auto; margin-right: auto;">
+            <div class="row d-flex justify-content-center">
 
-            <div class="row p-3 mx-auto mt-4">
-                <div class="form-area">
-                    <div class="col-md-12 pb-4">
-                        <p>
-                            <a class="primary-btn px-1 bg-transparent text-primary">
-                                Thank you! Your payment was successful!
-                            </a>
-                        </p>
-                        <ul class="pb-4 mb-4">
-                            @*<li><strong>Payment reason:</strong> Model.Reason</li>
-                <li><strong>Amount paid:</strong> Model.Amount</li>
-                <li><strong>Recipient:</strong> Model.To</li>*@
-                            <li><strong>Payment reason:</strong> @Model.Reason</li>
-                            <li><strong>Amount paid:</strong> $ @Model.Amount</li>
-                            <li><strong>Recipient:</strong> @Model.To</li>
-                            <li><strong>Property Address:</strong> @Model.Address</li>
-                            @*<li><strong>Transaction Date:</strong> @Model.TransactionDate</li>*@
-                        </ul>
+                <div class="row p-3 mx-auto mt-4">
+                    <div class="form-area">
+                        <div class="col-md-12 pb-4">
+                            <p>
+                                <a class="primary-btn px-1 bg-transparent text-primary">
+                                    Thank you! Your payment was successful!
+                                </a>
+                            </p>
+                            <ul class="pb-4 mb-4">
+                                @*<li><strong>Payment reason:</strong> Model.Reason</li>
+                                    <li><strong>Amount paid:</strong> Model.Amount</li>
+                                    <li><strong>Recipient:</strong> Model.To</li>*@
+                                <li><strong>Payment reason:</strong> @Model.Reason</li>
+                                <li><strong>Amount paid:</strong> $ @Model.Amount</li>
+                                <li><strong>Recipient:</strong> @Model.To</li>
+                                <li><strong>Property Address:</strong> @Model.Address</li>
+                                @*<li><strong>Transaction Date:</strong> @Model.TransactionDate</li>*@
+                            </ul>
+                        </div>
+                        @if (this.User.IsInRole(OwnerRoleName))
+                        {
+                            <div class="col-md-6 pt-4 mt-4 mx-auto">
+                                <a asp-area="Management"
+                                   asp-controller="Dashboard"
+                                   asp-action="Index"
+                                   class="shadow btn btn-block btn-primary text-white">
+                                    Back to Dashboard
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6 pt-4 mt-4 mx-auto">
+                                <a asp-controller="Profile"
+                                   asp-action="Index"
+                                   class="shadow btn btn-block btn-primary text-white">
+                                    Back to Profile
+                                </a>
+                            </div>
+                        }
                     </div>
-                    @if (this.User.IsInRole(OwnerRoleName))
-                    {
-                        <div class="col-md-6 pt-4 mt-4 mx-auto">
-                            <a asp-area="Management"
-                               asp-controller="Dashboard"
-                               asp-action="Index"
-                               class="shadow btn btn-block btn-primary text-white">
-                                Back to Dashboard
-                            </a>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col-md-6 pt-4 mt-4 mx-auto">
-                            <a asp-controller="Profile"
-                               asp-action="Index"
-                               class="shadow btn btn-block btn-primary text-white">
-                                Back to Profile
-                            </a>
-                        </div>
-                    }
                 </div>
             </div>
-        </div>
-    </section>
-</body>
+        </section>
+    </body>
+}
+
 
 

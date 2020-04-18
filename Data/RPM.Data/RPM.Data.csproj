@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20200323172500_AddColumnIsApprovedToRequest.Designer.cs" />
     <Compile Remove="Migrations\20200327195640_UpdateMigrations.cs" />
     <Compile Remove="Migrations\20200327195640_UpdateMigrations.Designer.cs" />
+    <Compile Remove="Migrations\20200418190111_CheckDbStatus.cs" />
+    <Compile Remove="Migrations\20200418190111_CheckDbStatus.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

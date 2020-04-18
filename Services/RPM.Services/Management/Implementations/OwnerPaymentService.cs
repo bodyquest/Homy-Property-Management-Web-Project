@@ -61,12 +61,43 @@
             return model;
         }
 
+        // CreateSession Method Calls this Service
         public async Task<UserPaymentDetailsServiceModel> GetPaymentDetailsAsync(string paymentId, string userId)
         {
-            var payment = await this.context.Rentals
+            var payment = new UserPaymentDetailsServiceModel();
+
+            // FIND if this is the owner who pays
+            var paymentFromDb = await this.context.Payments
+                .Include(p => p.Home)
+                .Where(p => p.Id == paymentId)
+                .FirstOrDefaultAsync();
+
+            if (paymentFromDb.HomeId != null && paymentFromDb.Home.OwnerId == userId)
+            {
+                payment = await this.context.Payments
+                .Where(p => p.Id == paymentId && p.Home.OwnerId == userId)
+                .Select(p => new UserPaymentDetailsServiceModel
+                {
+                    Id = p.Id,
+                    Date = p.Date,
+                    TransactionDate = p.TransactionDate,
+                    To = string.Format(RecipientFullName, p.Recipient.FirstName, p.Recipient.LastName),
+                    RecipientHasStripeAccount = !string.IsNullOrWhiteSpace(p.Recipient.StripeConnectedAccountId),
+                    ToStripeAccountId = p.Recipient.StripeConnectedAccountId,
+                    Reason = p.Reason,
+                    Amount = p.Amount,
+                    Status = p.Status,
+                    Address = string.Format(
+                        HomeLocation, p.Home.City.Name, p.Home.Address, p.Home.Category.ToString()),
+                })
+                .FirstOrDefaultAsync();
+            }
+            else
+            {
+                payment = await this.context.Rentals
                 .Where(r => r.TenantId == userId)
                 .SelectMany(r => r.Payments)
-                .Where(r => r.Id == paymentId)
+                .Where(p => p.Id == paymentId)
                 .Select(p => new UserPaymentDetailsServiceModel
                 {
                     Id = p.Id,
@@ -81,6 +112,7 @@
                         PaymentRentalLocation, p.Rental.Home.City.Name, p.Rental.Home.Address),
                 })
                 .FirstOrDefaultAsync();
+            }
 
             return payment;
         }

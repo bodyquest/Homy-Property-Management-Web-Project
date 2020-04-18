@@ -37,9 +37,10 @@
         public async Task<IActionResult> Pay(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
+
             var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
 
-            if (payment.RecipientHasStripeAccount == false)
+            if (payment.RecipientHasStripeAccount == false && this.User.IsInRole(OwnerRoleName))
             {
                 return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
                     .WithWarning(string.Empty, string.Format(ManagerHasNotStripeAccount, payment.To));

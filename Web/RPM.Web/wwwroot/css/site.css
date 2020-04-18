@@ -313,6 +313,10 @@ textAreaFixed {
     background-size: cover;
 }
 
+.success-bg {
+    background: url('../img/dust_scratches.png');
+}
+
 .add-listing-bg {
     min-height: 100vh;
     padding: 0;

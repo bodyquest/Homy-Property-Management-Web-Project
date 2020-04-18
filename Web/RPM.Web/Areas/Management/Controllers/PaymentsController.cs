@@ -24,6 +24,7 @@
 
     using static RPM.Common.GlobalConstants;
 
+    [Authorize(Roles = "Owner, Tenant")]
     public class PaymentsController : ManagementController
     {
         private readonly ApplicationDbContext context;
@@ -43,7 +44,6 @@
             this.paymentCommonService = paymentCommonService;
         }
 
-        [Authorize(Roles = OwnerRoleName)]
         public async Task<IActionResult> Index()
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -59,7 +59,6 @@
             return this.View(viewModel);
         }
 
-        [Authorize(Roles = TenantRole)]
         [ActionName("session")]
         public async Task<IActionResult> CreateSession(string id)
         {
@@ -67,12 +66,12 @@
             var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
 
             // LOCALHOST LINKS
-            // var successStringUrl = "https://localhost:44319/Checkout/success?sessionId={CHECKOUT_SESSION_ID}";
-            // var cancelStringUrl = "https://localhost:44319/Checkout/cancel";
+            var successStringUrl = "https://localhost:44319/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
+            var cancelStringUrl = "https://localhost:44319/checkout/cancel";
 
-            // CONVEYOR LINKS
-            var successStringUrl = "https://rpm-web.conveyor.cloud/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
-            var cancelStringUrl = "https://rpm-web.conveyor.cloud/checkout/cancel";
+            //// CONVEYOR LINKS
+            //var successStringUrl = "https://rpm-web.conveyor.cloud/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
+            //var cancelStringUrl = "https://rpm-web.conveyor.cloud/checkout/cancel";
 
             var options = new SessionCreateOptions
             {

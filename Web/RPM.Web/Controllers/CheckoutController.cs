@@ -1,28 +1,21 @@
 ﻿namespace RPM.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using RPM.Data;
     using RPM.Data.Models;
     using RPM.Data.Models.Enums;
     using RPM.Services.Common;
-    using RPM.Services.Common.Models.Home;
     using RPM.Web.Infrastructure.Extensions;
-    using RPM.Web.Models.Home;
     using RPM.Web.Models.Payment;
     using RPM.Web.Models.Profile;
-    using RPM.Web.ViewModels;
     using Stripe;
     using Stripe.Checkout;
 
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(Roles = TenantRole)]
+    [Authorize(Roles = "Tenant, Owner")]
     public class CheckoutController : BaseController
     {
         private readonly UserManager<User> userManager;

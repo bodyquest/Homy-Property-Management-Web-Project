@@ -71,29 +71,31 @@
                 {
                     Id = p.Id,
                     Date = p.Date,
-                    From = string.Format(RecipientFullName, p.Sender.FirstName, p.Sender.LastName),
+                    From = string.Format(OwnerFullName, p.Sender.FirstName, p.Sender.LastName),
                     Reason = p.Reason,
                     Amount = p.Amount,
                     TransactionDate = p.TransactionDate,
                     Status = p.Status,
                     Address = string.Format(
-                        HomeLocation, p.Home.City.Name, p.Home.Address),
+                        HomeLocation, p.Home.City.Name, p.Home.Address, p.Home.Category.ToString()),
                 })
                 .ToListAsync();
 
             return payments;
         }
 
+        // Called for the dynamic tables for Owner or Tenant in their Dashboard/Profile Pages
         public async Task<UserPaymentDetailsServiceModel> GetPaymentDetailsAsync(string paymentId, string userId)
         {
             var payment = new UserPaymentDetailsServiceModel();
 
             // FIND if this is the owner who pays
             var paymentFromDb = await this.context.Payments
+                .Include(p => p.Home)
                 .Where(p => p.Id == paymentId)
                 .FirstOrDefaultAsync();
 
-            if (paymentFromDb.SenderId == userId)
+            if (paymentFromDb.HomeId != null && paymentFromDb.Home.OwnerId == userId)
             {
                 payment = await this.context.Payments
                 .Where(p => p.Id == paymentId && p.Home.OwnerId == userId)
@@ -109,7 +111,7 @@
                     Amount = p.Amount,
                     Status = p.Status,
                     Address = string.Format(
-                        PaymentRentalLocation, p.Rental.Home.City.Name, p.Rental.Home.Address),
+                        HomeLocation, p.Home.City.Name, p.Home.Address, p.Home.Category.ToString()),
                 })
                 .FirstOrDefaultAsync();
             }
