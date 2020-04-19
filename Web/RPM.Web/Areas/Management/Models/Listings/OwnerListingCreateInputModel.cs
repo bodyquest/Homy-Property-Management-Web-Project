@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using RPM.Data.Models;
     using RPM.Data.Models.Enums;
@@ -49,7 +47,7 @@
         [Required]
         public HomeCategory Category { get; set; }
 
-        public bool UserHasStripeAccount { get; set; }
+        public bool? UserHasStripeAccount { get; set; }
 
         [Required]
         public IFormFile Image { get; set; }

@@ -6,21 +6,21 @@
 }
 
     <body class="add-listing-bg">
-        <h1 class="text-center text-info mx-auto">@this.ViewData["Title"]</h1>
+        @*<h1 class="text-center text-info mx-auto">@this.ViewData["Title"]</h1>*@
             <!-- Main content -->
-            <section class="content" style="padding-top:50px">
+            <section class="content" style="padding-top:0px;padding-bottom:100px">
                 <div class="row d-flex justify-content-center">
 
-                    <div class="col-7 pt-4">
+                    <div class="col-6 pt-4">
                         <!-- TABLE: Add New Listing -->
-                        <div class="card">
+                        <div class="card backgroundWhite shadow">
                             <div class="card-header border-transparent pb-0">
                                 <div class="row">
                                     <div class="col-4">
                                         <h3 class="card-title text-info"><strong>Add New Listing</strong></h3>
                                     </div>
                                     <div class="col-4 text-center">
-                                        @if (!Model.UserHasStripeAccount)
+                                        @if (Model.UserHasStripeAccount == false || Model.UserHasStripeAccount == null)
                                         {
                                             <a href=@HomyStrypeTestModeClientIdConnectLink class="btn btn-primary">
                                                 Connect to Stripe
@@ -74,7 +74,9 @@
                                                             asp-items="@Model.Countries
                                             .OrderBy(x => x.Name)
                                             .ToSelectListItem(Model.CountryId)"
-                                                            class="form-control"></select>
+                                                            class="form-control">
+
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -131,7 +133,8 @@
 
                                         <label asp-for="Image"></label>
                                         <div class="input-group">
-                                            <input type="file"
+                                            <input asp-for="Image"
+                                                   type="file"
                                                    id="image"
                                                    placeholder="Image...">
                                             <span asp-validation-for="Image" class="text-danger"></span>
@@ -139,13 +142,28 @@
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        @if (!Model.UserHasStripeAccount)
+                                        @if (Model.UserHasStripeAccount == false || Model.UserHasStripeAccount == null)
                                         {
-                                            <h5 class="text-danger col-md-6 mx-auto">To list, first connect to Stripe</h5>
+                                            <div class="row justify-content-center">
+                                                <div class="col-md-6">
+                                                    <button disabled
+                                                            type="submit"
+                                                            class="btn btn-secondary btn-block mx-auto">
+                                                        Add Listing
+                                                    </button>
+                                                </div>
+                                            </div>
                                         }
                                         else
                                         {
-                                            <button type="submit" class="btn btn-info col-md-6 mx-auto">Add Listing</button>
+                                            <div class="row justify-content-center">
+                                                <dvi class="col-md-6">
+                                                    <button type="submit"
+                                                            class="btn btn-info btn-block mx-auto">
+                                                        Add Listing
+                                                    </button>
+                                                </dvi>
+                                            </div>
                                         }
                                     </div>
                                 </form>

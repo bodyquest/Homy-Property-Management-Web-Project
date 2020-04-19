@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,6 +19,7 @@
 
     using static RPM.Common.GlobalConstants;
 
+    [Authorize]
     public class ListingsController : BaseController
     {
         private readonly IListingService listingService;
@@ -28,6 +29,7 @@
         private readonly ICloudImageService imageService;
         private readonly IImageDbService imageDbService;
         private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
 
         public ListingsController(
             IListingService listingService,
@@ -36,7 +38,8 @@
             ICountryService countryService,
             ICloudImageService imageService,
             IImageDbService imageDbService,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
             this.listingService = listingService;
             this.ownerListingService = ownerListingService;
@@ -45,6 +48,7 @@
             this.imageService = imageService;
             this.imageDbService = imageDbService;
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         [ActionName("GetCity")]
@@ -65,7 +69,7 @@
             var user = await this.userManager.FindByIdAsync(userId);
 
             var userStripeAccount = user.StripeConnectedAccountId;
-            bool hasStripe = true;
+            bool? hasStripe = true;
 
             if (string.IsNullOrWhiteSpace(userStripeAccount))
             {
@@ -125,12 +129,15 @@
 
             if (!isCreated)
             {
-                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                return this.RedirectToAction("Index", "Dashboard", new { area = string.Empty })
                     .WithWarning(string.Empty, CouldNotCreateRecord);
             }
 
             // Add To Role
             await this.userManager.AddToRoleAsync(user, OwnerRoleName);
+
+            // Referesh authorization since redirect requires the new role auth
+            await this.signInManager.RefreshSignInAsync(user);
 
             // Write Image to DB
             await this.imageDbService.WriteToDatabasebAsync(imgUrl, imgPubId);

@@ -1,8 +1,6 @@
 ﻿namespace RPM.Web.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -17,6 +15,7 @@
     using RPM.Web.Models.Requests;
     using static RPM.Common.GlobalConstants;
 
+    [Authorize]
     public class RequestsController : BaseController
     {
         private readonly UserManager<User> userManager;

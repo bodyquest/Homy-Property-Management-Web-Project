@@ -73,6 +73,7 @@
             // Response.Redirect(uri);
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
+            //// Google ReCaptcha
             //var recaptcha = this.recaptchaService.ValidateResponse(this.Input.Token);
             //if (!recaptcha.Result.Success && recaptcha.Result.Score <= 0.5)
             //{

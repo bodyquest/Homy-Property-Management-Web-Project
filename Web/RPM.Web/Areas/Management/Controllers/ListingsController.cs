@@ -283,7 +283,7 @@
             return this.View(model);
         }
 
-        [Authorize(Roles = TenantRole)]
+        [Authorize(Roles = "Owner, Viewer")]
         [ActionName("GetCity")]
         public async Task<IActionResult> GetCityAsync(int id)
         {

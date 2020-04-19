@@ -94,7 +94,6 @@
                         <li><a href="how-it-works.html">Explore</a></li>
                         <li><a href="listings.html">Cities</a></li>
                         <li><a asp-controller="ContactUs" asp-action="Index">Help</a></li>
-                        <li><a asp-controller="Home" asp-action="Test">TestPage</a></li>
                     </ul>
                 </nav>
                 <div class="header-right" id="MyTopnav">
@@ -117,7 +116,7 @@
                         }
 
                     </div>
-                    @if (!this.User.IsInRole(TenantRole))
+                    @if (!this.User.IsInRole(TenantRole) && !this.User.IsInRole(ManagerRoleName))
                     {
                         <a asp-area=""
                            asp-controller="Listings"
