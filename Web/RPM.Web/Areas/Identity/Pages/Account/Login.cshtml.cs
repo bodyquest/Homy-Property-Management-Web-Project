@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+    using System.Security.Claims;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authentication;
@@ -57,6 +58,12 @@
 
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
+            if (this.User.Identity.IsAuthenticated)
+            {
+                await this.signInManager.SignOutAsync();
+                this.HttpContext.Session.Clear();
+                this.HttpContext.User = new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity(string.Empty));
+            }
             // Clear the existing external cookie to ensure a clean login process
 
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);

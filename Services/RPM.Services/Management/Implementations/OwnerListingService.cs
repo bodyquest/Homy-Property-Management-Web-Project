@@ -84,6 +84,16 @@
             return result > 0;
         }
 
+        public async Task<bool> DeleteAsync(string id)
+        {
+            var home = await this.context.Homes.FindAsync(id);
+            this.context.Homes.Remove(home);
+
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
         public async Task<bool> EditListingAsync(OwnerEditListingServiceModel model)
         {
             var home = await this.context.Homes.FirstOrDefaultAsync(h => h.Id == model.Id);

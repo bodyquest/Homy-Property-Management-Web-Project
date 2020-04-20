@@ -117,8 +117,12 @@
                                         <hr class="hr-2 mt-1" />
                                     </div>
                                 </div>
-                                <p class="text-muted pr-5">
-                                    <a asp-action="DownloadFile" asp-route-requestid="@Model.Id" class="btn btn-sm btn-primary btn-block"><strong class="text-white">Download ID Document</strong></a>
+                                <p class="text-muted pr-5" style="padding-top:81px">
+                                    <a asp-action="DownloadFile"
+                                       asp-route-requestid="@Model.Id"
+                                       class="btn btn-sm btn-primary btn-block">
+                                        <strong class="text-white">Download ID Document</strong>
+                                    </a>
                                 </p>
                             </div>
                             <div class="col-6">
@@ -133,7 +137,6 @@
                                       enctype="multipart/form-data"
                                       method="post">
                                     <div class="row">
-
                                         <p class="text-danger pl-2">
                                             Upload contract in pdf format
                                         </p>
@@ -144,25 +147,44 @@
                                         </div>
 
                                     </div>
-                                    <div class="row d-flex justify-content-between">
-                                        <div class="col-6">
-                                            <p class="text-left p-0 m-0">
-                                                <input type="submit"
-                                                     class="btn btn-sm btn-success btn-block" value="Approve"/>
-                                            </p>
+                                    @if (Model.Status == RequestStatus.Rejected)
+                                    {
+                                        <div class="row d-flex justify-content-start">
+                                            <div class="col-6">
+                                                <p class="text-left p-0 m-0">
+                                                    <input disabled type="submit"
+                                                           class="btn btn-sm btn-secondary btn-block text-white"
+                                                           value="Approve" />
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div class="col-6">
-                                            <p class="text-left p-0 m-0">
-                                                <a asp-controller="Requests"
-                                                   asp-action="Reject"
-                                                   asp-route-id="@Model.Id"
-                                                   class="btn btn-sm btn-danger btn-block">
-                                                    Reject
-                                                </a>
-                                            </p>
+                                    }
+                                    else
+                                    {
+                                        <div class="row d-flex justify-content-start">
+                                            <div class="col-6">
+                                                <p class="text-left p-0 m-0">
+                                                    <input type="submit"
+                                                           class="btn btn-sm btn-success btn-block" value="Approve" />
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
                                 </form>
+                                    <form asp-action="Reject"
+                                          asp-route-id="@Model.Id"
+                                          method="post">
+                                        <div class="row d-flex justify-content-end"
+                                             style="margin-top:-30px">
+                                            <div class="col-6">
+                                                <p class="text-left p-0 m-0">
+                                                    <input type="submit"
+                                                           class="btn btn-sm btn-danger btn-block" value="Reject" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                
                             </div>
                         </div>
 

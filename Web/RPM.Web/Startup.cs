@@ -1,5 +1,6 @@
 ﻿namespace RPM.Web
 {
+    using System;
     using System.Reflection;
 
     using CloudinaryDotNet;
@@ -167,6 +168,13 @@
                 option.ConstraintMap["slugify"] = typeof(SlugifyParameterTransformer);
                 option.LowercaseUrls = true;
             });
+
+            services.AddSession(options =>
+            {
+                options.Cookie.IsEssential = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+                options.Cookie.HttpOnly = true;
+            });  // TODO: remove if it does not work as intended !!!!
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -209,6 +217,7 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession(); // TODO: remove if it does not work as intended !!!!
 
             app.UseRouting();
 

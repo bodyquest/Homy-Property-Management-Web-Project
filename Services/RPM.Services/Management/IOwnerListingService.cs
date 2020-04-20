@@ -13,6 +13,8 @@
 
         Task<bool> CreateListingAsync(OwnerCreateListingServiceModel model);
 
+        Task<bool> DeleteAsync(string id);
+
         Task<bool> EditListingAsync(OwnerEditListingServiceModel model);
 
         Task<OwnerListingFullDetailsServiceModel> GetDetailsAsync(string userId, string id);

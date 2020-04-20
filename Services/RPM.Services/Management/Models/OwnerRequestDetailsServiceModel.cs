@@ -1,4 +1,6 @@
-﻿namespace RPM.Services.Management.Models
+﻿using RPM.Data.Models.Enums;
+
+namespace RPM.Services.Management.Models
 {
     public class OwnerRequestDetailsServiceModel
     {
@@ -16,6 +18,8 @@
         public string Phone { get; set; }
 
         public string RequestType { get; set; }
+
+        public RequestStatus Status { get; set; }
 
         public string Message { get; set; }
 

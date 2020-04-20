@@ -60,6 +60,7 @@
                 Email = requestModel.Email,
                 Phone = requestModel.Phone,
                 RequestType = requestModel.RequestType,
+                Status = requestModel.Status,
                 Message = requestModel.Message,
                 About = requestModel.About,
                 Document = requestModel.Document,
@@ -149,6 +150,33 @@
             }
 
             return this.BadRequest();
+        }
+
+        [HttpPost]
+        [ActionName("Reject")]
+        public async Task<IActionResult> RejectAsync(string id)
+        {
+            var request = await this.requestService.GetRequestInfoAsync(id);
+            var requestType = request.RequestType;
+            var userId = request.UserId;
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            var userFullName = string.Format(ManagerFullName, user.FirstName, user.LastName);
+
+            if (user == null)
+            {
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                    .WithDanger(string.Empty, UserNotFound);
+            }
+
+            var isRejected = await this.requestService.RejectRequestAsync(id);
+            if (!isRejected)
+            {
+                return this.BadRequest();
+            }
+
+            return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                .WithWarning(string.Empty, RequestRejectedSuccessfully);
         }
     }
 }

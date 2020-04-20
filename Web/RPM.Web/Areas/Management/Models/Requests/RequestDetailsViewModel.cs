@@ -1,6 +1,7 @@
 ﻿namespace RPM.Web.Areas.Management.Models.Requests
 {
     using Microsoft.AspNetCore.Http;
+    using RPM.Data.Models.Enums;
     using RPM.Services.Management.Models;
     using System.ComponentModel.DataAnnotations;
 
@@ -23,6 +24,8 @@
         public string Message { get; set; }
 
         public string About { get; set; }
+
+        public RequestStatus Status { get; set; }
 
         public byte[] Document { get; set; }
 

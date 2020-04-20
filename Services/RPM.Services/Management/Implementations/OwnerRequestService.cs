@@ -75,8 +75,26 @@
             }
 
             request.Status = (RequestStatus)Enum.Parse(typeof(RequestStatus), Approved);
+            await this.context.SaveChangesAsync();
 
             return request;
+        }
+
+        public async Task<bool> RejectRequestAsync(string id)
+        {
+            var request = await this.context.Requests
+                            .Where(r => r.Id == id)
+                            .FirstOrDefaultAsync();
+
+            if (request == null)
+            {
+                return false;
+            }
+
+            request.Status = (RequestStatus)Enum.Parse(typeof(RequestStatus), Rejected);
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0;
         }
 
         public async Task<byte[]> GetFileAsync(string requestId)
@@ -141,6 +159,7 @@
                     Email = r.User.Email,
                     Phone = r.User.PhoneNumber,
                     RequestType = r.Type.ToString(),
+                    Status = r.Status,
                     Message = r.Message,
                     About = r.User.About,
                     Document = r.Document,
