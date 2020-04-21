@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using RPM.Services.Common.Models.Profile;
+    using RPM.Services.Common.Models.Rental;
 
     public class ProfileIndexViewModel
     {
@@ -14,5 +15,7 @@
         }
 
         public IEnumerable<UserPaymentListServiceModel> Payments { get; set; }
+
+        public IEnumerable<UserRentalListServiceModel> Rentals { get; set; }
     }
 }

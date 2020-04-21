@@ -58,10 +58,6 @@
         [ForeignKey("ManagerId")]
         public virtual User Manager { get; set; }
 
-        //[ForeignKey(nameof(User))]
-        //public string ManagerId { get; set; }
-        //public User Manager { get; set; }
-
         [ForeignKey(nameof(City))]
         public int CityId { get; set; }
         public virtual City City { get; set; }

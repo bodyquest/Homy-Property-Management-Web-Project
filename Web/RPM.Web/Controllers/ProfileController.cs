@@ -25,13 +25,16 @@
     {
         private readonly UserManager<User> userManager;
         private readonly IPaymentCommonService paymentService;
+        private readonly IRentalService rentalService;
 
         public ProfileController(
             UserManager<User> userManager,
-            IPaymentCommonService paymentService)
+            IPaymentCommonService paymentService,
+            IRentalService rentalService)
         {
             this.userManager = userManager;
             this.paymentService = paymentService;
+            this.rentalService = rentalService;
         }
 
         public async Task<IActionResult> Index()
@@ -40,13 +43,11 @@
 
             var userPayments = await this.paymentService.GetUserPaymentsListAsync(userId);
 
-            // TODO:
-            // var userRentals = await this.rentalService.GetUserRentalsListAsync(userId);
+            var userRentals = await this.rentalService.GetUserRentalsListAsync(userId);
             var viewModel = new ProfileIndexViewModel
             {
                 Payments = userPayments,
-
-                // Rentals = userRentals,
+                Rentals = userRentals,
             };
 
             return this.View(viewModel);

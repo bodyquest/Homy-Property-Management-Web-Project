@@ -27,7 +27,7 @@
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <div id="properties">
-                                <table class="table m-0 table-striped">
+                                <table id="properties" class="table m-0 table-striped">
                                     <thead>
                                         <tr>
                                             <th class="pl-3 pr-1">City</th>
@@ -456,7 +456,8 @@
                     <!-- /.card-header -->
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table m-0 table-striped">
+                            <div id="payments">
+                                <table id="payments" class="table m-0 table-striped">
                                 <thead>
                                     <tr>
                                         <th class="px-3">Date</th>
@@ -602,6 +603,7 @@
 
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <!-- /.table-responsive -->
                     </div>
@@ -941,6 +943,19 @@
 
         document
             .getElementById("requests")
+            .appendChild(box);
+    </script>
+
+    <script>
+        var box = paginator({
+            table: document.getElementById("payments").getElementsByTagName("table")[0],
+            box_mode: "list",
+        });
+
+        box.className = "box pl-3 pr-2 pt-2";
+
+        document
+            .getElementById("payments")
             .appendChild(box);
     </script>
 

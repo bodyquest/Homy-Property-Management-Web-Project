@@ -86,11 +86,7 @@
             // Add Rental to Tenant
             user.Rentals.Add(rental);
 
-            result = await this.context.SaveChangesAsync();
-            if (result == 0)
-            {
-                return false;
-            }
+            await this.context.SaveChangesAsync();
 
             return true;
         }

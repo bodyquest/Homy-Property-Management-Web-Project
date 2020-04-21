@@ -136,17 +136,27 @@
                                       asp-route-id="@Model.Id"
                                       enctype="multipart/form-data"
                                       method="post">
-                                    <div class="row">
-                                        <p class="text-danger pl-2">
-                                            Upload contract in pdf format
-                                        </p>
-                                        <div class="form-inline pb-3 pl-2">
-                                            <div class="form-group">
-                                                <input type="file" name="contract" accept=".pdf" />
+                                    @if (Model.Status == RequestStatus.Rejected)
+                                    {
+                                        <div class="row">
+                                            <p class="text-danger pl-2 pb-3">
+                                                Request rejected
+                                            </p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="row">
+                                            <p class="text-danger pl-2">
+                                                Upload contract in pdf format
+                                            </p>
+                                            <div class="form-inline pb-3 pl-2">
+                                                <div class="form-group">
+                                                    <input type="file" name="contract" accept=".pdf" />
+                                                </div>
                                             </div>
                                         </div>
-
-                                    </div>
+                                    }
                                     @if (Model.Status == RequestStatus.Rejected)
                                     {
                                         <div class="row d-flex justify-content-start">
@@ -171,6 +181,20 @@
                                         </div>
                                     }
                                 </form>
+                                @if (Model.Status == RequestStatus.Rejected)
+                                {
+                                    <div class="row d-flex justify-content-end"
+                                         style="margin-top:-30px">
+                                        <div class="col-6">
+                                            <p class="text-left p-0 m-0">
+                                                <input disabled type="submit"
+                                                       class="btn btn-sm btn-danger btn-block" value="Reject" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
                                     <form asp-action="Reject"
                                           asp-route-id="@Model.Id"
                                           method="post">
@@ -184,7 +208,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                
+                                }
                             </div>
                         </div>
 

@@ -189,43 +189,45 @@
         </footer>
         <!-- Footer Section End -->
 
-    <environment names="Development">
+        <environment names="Development">
 
-        <script src="~/js/jquery-3.3.1.min.js"></script>
-        <script src="~/js/bootstrap.min.js"></script>
-        <script src="~/js/jquery.magnific-popup.min.js"></script>
-        <script src="~/js/jquery.slicknav.js"></script>
-        <script src="~/js/owl.carousel.min.js"></script>
-        <script src="~/js/jquery.nice-select.min.js"></script>
-        <script src="~/js/mixitup.min.js"></script>
-        <script src="~/js/main.js"></script>
+            <script src="~/js/jquery-3.3.1.min.js"></script>
+            <script src="~/js/bootstrap.min.js"></script>
+            <script src="~/js/jquery.magnific-popup.min.js"></script>
+            <script src="~/js/jquery.slicknav.js"></script>
+            <script src="~/js/owl.carousel.min.js"></script>
+            <script src="~/js/jquery.nice-select.min.js"></script>
+            <script src="~/js/mixitup.min.js"></script>
+            <script src="~/js/main.js"></script>
 
-        <!-- jQuery -->
-        <script src="~/themes/admin/plugins/jquery/jquery.min.js"></script>
-        <!-- Bootstrap 4 -->
-        <script src="~/themes/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- AdminLTE App -->
-        <script src="~/themes/admin/dist/js/adminlte.min.js"></script>
-        <!-- AdminLTE for demo purposes -->
-        <script src="~/themes/admin/dist/js/demo.js"></script>
-        <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+            <!-- jQuery -->
+            <script src="~/themes/admin/plugins/jquery/jquery.min.js"></script>
+            <!-- Bootstrap 4 -->
+            <script src="~/themes/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- AdminLTE App -->
+            <script src="~/themes/admin/dist/js/adminlte.min.js"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="~/themes/admin/dist/js/demo.js"></script>
+            <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+            <script src="~/js/paginator.js"></script>
 
-    </environment>
+        </environment>
 
-    <environment names="Staging,Production">
-        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-        <script src="~js/jquery.magnific-popup.min.js"></script>
-        <script src="~js/jquery.slicknav.js"></script>
-        <script src="~js/jquery.nice-select.min.js"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-        <script src="~js/owl.carousel.min.js"></script>
-        <script src="~js/mixitup.min.js"></script>
-        <script src="~js/main.js"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <environment names="Staging,Production">
+            <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+            <script src="~js/jquery.magnific-popup.min.js"></script>
+            <script src="~js/jquery.slicknav.js"></script>
+            <script src="~js/jquery.nice-select.min.js"></script>
+            <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+            <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+            <script src="~js/owl.carousel.min.js"></script>
+            <script src="~js/mixitup.min.js"></script>
+            <script src="~js/main.js"></script>
+            <script src="~/js/site.min.js" asp-append-version="true"></script>
+            <script src="~/js/paginator.js"></script>
 
-    </environment>
+        </environment>
 
     @this.RenderSection("Scripts", required: false)
 
