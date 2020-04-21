@@ -45,12 +45,14 @@
         {
             var model = await this.context.Rentals
                 .Include(r => r.Home)
+                .Include(r => r.Home.City)
                 .Where(r => r.Id == id)
                 .Select(r => new RentalInfoServiceModel
                 {
                     Id = r.Id,
                     RentalDate = r.RentDate.ToString(StandartDateFormat),
                     Price = r.Home.Price,
+                    Location = string.Format(HomeLocation, r.Home.Address, r.Home.City.Name, r.Home.City.Country.Name),
                     Owner = string.Format(
                         OwnerFullName, r.Home.Owner.FirstName, r.Home.Owner.LastName),
                     Image = r.Home.Images.Select(i => i.PictureUrl).FirstOrDefault(),

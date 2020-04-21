@@ -16,15 +16,15 @@
 
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(Roles = (TenantRole))]
-    public class RentalsController : BaseController
+    [Authorize(Roles = ManagerRoleName)]
+    public class ManagedHomesController : BaseController
     {
         private readonly UserManager<User> userManager;
         private readonly IRentalService rentalService;
         private readonly IListingService listingService;
         private readonly IRequestService requestService;
 
-        public RentalsController(
+        public ManagedHomesController(
             UserManager<User> userManager,
             IRentalService rentalService,
             IListingService listingService,
@@ -37,29 +37,26 @@
         }
 
         [ActionName("Details")]
-        public async Task<IActionResult> DetailsAsync(int id)
+        public async Task<IActionResult> DetailsAsync(string id)
         {
+            var homeModel = await this.listingService.GetManagedDetailsAsync(id);
 
-            var user = await this.userManager.GetUserAsync(this.User);
-            var userId = user.Id;
-
-            var model = await this.rentalService.GetDetailsAsync(userId, id);
-
-            var viewModel = new CancellationRequestInputModel
+            var viewModel = new ManageCancellationRequestInputModel
             {
-                RentalInfo = model,
+                HomeInfo = homeModel,
             };
 
             return this.View(viewModel);
         }
 
         [HttpPost]
-        [ActionName("Details")]
-        public async Task<IActionResult> CancelRentAsync(string id, string message, IFormFile document)
+        [ActionName("HomeDetails")]
+        public async Task<IActionResult> CancelManageAsync(string id, string message, IFormFile document)
         {
+
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction("Index", "Profile", new { area = string.Empty })
+                return this.RedirectToAction("Index", "Dashboard", new { area = string.Empty })
                     .WithWarning(string.Empty, InvalidEntryData);
             }
 
@@ -71,7 +68,7 @@
             var modelForDb = new RequestCreateServiceModel
             {
                 Date = DateTime.UtcNow,
-                Type = RequestType.CancelRent,
+                Type = RequestType.CancelManage,
                 UserId = user.Id,
                 Message = message,
                 HomeId = homeFromDb.Id,
@@ -82,11 +79,11 @@
 
             if (isCreated)
             {
-                return this.RedirectToAction("Index", "Profile", new { area = string.Empty })
+                return this.RedirectToAction("Index", "Dashboard", new { area = string.Empty })
                     .WithSuccess(string.Empty, SuccessfullySubmittedRequest);
             }
 
-            return this.RedirectToAction("Index", "Profile", new { area = string.Empty })
+            return this.RedirectToAction("Index", "Dashboard", new { area = string.Empty })
                     .WithDanger(string.Empty, FailedToSubmitRequest);
         }
     }

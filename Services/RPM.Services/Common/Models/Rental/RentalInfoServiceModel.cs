@@ -10,6 +10,8 @@
 
         public string RentalDate { get; set; }
 
+        public string Location { get; set; }
+
         public string Owner { get; set; }
 
         public string TenantId { get; set; }

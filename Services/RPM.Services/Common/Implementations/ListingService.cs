@@ -135,6 +135,24 @@
             return model;
         }
 
+        public async Task<ManagedHomeInfoServiceModel> GetManagedDetailsAsync(string id)
+        {
+            var model = await this.context.Homes
+                .Include(h => h.City)
+                .Where(h => h.Id == id)
+                .Select(h => new ManagedHomeInfoServiceModel
+                {
+                    Id = h.Id,
+                    Location = string.Format(HomeLocation, h.Address, h.City.Name, h.City.Country.Name),
+                    Owner = string.Format(
+                        OwnerFullName, h.Owner.FirstName, h.Owner.LastName),
+                    Image = h.Images.Select(i => i.PictureUrl).FirstOrDefault(),
+                })
+                .FirstOrDefaultAsync();
+
+            return model;
+        }
+
         public async Task<PropertyCountServiceModel> GetPropertyCountByCategoryAsync(string category)
         {
             var managed = (HomeStatus)Enum.Parse(typeof(HomeStatus), Managed, true);

@@ -1,0 +1,112 @@
+﻿@model CancellationRequestInputModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="jumbotron jumbotron-fluid jumboHeroImage">
+</section>
+<!-- Hero Section End -->
+
+<section class="content" style="padding-top:0px;padding-bottom:100px">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-5 pt-4">
+            <!-- TABLE: Add New Listing -->
+            <div class="card shadow">
+                <div class="card-header border-transparent pb-0">
+                    <div class="row justify-content-between">
+                        <div class="col-6">
+                            <h3 class="card-title text-info"><strong>Request for Rent Cancellation</strong></h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <!-- form start -->
+                    <form asp-controller="Rentals"
+                          asp-action="Details"
+                          method="post"
+                          role="form"
+                          enctype="multipart/form-data">
+                        <input type="hidden" asp-for="RentalInfo.Id" />
+                        <div asp-validation-summary="ModelOnly"></div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <img src="@Model.RentalInfo.Image" class="img-fluid" alt="Responsive image">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="RentalInfo.Location" class="col-form-label">Location</label>
+                                <input class="form-control" disabled placeholder="@Model.RentalInfo.Location">
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="RentalInfo.Owner">Owner</label>
+                                <input class="form-control" disabled placeholder="@Model.RentalInfo.Owner">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="RentalInfo.RentalDate">Date of Rent Start</label>
+                                        <input class="form-control" disabled placeholder="@Model.RentalInfo.RentalDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="RentalInfo.Price">Monthly Rent Price</label>
+                                        <input class="form-control" disabled placeholder="@Model.RentalInfo.Price">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Message" class="col-form-label">Message</label>
+                                <textarea asp-for="Message" class="form-control" rows="5" placeholder="Enter message..."></textarea>
+                                <span asp-validation-for="Message" class="text-danger"></span>
+                            </div>
+
+                            <label class="text-danger pb-2" style="opacity: .5;">
+                                Upload the PDF cancellation form
+                            </label>
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <input asp-for="Document"
+                                           type="file"
+                                           accept=".pdf" />
+                                    <span asp-validation-for="Document" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center pt-4">
+                                <dvi class="col-md-6">
+                                    <button type="submit"
+                                            class="btn btn-info btn-block mx-auto">
+                                        Submit
+                                    </button>
+                                </dvi>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </form>
+                    <!-- /.form (end) -->
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -16,6 +16,8 @@
 
         Task<PropertyDetailsServiceModel> GetDetailsAsync(string id);
 
+        Task<ManagedHomeInfoServiceModel> GetManagedDetailsAsync(string id);
+
         Task<IEnumerable<PropertyListServiceModel>> GetAllByStatusAsync(string status);
 
         Task<PropertyCountServiceModel> GetPropertyCountByCategoryAsync(string category);
