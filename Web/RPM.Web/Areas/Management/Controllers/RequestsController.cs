@@ -89,7 +89,7 @@
                 return this.BadRequest();
             }
 
-            return this.File(documentContent, "application/pdf", $"{userFirstName}_{userLastName}_request-{requestType}_{DateTime.UtcNow.ToString("dd-mm-yyyy")}.pdf");
+            return this.File(documentContent, "application/pdf", $"{userFirstName}_{userLastName}_request-{requestType}_{DateTime.UtcNow.ToString("dd-MM-yyyy")}.pdf");
         }
 
         [HttpPost]

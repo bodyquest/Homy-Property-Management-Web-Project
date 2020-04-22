@@ -322,33 +322,61 @@
                 return false;
             }
 
-            var home = request.Home;
+            var homeId = request.HomeId;
+            var home = await this.context.Homes.Where(h => h.Id == homeId).FirstOrDefaultAsync();
+
+            var userId = request.UserId;
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            var managedHomes = await this.context.Homes
+                .Where(h => h.ManagerId == user.Id)
+                .ToListAsync();
+
+            // Stop Recurring payments from Tenant to Owner
+            List<string> transactionRequests = await this.context.TransactionRequests
+                .Where(tr => tr.HomeId == home.Id)
+                .Select(tr => tr.Id)
+                .ToListAsync();
 
             // Stop Recurring payments to Manager
-            List<string> transactionRequests = home.TransactionRequests.Select(tr => tr.Id).ToList();
             foreach (var transactionId in transactionRequests)
             {
+                // TO DO
+                var tr = await this.context.TransactionRequests
+                    .Where(tr => tr.Id == transactionId)
+                    .FirstOrDefaultAsync();
+                var payments = await this.context.Payments
+                    .Where(p => p.HomeId == home.Id)
+                    .ToListAsync();
+                var contract = await this.context.Contracts
+                    .Where(c => c.ManagerId == user.Id).FirstOrDefaultAsync();
+
+                this.context.Payments.RemoveRange(payments);
+                this.context.Contracts.Remove(contract);
+                this.context.TransactionRequests.Remove(tr);
+
                 RecurringJob.RemoveIfExists(transactionId);
             }
 
             // Remove manager from Home and remove from role Manager if this is the only managed home
-            var user = await this.context.Users.Where(u => u.Id == home.ManagerId).FirstOrDefaultAsync();
             if (user.ManagedHomes.Count() == 1)
             {
                 home.Manager = null;
+                home.Manager.Id = string.Empty; // check if redundant
                 await this.userManager.RemoveFromRoleAsync(user, ManagerRoleName);
             }
             else
             {
+                home.Manager.Id = string.Empty; // check if redundant
                 home.Manager = null;
             }
 
             // Change home status
             home.Status = HomeStatus.ToManage;
 
-            await this.context.SaveChangesAsync();
+            var finalResult = await this.context.SaveChangesAsync();
 
-            return true;
+            return finalResult > 0;
         }
 
         public async Task<IEnumerable<OwnerTransactionListOfManagedHomesServiceModel>>
