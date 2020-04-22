@@ -41,7 +41,7 @@
             return rentals;
         }
 
-        public async Task<RentalInfoServiceModel> GetDetailsAsync(string userId, int id)
+        public async Task<RentalInfoServiceModel> GetDetailsAsync(int id)
         {
             var model = await this.context.Rentals
                 .Include(r => r.Home)
@@ -50,6 +50,7 @@
                 .Select(r => new RentalInfoServiceModel
                 {
                     Id = r.Id,
+                    HomeId = r.Home.Id,
                     RentalDate = r.RentDate.ToString(StandartDateFormat),
                     Price = r.Home.Price,
                     Location = string.Format(HomeLocation, r.Home.Address, r.Home.City.Name, r.Home.City.Country.Name),

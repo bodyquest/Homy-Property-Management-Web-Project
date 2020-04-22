@@ -121,7 +121,7 @@
                                     <a asp-action="DownloadFile"
                                        asp-route-requestid="@Model.Id"
                                        class="btn btn-sm btn-primary btn-block">
-                                        <strong class="text-white">Download ID Document</strong>
+                                        <strong class="text-white">Download User Document</strong>
                                     </a>
                                 </p>
                             </div>
@@ -144,11 +144,19 @@
                                             </p>
                                         </div>
                                     }
+                                    else if (Model.Status == RequestStatus.Approved)
+                                    {
+                                        <div class="row">
+                                            <p class="text-success pl-2 pb-3">
+                                                Request approved
+                                            </p>
+                                        </div>
+                                    }
                                     else
                                     {
                                         <div class="row">
                                             <p class="text-danger pl-2">
-                                                Upload contract in pdf format
+                                                Upload contract/protocol in pdf format
                                             </p>
                                             <div class="form-inline pb-3 pl-2">
                                                 <div class="form-group">
@@ -157,7 +165,7 @@
                                             </div>
                                         </div>
                                     }
-                                    @if (Model.Status == RequestStatus.Rejected)
+                                    @if (Model.Status == RequestStatus.Rejected || Model.Status == RequestStatus.Approved)
                                     {
                                         <div class="row d-flex justify-content-start">
                                             <div class="col-6">
@@ -181,7 +189,7 @@
                                         </div>
                                     }
                                 </form>
-                                @if (Model.Status == RequestStatus.Rejected)
+                                @if (Model.Status == RequestStatus.Rejected || Model.Status == RequestStatus.Approved)
                                 {
                                     <div class="row d-flex justify-content-end"
                                          style="margin-top:-30px">
@@ -320,6 +328,10 @@
                                     else if (Model.HomeInfo.Status.ToString() == "Managed")
                                     {
                                         <span class="badge badge-success">Managed</span>
+                                    }
+                                    else if (Model.HomeInfo.Status.ToString() == "Rented")
+                                    {
+                                        <span class="badge badge-success">Rented</span>
                                     }
                                 </div>
                                 <div class="col-6">

@@ -26,7 +26,8 @@
         {
             var requestsFromDb = await this.context.Requests
                 .Where(requests => requests.Home.OwnerId == id)
-                .OrderBy(r => r.Date)
+                .OrderByDescending(r => r.Date)
+                .ThenByDescending(r => r.Date.TimeOfDay)
                 .Select(r => new OwnerIndexRequestsServiceModel
                 {
                     Id = r.Id,

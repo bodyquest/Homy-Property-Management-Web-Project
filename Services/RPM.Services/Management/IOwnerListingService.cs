@@ -27,6 +27,8 @@
 
         Task<bool> StartHomeManage(string id, byte[] fileContent);
 
+        Task<bool> StopHomeManageAsync(string id);
+
         Task<IEnumerable<OwnerTransactionListOfManagedHomesServiceModel>>
            GetManagedHomesAsync(string userId);
 

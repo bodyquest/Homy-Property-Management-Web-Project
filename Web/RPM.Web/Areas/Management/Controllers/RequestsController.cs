@@ -143,10 +143,29 @@
             else if (requestType == CancelRent)
             {
                 // TODO: implement cancellation
+                var isCancelRentSuccessful = await this.rentalService.StopRentAsync(id);
+
+                if (!isCancelRentSuccessful)
+                {
+                    return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                        .WithDanger(string.Empty, string.Format(CouldNotUpdateRecord));
+                }
+
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                            .WithSuccess(string.Empty, string.Format(TenantRemovedSuccessfully));
             }
             else if (requestType == CancelManage)
             {
-                // TODO: implement cancellation
+                var isCancelManageSuccessful = await this.listingService.StopHomeManageAsync(id);
+
+                if (!isCancelManageSuccessful)
+                {
+                    return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                        .WithDanger(string.Empty, string.Format(CouldNotUpdateRecord));
+                }
+
+                return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
+                        .WithSuccess(string.Empty, string.Format(ManagerRemovedSuccessfully, userFullName));
             }
 
             return this.BadRequest();

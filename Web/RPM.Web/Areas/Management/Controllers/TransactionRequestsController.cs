@@ -77,7 +77,7 @@
         }
 
         [HttpPost]
-        [ActionName("CreateFrom")]
+        [ActionName("SchedulePaymentFrom")]
         public async Task<IActionResult> CreateFromAsync(OwnerTransactionRequestsCreateInputModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -105,6 +105,11 @@
 
                     return this.View(viewModel);
                 }
+
+                // TEST the service. Put Breakpoint on Line BELLOW and when hit, press F11
+                //await this.paymentService.AddPaymentRequestToUserAsync(
+                //       userId,
+                //       isCreatedId);
 
                 var schedule = model.RecurringSchedule;
 
@@ -168,7 +173,7 @@
                     return this.View(viewModel);
                 }
 
-                // TEST the service. Put Breakpoint on Line 172 and when hit, press F11
+                // TEST the service. Put Breakpoint on Line BELLOW and when hit, press F11
                 // await this.paymentService.AddPaymentRequestToUserAsync(
                 //        userId,
                 //        isCreatedId);
@@ -191,6 +196,7 @@
             return this.View(model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> RemoveRecurring(string id)
         {
             var transactionRequestForDelete = await this.transactionRequestService.FindByIdAsync(id);

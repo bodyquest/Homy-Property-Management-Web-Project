@@ -16,7 +16,7 @@
 
     using static RPM.Common.GlobalConstants;
 
-    [Authorize(Roles = (TenantRole))]
+    [Authorize(Roles = TenantRole)]
     public class RentalsController : BaseController
     {
         private readonly UserManager<User> userManager;
@@ -43,7 +43,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
             var userId = user.Id;
 
-            var model = await this.rentalService.GetDetailsAsync(userId, id);
+            var model = await this.rentalService.GetDetailsAsync(id);
 
             var viewModel = new CancellationRequestInputModel
             {
@@ -55,7 +55,7 @@
 
         [HttpPost]
         [ActionName("Details")]
-        public async Task<IActionResult> CancelRentAsync(string id, string message, IFormFile document)
+        public async Task<IActionResult> CancelRentAsync(int id, string message, IFormFile document)
         {
             if (!this.ModelState.IsValid)
             {
@@ -65,7 +65,7 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var homeFromDb = await this.listingService.GetDetailsAsync(id);
+            var homeFromDb = await this.rentalService.GetDetailsAsync(id);
             var fileContents = await document.ToByteArrayAsync();
 
             var modelForDb = new RequestCreateServiceModel
@@ -74,7 +74,7 @@
                 Type = RequestType.CancelRent,
                 UserId = user.Id,
                 Message = message,
-                HomeId = homeFromDb.Id,
+                HomeId = homeFromDb.HomeId,
                 Document = fileContents,
             };
 

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Hangfire;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using RPM.Data;
@@ -89,6 +90,69 @@
             await this.context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<bool> StopRentAsync(string id)
+        {
+            // Approve Request
+            var request = await this.requestService.ApproveRequestAsync(id);
+
+            if (request == null)
+            {
+                return false;
+            }
+
+            var userId = request.UserId;
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            // Change Home Status
+            string homeId = await this.listingService.ChangeHomeStatusAsync(request);
+            if (homeId == EntityNotFound)
+            {
+                return false;
+            }
+
+            var rental = await this.context.Rentals
+                .Where(r => r.TenantId == user.Id && r.HomeId == homeId)
+                .FirstOrDefaultAsync();
+
+            // Remove user from Rental and remove Rental entity
+            var userRentals = await this.context.Rentals.Where(r => r.TenantId == user.Id).ToListAsync();
+
+            // Stop Recurring payments from Tenant to Owner
+            List<string> transactionRequests = await this.context.TransactionRequests
+                .Where(tr => tr.RentalId == rental.Id)
+                .Select(tr => tr.Id)
+                .ToListAsync();
+
+            foreach (var transactionId in transactionRequests)
+            {
+                var tr = await this.context.TransactionRequests
+                    .Where(tr => tr.Id == transactionId)
+                    .FirstOrDefaultAsync();
+                var payments = await this.context.Payments
+                    .Where(p => p.Rental.Id == rental.Id)
+                    .ToListAsync();
+                var contract = await this.context.Contracts
+                    .Where(c => c.RentalId == rental.Id).FirstOrDefaultAsync();
+
+                this.context.Payments.RemoveRange(payments);
+                this.context.Contracts.Remove(contract);
+                this.context.TransactionRequests.Remove(tr);
+
+                RecurringJob.RemoveIfExists(transactionId);
+            }
+
+            // Remove from role Tenan if this is the only Rent which the user terminates.
+            if (userRentals.Count() == 1)
+            {
+                await this.userManager.RemoveFromRoleAsync(user, TenantRole);
+            }
+
+            this.context.Rentals.Remove(rental);
+            var resultFinal = await this.context.SaveChangesAsync();
+
+            return resultFinal > 0;
         }
 
         public async Task<IEnumerable<OwnerAllRentalsServiceModel>> GetAllRentalsWithDetailsAsync(string id)

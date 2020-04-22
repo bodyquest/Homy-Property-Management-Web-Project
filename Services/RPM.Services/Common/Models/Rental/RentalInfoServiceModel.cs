@@ -8,6 +8,8 @@
     {
         public int Id { get; set; }
 
+        public string HomeId { get; set; }
+
         public string RentalDate { get; set; }
 
         public string Location { get; set; }

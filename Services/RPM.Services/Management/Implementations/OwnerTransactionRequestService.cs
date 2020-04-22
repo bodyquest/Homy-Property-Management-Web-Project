@@ -96,6 +96,7 @@
                 IsRecurring = model.IsRecurring,
                 RentalId = model.RentalId,
                 SenderId = senderId,
+                //HomeId = rental.Home.Id,
                 RecipientId = recipientId,
             };
 
@@ -160,12 +161,7 @@
             this.context.TransactionRequests.Update(transactionRequest);
             var result = await this.context.SaveChangesAsync();
 
-            if (result > 0)
-            {
-                return true;
-            }
-
-            return false;
+            return result > 0;
         }
 
         public async Task<TransactionRequest> FindByIdAsync(string id)

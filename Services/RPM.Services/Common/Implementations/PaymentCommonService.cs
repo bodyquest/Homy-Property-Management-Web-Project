@@ -224,15 +224,6 @@
                 };
 
                 await this.context.Payments.AddAsync(payment);
-                await this.context.SaveChangesAsync();
-
-                var rentalId = transactionRequest.RentalId;
-                var userRental = user.Rentals
-                    .Where(r => r.Id == rentalId)
-                    .FirstOrDefault();
-
-                userRental.Payments.Add(payment);
-
                 result = await this.context.SaveChangesAsync();
 
                 if (result == 0)

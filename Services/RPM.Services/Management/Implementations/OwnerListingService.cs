@@ -1,6 +1,7 @@
 ﻿namespace RPM.Services.Management.Implementations
 {
     using System;
+    using Hangfire;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -305,6 +306,49 @@
             var result = await this.context.SaveChangesAsync();
 
             return result > 0;
+        }
+
+        public async Task<bool> StopHomeManageAsync(string id)
+        {
+            var request = await this.context.Requests
+                .Where(r => r.Id == id)
+                .FirstOrDefaultAsync();
+
+            // Approve Request to cancel home management
+            var result = await this.requestService.ApproveRequestAsync(id);
+
+            if (result == null)
+            {
+                return false;
+            }
+
+            var home = request.Home;
+
+            // Stop Recurring payments to Manager
+            List<string> transactionRequests = home.TransactionRequests.Select(tr => tr.Id).ToList();
+            foreach (var transactionId in transactionRequests)
+            {
+                RecurringJob.RemoveIfExists(transactionId);
+            }
+
+            // Remove manager from Home and remove from role Manager if this is the only managed home
+            var user = await this.context.Users.Where(u => u.Id == home.ManagerId).FirstOrDefaultAsync();
+            if (user.ManagedHomes.Count() == 1)
+            {
+                home.Manager = null;
+                await this.userManager.RemoveFromRoleAsync(user, ManagerRoleName);
+            }
+            else
+            {
+                home.Manager = null;
+            }
+
+            // Change home status
+            home.Status = HomeStatus.ToManage;
+
+            await this.context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<IEnumerable<OwnerTransactionListOfManagedHomesServiceModel>>

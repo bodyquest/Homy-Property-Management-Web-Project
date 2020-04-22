@@ -8,6 +8,6 @@
     {
         Task<IEnumerable<UserRentalListServiceModel>> GetUserRentalsListAsync(string userId);
 
-        Task<RentalInfoServiceModel> GetDetailsAsync(string userId, int id);
+        Task<RentalInfoServiceModel> GetDetailsAsync(int id);
     }
 }
