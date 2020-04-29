@@ -17,6 +17,7 @@
         private readonly IOwnerRequestService requestService;
         private readonly IOwnerRentalService rentalService;
         private readonly IOwnerPaymentService paymentService;
+        private readonly IOwnerTransactionRequestService transactionRequestService;
         private readonly UserManager<User> userManager;
 
         public DashboardController(
@@ -24,12 +25,14 @@
             IOwnerRequestService requestService,
             IOwnerRentalService rentalService,
             IOwnerPaymentService paymentService,
+            IOwnerTransactionRequestService transactionRequestService,
             UserManager<User> userManager)
         {
             this.listingService = listingService;
             this.requestService = requestService;
             this.rentalService = rentalService;
             this.paymentService = paymentService;
+            this.transactionRequestService = transactionRequestService;
             this.userManager = userManager;
         }
 
@@ -42,6 +45,7 @@
             var requests = await this.requestService.GetRequestsAsync(userId);
             var rentals = await this.rentalService.GetRentalsAsync(userId);
             var payments = await this.paymentService.AllPayments(userId);
+            var transactionRequests = await this.transactionRequestService.GetAllTransactionRequestsAsync(userId);
 
             var viewModel = new OwnerDashboardViewModel
             {
@@ -49,6 +53,7 @@
                 Requests = requests,
                 Rentals = rentals,
                 Payments = payments,
+                TransactionRequests = transactionRequests,
             };
 
             return this.View(viewModel);

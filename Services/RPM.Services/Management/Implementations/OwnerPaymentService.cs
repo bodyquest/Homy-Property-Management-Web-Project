@@ -1,5 +1,6 @@
 ﻿namespace RPM.Services.Management.Implementations
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -22,6 +23,7 @@
         {
             var homePayments = await this.context.Payments
                 .Where(p => p.Home.OwnerId == userId && p.Home.Manager != null)
+                .OrderByDescending(p => p.Date)
                 .Select(p => new OwnerAllPaymentsServiceModel
                 {
                     Id = p.Id,
@@ -56,7 +58,14 @@
             IEnumerable<OwnerAllPaymentsServiceModel> model =
                 homePayments.Concat(rentalPayments);
 
-            return model;
+            var orderedList = model.OrderByDescending(x =>
+            {
+                DateTime dt;
+                DateTime.TryParse(x.Date, out dt);
+                return dt.ToString(StandartDateFormat);
+            });
+
+            return orderedList;
         }
 
         // CreateSession Method Calls this Service Method

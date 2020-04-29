@@ -1,0 +1,15 @@
+﻿@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+    <img src="~/img/default-admin.png"
+         class="img-circle elevation-2" alt="User Image">
+}
+else if (User.IsInRole(GlobalConstants.OwnerRoleName))
+{
+    <img src="~/img/default-owner.png"
+         class="img-circle elevation-2" alt="User Image">
+}
+else if (User.IsInRole(GlobalConstants.ManagerRoleName))
+{
+    <img src="~/img/default-manager.png"
+         class="img-circle elevation-2" alt="User Image">
+}

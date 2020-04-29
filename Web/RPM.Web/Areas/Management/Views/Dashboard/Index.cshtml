@@ -387,35 +387,6 @@
                                                 </tr>
                                             }
                                         }
-                                        <tr>
-                                            <td class="col-1 py-1 px-3" style='vertical-align:middle'>12/03/2020</td>
-                                            <td class="col-2 py-1" style='vertical-align:middle'><span class="badge badge-danger">Cancel Rent</span></td>
-                                            <td class="col-3 py-1 px-3" style='vertical-align:middle'>Schunko Svinski</td>
-                                            <td class="col-5 py-1 px-3" style='vertical-align:middle'>Berlin, 17, Damerowstrasse, 13187</td>
-                                            <td class="col-1 py-1 pl-0 pr-3" style='vertical-align:middle'>
-                                                <a asp-controller="Requests"
-                                                   asp-action="Details"
-                                                   asp-route-Id="id"
-                                                   style="display:block; margin-bottom:-10px">
-                                                    <ion-icon size="large" name="list-outline"></ion-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="col-1 py-1 px-3" style='vertical-align:middle'>12/03/2020</td>
-                                            <td class="col-2 py-1" style='vertical-align:middle'><span class="badge badge-danger">Cancel Manage</span></td>
-                                            <td class="col-3 py-1 px-3" style='vertical-align:middle'>Prasemir Butonoskov</td>
-                                            <td class="col-5 py-1 px-3" style='vertical-align:middle'>Berlin, 17, Damerowstrasse, 13187</td>
-                                            <td class="col-1 py-1 pl-0 pr-3" style='vertical-align:middle'>
-                                                <a asp-controller="Requests"
-                                                   asp-action="Details"
-                                                   asp-route-Id="id"
-                                                   style="display:block; margin-bottom:-10px">
-                                                    <ion-icon size="large" name="list-outline"></ion-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -467,7 +438,6 @@
                                         <th>Amount</th>
                                         <th>Transaction</th>
                                         <th>Status</th>
-                                        <th>Details</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -535,15 +505,6 @@
                                                 pending
                                             </td>
                                         }
-                                        <td class="col-1 py-1"
-                                            style='vertical-align:middle'>
-                                            <a asp-controller="Payments"
-                                               asp-action="Details"
-                                               asp-route-Id="@payment.Id"
-                                               style="display:block; margin-bottom:-10px">
-                                                <ion-icon size="large" name="list-outline"></ion-icon>
-                                            </a>
-                                        </td>
                                         <td class="col-2 py-1 pl-0 pr-3"
                                             style='text-align:center;vertical-align:middle'>
                                             <div>
@@ -677,15 +638,6 @@
                                                         style='text-align:center;vertical-align:middle'>
                                                         @rental.Tenant
                                                     </td>
-
-                                                    <td class="col-2 py-1 pl-0 pr-2" style='vertical-align:middle'>
-                                                        <a asp-controller="Properties"
-                                                           asp-action="Details"
-                                                           asp-route-Id="id"
-                                                           style="display:block; margin-bottom:-10px">
-                                                            <ion-icon size="large" name="list-outline"></ion-icon>
-                                                        </a>
-                                                    </td>
                                                 </tr>
                                             }
                                             else
@@ -696,83 +648,6 @@
                                                 </tr>
                                             }
                                         }
-                                        <tr>
-                                            <td class="col-3 py-1 pl-3 pr-1"
-                                                style='vertical-align:middle'>
-                                                12/03/2020
-                                            </td>
-
-                                            <td class="col-1 py-1 pl-2 pr-1" style='vertical-align:middle'>24</td>
-
-                                            <td class="col-4 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                                17, Damerowstrasse, 13187
-                                            </td>
-
-                                            <td class="col-3 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                                Shunko Svinski
-                                            </td>
-
-                                            <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
-                                                <a asp-controller="Properties"
-                                                   asp-action="Details"
-                                                   asp-route-Id="id"
-                                                   style="display:block; margin-bottom:-10px">
-                                                    <ion-icon size="large" name="list-outline"></ion-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="col-3 py-1 pl-3 pr-1"
-                                                style='vertical-align:middle'>
-                                                12/03/2020
-                                            </td>
-
-                                            <td class="col-1 py-1 pl-2 pr-1" style='vertical-align:middle'>24</td>
-
-                                            <td class="col-4 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                                17, Damerowstrasse, 13187
-                                            </td>
-
-                                            <td class="col-3 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                                Shunko Svinski
-                                            </td>
-
-                                            <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
-                                                <a asp-controller="Properties"
-                                                   asp-action="Details"
-                                                   asp-route-Id="id"
-                                                   style="display:block; margin-bottom:-10px">
-                                                    <ion-icon size="large" name="list-outline"></ion-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="col-3 py-1 pl-3 pr-1"
-                                                style='vertical-align:middle'>
-                                                12/03/2020
-                                            </td>
-
-                                            <td class="col-1 py-1 pl-2 pr-1" style='vertical-align:middle'>24</td>
-
-                                            <td class="col-4 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                                17, Damerowstrasse, 13187
-                                            </td>
-
-                                            <td class="col-3 py-1 px-1" style='text-align:center; vertical-align:middle'>
-                                                Shunko Svinski
-                                            </td>
-
-                                            <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
-                                                <a asp-controller="Properties"
-                                                   asp-action="Details"
-                                                   asp-route-Id="id"
-                                                   style="display:block; margin-bottom:-10px">
-                                                    <ion-icon size="large" name="list-outline"></ion-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -810,91 +685,73 @@
                                 <thead>
                                     <tr>
                                         <th class="px-3">Date</th>
-                                        <th>To</th>
+                                        <th>To Pay</th>
                                         <th>Reason</th>
                                         <th>Amount</th>
                                         <th>Recurring</th>
-                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="col-1 py-1 px-3"
+                                    @if (Model.TransactionRequests.Any())
+                                    {
+                                        @foreach (var transactionRequest in Model.TransactionRequests)
+                                        {
+                                            if (transactionRequest.Status != TransactionRequestStatus.Removed.ToString())
+                                            {
+                                                <tr>
+                                                    <td class="col-1 py-1 px-3"
+                                                        style='vertical-align:middle'>
+                                                        @transactionRequest.Date
+                                                    </td>
+                                                    @if (!string.IsNullOrWhiteSpace(transactionRequest.TenantName))
+                                                    {
+                                                        <td class="col-4 py-1 px-1"
+                                                            style='vertical-align:middle'>
+                                                            @transactionRequest.TenantName
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="col-4 py-1 px-1"
+                                                            style='vertical-align:middle'>
+                                                            @transactionRequest.OwnerName
+                                                        </td>
+                                                    }
+                                                    <td class="col-4 py-1 px-1"
+                                                        style='vertical-align:middle'>
+                                                        @transactionRequest.Reason
+                                                    </td>
+                                                    <td class="col-2 py-1 px-1"
+                                                        style='text-align:center;vertical-align:middle'>
+                                                        $@transactionRequest.Amount
+                                                    </td>
+                                                    <td class="col-3 py-1"
+                                                        style='text-align:center;vertical-align:middle'>
+                                                        @if (transactionRequest.IsRecurring)
+                                                        {
+                                                            <span class="badge badge-success">
+                                                                YES
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge badge-info">
+                                                                NO
+                                                            </span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr class="col-12 py-1 px-3 text-secondary text-center"
                                             style='vertical-align:middle'>
-                                            12/03/2020
-                                        </td>
-                                        <td class="col-4 py-1 px-1"
-                                            style='vertical-align:middle'>
-                                            Kanalin Tsolov
-                                        </td>
-                                        <td class="col-3 py-1 px-1"
-                                            style='vertical-align:middle'>
-                                            Rent Payment
-                                        </td>
-                                        <td class="col-2 py-1 px-1"
-                                            style='text-align:center;vertical-align:middle'>
-                                            $900
-                                        </td>
-                                        <td class="col-3 py-1"
-                                            style='text-align:center;vertical-align:middle'>
-                                            <span class="badge badge-success">
-                                                YES
-                                            </span>
-                                        </td>
-                                        <td class="col-3 py-1"
-                                            style='text-align:center;vertical-align:middle'>
-                                            <span class="text-success"><i class="fas fa-check"></i></span>
-                                        </td>
-
-                                        <td class="col-1 py-1 pl-0 pr-3"
-                                            style='vertical-align:middle'>
-                                            <a asp-controller="Requests"
-                                               asp-action="Details"
-                                               asp-route-Id="id"
-                                               style="display:block; margin-bottom:-10px">
-                                                <ion-icon size="large" name="list-outline"></ion-icon>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-1 py-1 px-3"
-                                            style='vertical-align:middle'>
-                                            12/03/2020
-                                        </td>
-                                        <td class="col-4 py-1 px-1"
-                                            style='vertical-align:middle'>
-                                            Schunko Svinski
-                                        </td>
-                                        <td class="col-4 py-1 px-1"
-                                            style='vertical-align:middle'>
-                                            Repair Works
-                                        </td>
-                                        <td class="col-2 py-1 px-1"
-                                            style='text-align:center;vertical-align:middle'>
-                                            $350
-                                        </td>
-                                        <td class="col-2 py-1"
-                                            style='text-align:center;vertical-align:middle'>
-                                            <span class="badge badge-info">
-                                                NO
-                                            </span>
-                                        </td>
-                                        <td class="col-2 py-1 text-danger"
-                                            style='text-align:center;vertical-align:middle'>
-                                            Pending
-                                        </td>
-                                        <td class="col-1 py-1 pl-0 pr-3"
-                                            style='vertical-align:middle'>
-                                            <a asp-controller="Requests"
-                                               asp-action="Details"
-                                               asp-route-Id="id"
-                                               style="display:block; margin-bottom:-10px">
-                                                <ion-icon size="large" name="list-outline"></ion-icon>
-                                            </a>
-                                        </td>
-                                    </tr>
-
+                                            No transaction requests for your rentals
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -903,9 +760,6 @@
                     <!-- /.card-body -->
                     <div class="card-footer row justify-content-end m-0 pr-3">
                         <div class="col-12">
-                            <p class="text-right p-0 m-0">
-                                <a asp-controller="Requests" asp-action="Index" class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i>&nbsp; View All</a>
-                            </p>
                         </div>
                     </div>
                     <!-- /.card-footer -->
