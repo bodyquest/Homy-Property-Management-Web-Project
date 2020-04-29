@@ -142,7 +142,6 @@
             }
             else if (requestType == CancelRent)
             {
-                // TODO: implement cancellation
                 var isCancelRentSuccessful = await this.rentalService.StopRentAsync(id);
 
                 if (!isCancelRentSuccessful)
@@ -193,6 +192,8 @@
             {
                 return this.BadRequest();
             }
+
+            // TODO: Send E-mail with rejection reason
 
             return this.RedirectToAction("Index", "Dashboard", new { area = ManagementArea })
                 .WithWarning(string.Empty, RequestRejectedSuccessfully);

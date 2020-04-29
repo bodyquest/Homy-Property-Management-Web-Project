@@ -1,9 +1,7 @@
 ﻿namespace RPM.Services.Management.Implementations
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using RPM.Data;
@@ -61,7 +59,7 @@
             return model;
         }
 
-        // CreateSession Method Calls this Service
+        // CreateSession Method Calls this Service Method
         public async Task<UserPaymentDetailsServiceModel> GetPaymentDetailsAsync(string paymentId, string userId)
         {
             var payment = new UserPaymentDetailsServiceModel();
@@ -92,11 +90,9 @@
                 })
                 .FirstOrDefaultAsync();
             }
-            else
+            else if (paymentFromDb.SenderId == userId)
             {
-                payment = await this.context.Rentals
-                .Where(r => r.TenantId == userId)
-                .SelectMany(r => r.Payments)
+                payment = await this.context.Payments
                 .Where(p => p.Id == paymentId)
                 .Select(p => new UserPaymentDetailsServiceModel
                 {

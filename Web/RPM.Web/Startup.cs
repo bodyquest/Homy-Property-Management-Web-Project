@@ -5,6 +5,7 @@
 
     using CloudinaryDotNet;
     using Hangfire;
+    using Hangfire.Dashboard;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -32,6 +33,7 @@
     using RPM.Services.Management.Implementations;
     using RPM.Services.Mapping;
     using RPM.Services.Messaging;
+    using RPM.Web.Filters;
     using RPM.Web.ViewModels;
     using Stripe;
 
@@ -53,7 +55,8 @@
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<User>(IdentityOptionsProvider.GetIdentityOptions)
-                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -175,6 +178,8 @@
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true;
             });  // TODO: remove if it does not work as intended !!!!
+
+            services.AddHttpContextAccessor();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -226,7 +231,18 @@
 
             StripeConfiguration.ApiKey = this.configuration.GetSection("Stripe")["SecretKey"];
 
-            app.UseHangfireDashboard();
+            var options = new DashboardOptions
+            {
+                Authorization = new[]
+                {
+                    new HangfireAuthorizationFilter(),
+                },
+
+            };
+
+            app.UseHangfireDashboard("/hangfire", options);
+
+            app.UseHangfireServer();
 
             app.UseEndpoints(
                 endpoints =>

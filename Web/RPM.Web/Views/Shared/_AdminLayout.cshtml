@@ -52,9 +52,12 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="~/themes/admin/index3.html" class="nav-link">Home</a>
-                </li>
+                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="https://homy.azurewebsites.net/hangfire" class="nav-link">Hangfire Dashboard</a>
+                    </li>
+                }
             </ul>
 
             <!-- Right navbar links -->
@@ -160,29 +163,32 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
-                                <a asp-area="Administration" asp-controller="Listings" asp-action="Index" class="nav-link">
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-home"></i>
                                     <p>
                                         Listings
+                                        <i class="right fas fa-angle-left"></i>
                                     </p>
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-area="Administration" asp-controller="Listings" asp-action="Create" class="nav-link">
-                                    <i class="nav-icon fas fa-home"></i>
-                                    <p>
-                                        Listings CREATE
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-area="Administration" asp-controller="Rentals" asp-action="Create" class="nav-link">
-                                    <i class="fas fa-angle-left right"></i>
-                                    <p>
-                                        Rentals CREATE
-                                    </p>
-                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a asp-area="Administration" asp-controller="Listings" asp-action="Index" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>
+                                                All Listings
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-area="Administration" asp-controller="Listings" asp-action="Create" class="nav-link">
+                                            <i class="nav-icon fas fa-home"></i>
+                                            <p>
+                                                Create Listing
+                                            </p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else if (User.IsInRole(GlobalConstants.OwnerRoleName))
@@ -318,15 +324,16 @@
         <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
 
+        <!-- jQuery -->
+        <script src="~/themes/admin/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
         <script src="~/themes/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
         <script src="~/themes/admin/dist/js/adminlte.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="~/themes/admin/dist/js/demo.js"></script>
-        <script src="~/lib/ionicons/dist/ionicons.js"></script>
+        <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
         <script src="~/js/paginator.js"></script>
-
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 

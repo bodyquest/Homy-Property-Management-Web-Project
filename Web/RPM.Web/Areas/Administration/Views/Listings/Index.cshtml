@@ -1,0 +1,162 @@
+﻿@model IEnumerable<AdminHomesListingServiceModel>
+
+@{
+    this.ViewData["Title"] = "All User Properties";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center text-info">@this.ViewData["Title"]</h1>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row justify-content-center">
+
+            <div class="col-11 pt-4">
+                <!-- TABLE: My PROPERTIES -->
+                <div class="card shadow">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title text-info"><strong>Listed Properties</strong></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <div id="properties">
+                                <table id="properties" class="table m-0 table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="pl-3 pr-1">Country</th>
+                                            <th>City</th>
+                                            <th>Address</th>
+                                            <th>Owner</th>
+                                            <th>Category</th>
+                                            <th>Status</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var home in Model)
+                                        {
+                                            if (Model.Any())
+                                            {
+                                        <tr>
+                                            <td class="col-1 py-1 pl-3 pr-1"
+                                                style='vertical-align:middle'>
+                                                @home.Country
+                                            </td>
+
+                                            <td class="col-1 py-1 pl-2 pr-1"
+                                                style='vertical-align:middle'>
+                                                @home.City
+                                            </td>
+
+                                            <td class="col-3 py-1 pl-2 pr-1"
+                                                style='vertical-align:middle'>
+                                                @home.Address
+                                            </td>
+
+                                            <td class="col-3 py-1 pl-2 pr-1"
+                                                style='vertical-align:middle'>
+                                                @home.Owner
+                                            </td>
+
+                                            <td class="col-1 py-1 px-1"
+                                                style='text-align:center; vertical-align:middle'>
+                                                <span class="badge badge-info">@home.Category</span>
+                                            </td>
+
+                                            <td class="col-1 py-1 px-1"
+                                                style='text-align:center; vertical-align:middle'>
+                                                @if (home.Status == "ToRent")
+                                                {
+                                                    <span class="badge badge-danger">@home.Status</span>
+                                                    if (!string.IsNullOrWhiteSpace(home.Manager))
+                                                    {
+                                                        <span class="badge badge-success">Managed</span>
+                                                    }
+                                                }
+                                                else if (home.Status == "ToManage")
+                                                {
+                                                    <span class="badge badge-warning">@home.Status</span>
+                                                    if (!string.IsNullOrWhiteSpace(home.Tenant))
+                                                    {
+                                                        <span class="badge badge-success">Rented</span>
+                                                    }
+                                                }
+                                                else if (home.Status == "Rented")
+                                                {
+                                                    <span class="badge badge-success">@home.Status</span>
+                                                    if (!string.IsNullOrWhiteSpace(home.Manager))
+                                                    {
+                                                        <span class="badge badge-success">Managed</span>
+                                                    }
+                                                }
+                                                else if (home.Status == "Managed")
+                                                {
+                                                    <span class="badge badge-success">@home.Status</span>
+                                                    if (!string.IsNullOrWhiteSpace(home.Tenant))
+                                                    {
+                                                        <span class="badge badge-success">Rented</span>
+                                                    }
+                                                }
+                                            </td>
+
+                                            <td class="col-1 py-1 pl-0 pr-2" style='vertical-align:middle'>
+                                                <a asp-controller="Listings"
+                                                   asp-action="Details"
+                                                   asp-route-Id="@home.Id"
+                                                   style="display:block; margin-bottom:-10px">
+                                                    <ion-icon size="large" name="list-outline"></ion-icon>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                            }
+                                            else
+                                            {
+                                                <tr class="col-12 py-1 px-3 text-secondary text-center"
+                                                    style='vertical-align:middle'>
+                                                    No listed properties
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer row justify-content-between m-0 px-2">
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section Scripts{
+
+    <script>
+        var box = paginator({
+            table: document.getElementById("properties").getElementsByTagName("table")[0],
+            box_mode: "list",
+        });
+
+        box.className = "box pl-3 pr-2 pt-2";
+
+        document
+            .getElementById("properties")
+            .appendChild(box);
+    </script>
+
+}

@@ -20,7 +20,7 @@
         {
             var contractEntity = new Contract
             {
-                Title = $"{DateTime.UtcNow.Year}_{user.UserName}",
+                Title = $"{DateTime.UtcNow.ToString("dd.MM.yyy")}_{user.UserName}",
                 ContractDocument = fileContent,
                 RentalId = rental.Id,
             };
@@ -35,7 +35,7 @@
         {
             var contractEntity = new Contract
             {
-                Title = $"{DateTime.UtcNow.Year}_{user.UserName}",
+                Title = $"{DateTime.UtcNow.ToString("dd.MM.yyy")}_{user.UserName}",
                 ContractDocument = fileContent,
             };
 

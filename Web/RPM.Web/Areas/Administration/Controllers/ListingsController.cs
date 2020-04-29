@@ -43,8 +43,9 @@
         // GET: Listings
         public async Task<IActionResult> Index()
         {
+            var viewModel = await this.adminListingService.GetAllListingsAsync();
 
-            return this.View();
+            return this.View(viewModel);
         }
 
         // GET: Create

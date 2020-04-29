@@ -1,10 +1,11 @@
 ﻿namespace RPM.Services.Management.Implementations
 {
     using System;
-    using Hangfire;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Hangfire;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using RPM.Data;
@@ -276,13 +277,13 @@
             }
 
             // Add User to Role
-            var userId = request.UserId;
+            var userId = await this.context.Users
+                .Where(u => u.Id == request.UserId)
+                .Select(u => u.Id).FirstOrDefaultAsync();
+
             var user = await this.userManager.FindByIdAsync(userId);
 
-            var rolesBefore = await this.userManager.GetRolesAsync(user);
             var isAdded = await this.userManager.AddToRoleAsync(user, ManagerRoleName);
-
-            var rolesAfter = await this.userManager.GetRolesAsync(user);
 
             // Add Contract
             var isSuccessful = await this.contractService
@@ -362,12 +363,10 @@
             if (user.ManagedHomes.Count() == 1)
             {
                 home.Manager = null;
-                home.Manager.Id = string.Empty; // check if redundant
                 await this.userManager.RemoveFromRoleAsync(user, ManagerRoleName);
             }
             else
             {
-                home.Manager.Id = string.Empty; // check if redundant
                 home.Manager = null;
             }
 

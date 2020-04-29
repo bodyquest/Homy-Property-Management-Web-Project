@@ -107,16 +107,16 @@
         {
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
-            //// Google ReCaptcha
-            //var recaptcha = this.recaptchaService.ValidateResponse(this.Input.Token);
-            //if (!recaptcha.Result.Success && recaptcha.Result.Score <= 0.5)
-            //{
-            //    this.ModelState.AddModelError(string.Empty, "You are possibly using fake account!");
+            // Google ReCaptcha
+            var recaptcha = this.recaptchaService.ValidateResponse(this.Input.Token);
+            if (!recaptcha.Result.Success && recaptcha.Result.Score <= 0.5)
+            {
+                this.ModelState.AddModelError(string.Empty, "You are possibly using fake account!");
 
-            //    this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            //    return this.Page();
-            //}
+                return this.Page();
+            }
 
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 

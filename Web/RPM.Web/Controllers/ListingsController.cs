@@ -147,6 +147,7 @@
         }
 
         [ActionName("Details")]
+        [AllowAnonymous]
         public async Task<IActionResult> DetailsAsync(string id)
         {
             var model = await this.listingService.GetDetailsAsync(id);
@@ -175,6 +176,7 @@
         }
 
         [ActionName("AllHouses")]
+        [AllowAnonymous]
         public async Task<IActionResult> AllHousesAsync()
         {
             var category = HomeCategory.House;
@@ -188,6 +190,7 @@
         }
 
         [ActionName("AllApartments")]
+        [AllowAnonymous]
         public async Task<IActionResult> AllApartmentsAsync()
         {
             var category = HomeCategory.Apartment;
@@ -202,6 +205,7 @@
         }
 
         [ActionName("AllRooms")]
+        [AllowAnonymous]
         public async Task<IActionResult> AllRoomsAsync()
         {
             var category = HomeCategory.Room;
@@ -216,6 +220,7 @@
         }
 
         [ActionName("AllToRent")]
+        [AllowAnonymous]
         public async Task<IActionResult> AllToRentAsync()
         {
             var status = HomeStatus.ToRent.ToString();
@@ -230,6 +235,7 @@
         }
 
         [ActionName("AllToManage")]
+        [AllowAnonymous]
         public async Task<IActionResult> AllToManageAsync()
         {
             var status = HomeStatus.ToManage.ToString();

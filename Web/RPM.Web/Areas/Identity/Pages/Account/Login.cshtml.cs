@@ -62,10 +62,11 @@
             {
                 await this.signInManager.SignOutAsync();
                 this.HttpContext.Session.Clear();
-                this.HttpContext.User = new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity(string.Empty));
+                this.HttpContext.User = new System.Security
+                    .Claims.ClaimsPrincipal(new ClaimsIdentity(string.Empty));
             }
-            // Clear the existing external cookie to ensure a clean login process
 
+            // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -80,16 +81,16 @@
             // Response.Redirect(uri);
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
-            //// Google ReCaptcha
-            //var recaptcha = this.recaptchaService.ValidateResponse(this.Input.Token);
-            //if (!recaptcha.Result.Success && recaptcha.Result.Score <= 0.5)
-            //{
-            //    this.ModelState.AddModelError(string.Empty, "You are possibly using fake account!");
+            // Google ReCaptcha
+            var recaptcha = this.recaptchaService.ValidateResponse(this.Input.Token);
+            if (!recaptcha.Result.Success && recaptcha.Result.Score <= 0.5)
+            {
+                this.ModelState.AddModelError(string.Empty, "You are possibly using fake account!");
 
-            //    this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            //    return this.Page();
-            //}
+                return this.Page();
+            }
 
             if (this.ModelState.IsValid)
             {

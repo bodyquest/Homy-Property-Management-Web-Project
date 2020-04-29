@@ -306,6 +306,12 @@ textAreaFixed {
     background-image: url('../img/hd_binary.jpg');
 }
 
+.policy-bg {
+    min-height: 100vh;
+    padding: 0;
+    background-image: url('../img/dust_scratches.png');
+}
+
 .handshake-bg {
     min-height: 100vh;
     padding: 0;

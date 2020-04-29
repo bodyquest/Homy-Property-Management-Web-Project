@@ -32,7 +32,30 @@
 
         public async Task<IEnumerable<AdminHomesListingServiceModel>> GetAllListingsAsync()
         {
-            throw new NotImplementedException();
+            var homes = await this.context.Homes
+                .Include(h => h.Manager)
+                .OrderBy(h => h.City.Country.Name)
+                .Select(h => new AdminHomesListingServiceModel
+                {
+                    Id = h.Id,
+                    City = h.City.Name,
+                    Country = h.City.Country.Name,
+                    Address = h.Address,
+                    Category = h.Category.ToString(),
+                    Status = h.Status.ToString(),
+                    Owner = string.Format(
+                        OwnerFullName, h.Owner.FirstName, h.Owner.LastName),
+                    Manager = string.Format(
+                        ManagerFullName, h.Manager.FirstName, h.Manager.LastName),
+                    Tenant = this.context.Rentals
+                    .Where(r => r.HomeId == h.Id)
+                    .Select(r => string.Format(
+                        TenantFullName, r.Tenant.FirstName, r.Tenant.LastName))
+                    .FirstOrDefault(),
+                })
+                .ToListAsync();
+
+            return homes;
         }
 
         public async Task<bool> CreateListingAsync(AdminHomeCreateServiceModel model)

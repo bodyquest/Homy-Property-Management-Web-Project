@@ -9,7 +9,6 @@
     using Microsoft.EntityFrameworkCore;
     using RPM.Data;
     using RPM.Data.Models;
-    using RPM.Data.Models.Enums;
     using RPM.Services.Management.Models;
 
     using static RPM.Common.GlobalConstants;
@@ -60,17 +59,9 @@
             await this.userManager.AddToRoleAsync(user, TenantRole);
 
             // Create Rental
-            var rental = new Rental
-            {
-                RentDate = DateTime.UtcNow,
-                HomeId = homeId,
-                TenantId = userId,
-            };
+            var rental = await this.CreateRental(homeId, userId);
 
-            this.context.Rentals.Add(rental);
-            var result = await this.context.SaveChangesAsync();
-
-            if (result == 0)
+            if (rental == null)
             {
                 return false;
             }
@@ -79,17 +70,25 @@
             var isSuccessful = await this.contractService
                 .CreateRentalContractAsync(fileContent, user, rental);
 
-            if (!isSuccessful)
-            {
-                return false;
-            }
-
             // Add Rental to Tenant
             user.Rentals.Add(rental);
 
+            return true;
+        }
+
+        public async Task<Rental> CreateRental(string homeId, string tenantId)
+        {
+            Rental rental = new Rental
+            {
+                RentDate = DateTime.UtcNow,
+                HomeId = homeId,
+                TenantId = tenantId,
+            };
+
+            this.context.Rentals.Add(rental);
             await this.context.SaveChangesAsync();
 
-            return true;
+            return rental;
         }
 
         public async Task<bool> StopRentAsync(string id)
@@ -143,7 +142,7 @@
                 RecurringJob.RemoveIfExists(transactionId);
             }
 
-            // Remove from role Tenan if this is the only Rent which the user terminates.
+            // Remove from role Tenant if this is the only Rent which the user terminates.
             if (userRentals.Count() == 1)
             {
                 await this.userManager.RemoveFromRoleAsync(user, TenantRole);

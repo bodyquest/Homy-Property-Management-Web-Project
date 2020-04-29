@@ -14,7 +14,6 @@
     <title>Homy | Home Page</title>
 
     <environment names="Development">
-
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -43,22 +42,31 @@
     </environment>
 
     <environment names="Staging,Production">
-        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
-        <link href="~/lib/fortawesome/fontawesome-free/css/all.css" rel="stylesheet" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" type="text/css" asp-append-version="true" />
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
-        <link rel="stylesheet" href="~/lib/magnific-popup/dist/magnific-popup.css" type="text/css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/slicknav/dist/slicknav.min.css" type="text/css" asp-append-version="true" />
+        <!-- Css Styles -->
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="~/css/flaticon.css" type="text/css">
+        <link rel="stylesheet" href="~/css/nice-select.css" type="text/css">
+        <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
+        <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css">
+        <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
+        <link rel="stylesheet" href="~/css/style.css" type="text/css">
 
-        <link rel="stylesheet" href="~/css/flaticon.css" type="text/css" />
-        <link rel="stylesheet" href="~/css/nice-select.css" type="text/css" />
-        <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css" />
-        <link rel="stylesheet" href="~/css/style.css" type="text/css" />
+        <!-- Font Awesome -->
+        <link href="~/themes/admin/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="~/themes/admin/dist/css/adminlte.min.css">
 
-        <link rel="stylesheet" href="~/lib/ionicons-npm/css/ionicons.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/themes/admin/dist/css/adminlte.min.css" />
+        <!-- Bootstrap -->
+        <link href="~/themes/admin/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
 
-        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 </head>
 
@@ -126,6 +134,7 @@
                 </div>
                 <div id="mobile-menu-wrap"></div>
             }
+<a href="D:\DEV\WEBProject_DARI\WEBProject_DARI\Project\MyWebProject\Web\RPM.Web\Areas\Identity\Pages\Account\Login.cshtml">D:\DEV\WEBProject_DARI\WEBProject_DARI\Project\MyWebProject\Web\RPM.Web\Areas\Identity\Pages\Account\Login.cshtml</a>
             else
             {
                 <nav class="main-menu mobile-menu">
@@ -214,17 +223,24 @@
         </environment>
 
         <environment names="Staging,Production">
-            <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-            <script src="~js/jquery.magnific-popup.min.js"></script>
-            <script src="~js/jquery.slicknav.js"></script>
-            <script src="~js/jquery.nice-select.min.js"></script>
-            <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
-            <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-            <script src="~js/owl.carousel.min.js"></script>
-            <script src="~js/mixitup.min.js"></script>
-            <script src="~js/main.js"></script>
-            <script src="~/js/site.min.js" asp-append-version="true"></script>
+            <script src="~/js/jquery-3.3.1.min.js"></script>
+            <script src="~/js/bootstrap.min.js"></script>
+            <script src="~/js/jquery.magnific-popup.min.js"></script>
+            <script src="~/js/jquery.slicknav.js"></script>
+            <script src="~/js/owl.carousel.min.js"></script>
+            <script src="~/js/jquery.nice-select.min.js"></script>
+            <script src="~/js/mixitup.min.js"></script>
+            <script src="~/js/main.js"></script>
+
+            <!-- jQuery -->
+            <script src="~/themes/admin/plugins/jquery/jquery.min.js"></script>
+            <!-- Bootstrap 4 -->
+            <script src="~/themes/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- AdminLTE App -->
+            <script src="~/themes/admin/dist/js/adminlte.min.js"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="~/themes/admin/dist/js/demo.js"></script>
+            <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
             <script src="~/js/paginator.js"></script>
 
         </environment>
