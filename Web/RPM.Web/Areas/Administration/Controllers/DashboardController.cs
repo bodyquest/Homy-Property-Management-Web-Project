@@ -1,25 +1,45 @@
 ﻿namespace RPM.Web.Areas.Administration.Controllers
 {
-    using RPM.Services.Data;
-    using RPM.Web.ViewModels.Administration.Dashboard;
-
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
+    using RPM.Services.Admin;
+    using RPM.Services.Admin.Models;
+    using RPM.Services.Data;
 
     public class DashboardController : AdministrationController
     {
         private readonly ISettingsService settingsService;
+        private readonly IAdminUserService usersService;
+        private readonly IAdminListingService listingsService;
+        private readonly IAdminRentalService rentalsService;
 
-        public DashboardController(ISettingsService settingsService)
+        public DashboardController(
+            ISettingsService settingsService,
+            IAdminUserService usersService,
+            IAdminListingService listingsService,
+            IAdminRentalService rentalsService)
         {
             this.settingsService = settingsService;
+            this.usersService = usersService;
+            this.listingsService = listingsService;
+            this.rentalsService = rentalsService;
         }
 
         [HttpGet("/Administration/Dashboard/Index")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
+            var users = await this.usersService.GetUsersCount();
+            var properties = await this.listingsService.GetListingsCount();
+            var rentals = await this.rentalsService.GetRentalsCount();
 
-            return this.View();
+            var viewModel = new AdminDashboardViewModel
+            {
+                Users = users,
+                Properties = properties,
+                Rentals = rentals,
+            };
+
+            return this.View(viewModel);
         }
     }
 }

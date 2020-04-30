@@ -58,13 +58,13 @@
 
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
-            if (this.User.Identity.IsAuthenticated)
-            {
-                await this.signInManager.SignOutAsync();
-                this.HttpContext.Session.Clear();
-                this.HttpContext.User = new System.Security
-                    .Claims.ClaimsPrincipal(new ClaimsIdentity(string.Empty));
-            }
+            //if (this.User.Identity.IsAuthenticated)
+            //{
+            //    await this.signInManager.SignOutAsync();
+            //    this.HttpContext.Session.Clear();
+            //    this.HttpContext.User = new System.Security
+            //        .Claims.ClaimsPrincipal(new ClaimsIdentity(string.Empty));
+            //}
 
             // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);

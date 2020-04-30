@@ -115,7 +115,7 @@
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
-            // services.AddScoped<ISeeder, ApplicationDbContextSeeder>(); !!!!!!!!!!!!!!!!!!
+            // services.AddScoped<ISeeder, ApplicationDbContextSeeder>(); !!!
 
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(SendGridKey));
@@ -127,15 +127,16 @@
             services.AddTransient<IAdminCountryService, AdminCountryService>();
             services.AddTransient<IAdminCityService, AdminCityService>();
             services.AddTransient<IAdminListingService, AdminListingService>();
+            services.AddTransient<IAdminRentalService, AdminRentalService>();
 
             services.AddTransient<ICloudImageService, CloudImageService>();
             services.AddTransient<IImageDbService, ImageDbService>();
             services.AddTransient<IListingService, ListingService>();
 
-            services.AddTransient<IOwnerListingService, OwnerListingService>(); // 
+            services.AddTransient<IOwnerListingService, OwnerListingService>(); // Tests
             services.AddTransient<IOwnerRequestService, OwnerRequestService>(); // 
-            services.AddTransient<IOwnerRentalService, OwnerRentalService>(); // 
-            services.AddTransient<IOwnerPaymentService, OwnerPaymentService>(); //
+            services.AddTransient<IOwnerRentalService, OwnerRentalService>(); // Tests
+            services.AddTransient<IOwnerPaymentService, OwnerPaymentService>(); // Tests
             services.AddTransient<IOwnerContractService, OwnerContractService>(); // 
             services.AddTransient<IOwnerTransactionRequestService,
                 OwnerTransactionRequestService>(); // 

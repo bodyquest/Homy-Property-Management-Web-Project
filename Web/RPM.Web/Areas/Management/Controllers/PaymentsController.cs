@@ -65,13 +65,18 @@
             var userId = this.userManager.GetUserId(this.User);
             var payment = await this.paymentService.GetPaymentDetailsAsync(id, userId);
 
+            //// LOCALHOST LINKS
+            // var successStringUrl = "https://localhost:44319/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
+            // var cancelStringUrl = "https://localhost:44319/checkout/cancel";
+
+            // AZURE LINKS
             // LOCALHOST LINKS
-            var successStringUrl = "https://localhost:44319/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
-            var cancelStringUrl = "https://localhost:44319/checkout/cancel";
+            var successStringUrl = "https://homy.azurewebsites.net/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
+            var cancelStringUrl = "https://homy.azurewebsites.net/checkout/cancel";
 
             //// CONVEYOR LINKS
-            //var successStringUrl = "https://rpm-web.conveyor.cloud/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
-            //var cancelStringUrl = "https://rpm-web.conveyor.cloud/checkout/cancel";
+            // var successStringUrl = "https://rpm-web.conveyor.cloud/checkout/success?sessionId={CHECKOUT_SESSION_ID}";
+            // var cancelStringUrl = "https://rpm-web.conveyor.cloud/checkout/cancel";
 
             var options = new SessionCreateOptions
             {

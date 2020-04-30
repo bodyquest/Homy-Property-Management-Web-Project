@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\Services\RPM.Services.Mapping\RPM.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Administration\" />
+  </ItemGroup>
+
 </Project>

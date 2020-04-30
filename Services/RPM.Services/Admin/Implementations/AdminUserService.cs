@@ -63,6 +63,13 @@
             return userList;
         }
 
+        public async Task<int> GetUsersCount()
+        {
+            var count = await this.context.Users.CountAsync();
+
+            return count;
+        }
+
         public async Task<UserProfileServiceModel> GetUserDetailsAsync(string id)
         {
             var homes = await this.context.Homes

@@ -58,6 +58,13 @@
             return homes;
         }
 
+        public async Task<int> GetListingsCount()
+        {
+            var count = await this.context.Homes.CountAsync();
+
+            return count;
+        }
+
         public async Task<bool> CreateListingAsync(AdminHomeCreateServiceModel model)
         {
             var city = await this.context.Cities.FirstOrDefaultAsync(x => x.Name == model.City);

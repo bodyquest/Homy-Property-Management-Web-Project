@@ -13,6 +13,8 @@
     {
         Task<IEnumerable<AdminUserListingServiceModel>> AllAsync(int page = 1);
 
+        Task<int> GetUsersCount();
+
         Task<UserProfileServiceModel> GetUserDetailsAsync(string id);
 
         int Total();

@@ -190,6 +190,15 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            <li class="nav-item">
+                                <a asp-area="Administration" asp-controller="Rentals" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>
+                                        Rentals
+                                    </p>
+                                </a>
+                            </li>
                         }
                         else if (User.IsInRole(GlobalConstants.OwnerRoleName))
                         {
@@ -249,22 +258,6 @@
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
                                     <p>
                                         Dashboard
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-controller="Listings" asp-action="Index" class="nav-link">
-                                    <i class="nav-icon fas fa-home"></i>
-                                    <p>
-                                        Managed Properties
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-controller="Payments" asp-action="Index" class="nav-link">
-                                    <i class="nav-icon fas fa-money-check-alt"></i>
-                                    <p>
-                                        Payments
                                     </p>
                                 </a>
                             </li>
