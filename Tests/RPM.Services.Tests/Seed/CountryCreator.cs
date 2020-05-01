@@ -13,7 +13,7 @@
             {
                 Id = rnd.Next(1, 1000),
                 Name = Guid.NewGuid().ToString(),
-                Code = Guid.NewGuid().ToString().Substring(0,3),
+                Code = Guid.NewGuid().ToString().Substring(0, 3),
             };
         }
     }

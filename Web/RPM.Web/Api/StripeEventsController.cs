@@ -17,7 +17,7 @@
     {
         // https://dashboard.stripe.com/test/webhooks
         public const string SecretAccount = "whsec_kkeaMYEHNkXTJyAW48syt8tWSPymAKLn";
-        //public const string SecretConnect = "whsec_AZBLAbu7yiGC1urpKV5oatojyPPHs9CQ";
+        // public const string SecretConnect = "whsec_AZBLAbu7yiGC1urpKV5oatojyPPHs9CQ";
         private readonly IPaymentCommonService paymentCommonService;
 
         public StripeEventsController(IPaymentCommonService paymentCommonService)

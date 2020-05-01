@@ -96,7 +96,6 @@
                 IsRecurring = model.IsRecurring,
                 RentalId = model.RentalId,
                 SenderId = senderId,
-                //HomeId = rental.Home.Id,
                 RecipientId = recipientId,
             };
 
