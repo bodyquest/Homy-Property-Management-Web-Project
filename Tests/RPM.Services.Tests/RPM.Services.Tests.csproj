@@ -33,7 +33,6 @@
 
   <ItemGroup>
     <Folder Include="Admin\" />
-    <Folder Include="Common\" />
   </ItemGroup>
 
 </Project>

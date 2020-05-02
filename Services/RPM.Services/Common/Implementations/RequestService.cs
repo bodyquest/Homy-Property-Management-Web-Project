@@ -16,7 +16,6 @@
     public class RequestService : IRequestService
     {
         private readonly ApplicationDbContext context;
-        private readonly IListingService listingService;
 
         public RequestService(ApplicationDbContext context)
         {
@@ -50,11 +49,6 @@
             }
 
             return false;
-        }
-
-        public async Task<IEnumerable<RequestListServiceModel>> GetRequestsAsync(string id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

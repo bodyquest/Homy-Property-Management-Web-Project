@@ -1,7 +1,6 @@
 ﻿namespace RPM.Services.Tests.Manager
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using FluentAssertions;
@@ -290,5 +289,8 @@
             result.Should().HaveCount(expectedCount);
             result.Should().HaveCount(3);
         }
+
+        // TODO
+        // public async Task<bool> StopRentAsync(string id)
     }
 }

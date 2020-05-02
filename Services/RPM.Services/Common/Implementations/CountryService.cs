@@ -18,7 +18,7 @@
             this.context = context;
         }
 
-        public async Task<IEnumerable<CountryListServiceModel>> AllCountriesAsync ()
+        public async Task<IEnumerable<CountryListServiceModel>> AllCountriesAsync()
         {
             var countries = await this.context.Countries
                 .Select(c => new CountryListServiceModel
