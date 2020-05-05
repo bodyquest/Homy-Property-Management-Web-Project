@@ -358,5 +358,7 @@ appsettings.Production.json
 appsettings.json
 GlobalConstants.cs
 *.min.css
-*.min.js 
+*.min.js
  
+Web/RPM.Web/appsettings.json
+RPM.Common/GlobalConstants.cs
